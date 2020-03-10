@@ -78,6 +78,50 @@ func handleMsgEditInvoice(ctx sdk.Context, keeper Keeper, msg MsgEditInvoice) sd
 	}
 }
 
+// Pay Invoice
+
+func handleMsgPayInvoice(ctx sdk.Context, keeper Keeper, msg MsgPayInvoice) sdk.Result {
+	if err := msg.ValidateBasic(); err != nil {
+		return err.Result()
+	}
+
+	invoice, err := keeper.PayInvoice(ctx, msg.ID, msg.Body, msg.Editor)
+	if err != nil {
+		return err.Result()
+	}
+
+	res, codecErr := ModuleCodec.MarshalJSON(invoice)
+	if codecErr != nil {
+		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
+	}
+
+	return sdk.Result{
+		Data: res,
+	}
+}
+
+// Factor Invoice
+
+func handleMsgFactorInvoice(ctx sdk.Context, keeper Keeper, msg MsgFactorInvoice) sdk.Result {
+	if err := msg.ValidateBasic(); err != nil {
+		return err.Result()
+	}
+
+	invoice, err := keeper.FactorInvoice(ctx, msg.ID, msg.Body, msg.Editor)
+	if err != nil {
+		return err.Result()
+	}
+
+	res, codecErr := ModuleCodec.MarshalJSON(invoice)
+	if codecErr != nil {
+		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
+	}
+
+	return sdk.Result{
+		Data: res,
+	}
+}
+
 func handleMsgAddAdmin(ctx sdk.Context, k Keeper, msg MsgAddAdmin) sdk.Result {
 	if err := msg.ValidateBasic(); err != nil {
 		return err.Result()

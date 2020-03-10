@@ -34,8 +34,8 @@ func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.C
 	}
 }
 
-// SubmitInvoice creates a new invoice in the invoice key-value store
-func (k Keeper) SubmitInvoice(ctx sdk.Context, body, invoiceID string,
+// CreateInvoice creates a new invoice in the invoice key-value store
+func (k Keeper) CreateInvoice(ctx sdk.Context, body, invoiceID string,
 	merchant sdk.AccAddress, source url.URL) (invoice Invoice, err sdk.Error) {
 
 	err = k.validateLength(ctx, body)
