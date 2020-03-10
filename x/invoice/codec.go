@@ -7,6 +7,8 @@ func RegisterCodec(c *codec.Codec) {
 	c.RegisterConcrete(MsgCreateInvoice{}, "stateset/MsgCreateInvoice", nil)
 	c.RegisterConcrete(MsgEditInvoice{}, "stateset/MsgEditInvoice", nil)
 	c.RegisterConcrete(MsgDeleteInvoice{}, "stateset/MsgDeleteInvoice", nil)
+	c.RegisterConcrete(MsgFactorInvoice{}, "stateset/MsgFactorInvoice", nil)
+	c.RegisterConcrete(MsgPayInvoice{}, "stateset/MsgPayInvoice", nil)
 	c.RegisterConcrete(MsgAddAdmin{}, "invoice/MsgAddAdmin", nil)
 	c.RegisterConcrete(MsgRemoveAdmin{}, "invoice/MsgRemoveAdmin", nil)
 	c.RegisterConcrete(MsgUpdateParams{}, "invoice/MsgUpdateParams", nil)

@@ -7,6 +7,7 @@ func RegisterCodec(c *codec.Codec) {
 	c.RegisterConcrete(MsgCreateLoan{}, "stateset/MsgCreateLoan", nil)
 	c.RegisterConcrete(MsgEditLoan{}, "stateset/MsgEditLoan", nil)
 	c.RegisterConcrete(MsgDeleteLoan{}, "stateset/MsgDeleteLoan", nil)
+	c.RegisterConcrete(MsgPayBackLoan{}, "stateset/MsgPayBackLoan", nil)
 	c.RegisterConcrete(MsgAddAdmin{}, "loan/MsgAddAdmin", nil)
 	c.RegisterConcrete(MsgRemoveAdmin{}, "loan/MsgRemoveAdmin", nil)
 	c.RegisterConcrete(MsgUpdateParams{}, "loan/MsgUpdateParams", nil)
