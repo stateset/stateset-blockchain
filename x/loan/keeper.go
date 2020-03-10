@@ -5,7 +5,7 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset/types"
-	"github.com/stateset/stateset/x/community"
+	"github.com/stateset/stateset/x/marketplace"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -24,7 +24,7 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, communityKeeper community.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketplaceKeeper marketplace.Keeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,

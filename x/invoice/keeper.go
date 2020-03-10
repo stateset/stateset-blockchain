@@ -5,7 +5,7 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset/types"
-	"github.com/stateset/stateset/x/community"
+	"github.com/stateset/stateset/x/markeplace"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,17 +20,17 @@ type Keeper struct {
 	paramStore params.Subspace
 
 	accountKeeper   AccountKeeper
-	communityKeeper community.Keeper
+	markerplaceKeeper marketplace.Keeper
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, communityKeeper community.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketplaceKeeper marketplace.Keeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,
 		paramStore.WithKeyTable(ParamKeyTable()),
 		accountKeeper,
-		communityKeeper,
+		marketplaceKeeper,
 	}
 }
 
@@ -150,9 +150,9 @@ func (k Keeper) InvoicessAfterTime(ctx sdk.Context, createdTime time.Time) (invo
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// CommunityInvoices gets all the invoices for a given community
-func (k Keeper) CommunityInvoices(ctx sdk.Context, communityID string) (invoices Invoices) {
-	return k.associatedInvoices(ctx, communityInvoicesKey(communityID))
+// MarketplaceInvoices gets all the invoices for a given markerplace
+func (k Keeper) MarketplaceInvoices(ctx sdk.Context, marketplaceID string) (invoices Invoices) {
+	return k.associatedInvoices(ctx, marketplaceInvoicesKey(marketplaceID))
 }
 
 // MerchantInvoices gets all the invoices for a given merchant

@@ -84,10 +84,10 @@ func (app *TruChain) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []s
 	// reinitialize all validators
 	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val staking.ValidatorI) (stop bool) {
 
-		// donate any unwithdrawn outstanding reward fraction tokens to the community pool
+		// donate any unwithdrawn outstanding reward fraction tokens to the marketplace pool
 		scraps := app.distrKeeper.GetValidatorOutstandingRewards(ctx, val.GetOperator())
 		feePool := app.distrKeeper.GetFeePool(ctx)
-		feePool.CommunityPool = feePool.CommunityPool.Add(scraps)
+		feePool.MarketplacePool = feePool.MarketplacePool.Add(scraps)
 		app.distrKeeper.SetFeePool(ctx, feePool)
 
 		app.distrKeeper.Hooks().AfterValidatorCreated(ctx, val.GetOperator())

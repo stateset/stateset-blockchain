@@ -5,7 +5,7 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset/types"
-	"github.com/stateset/stateset/x/community"
+	"github.com/stateset/stateset-blockchain/x/marketplace"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,22 +20,22 @@ type Keeper struct {
 	paramStore params.Subspace
 
 	accountKeeper   AccountKeeper
-	communityKeeper community.Keeper
+	marketplaceKeeper marketplace.Keeper
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, communityKeeper community.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketplaceKeeper marketplace.Keeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,
 		paramStore.WithKeyTable(ParamKeyTable()),
 		accountKeeper,
-		communityKeeper,
+		marketplaceKeeper,
 	}
 }
 
 // SubmitAccount creates a new account in the account key-value store
-func (k Keeper) SubmitAccount(ctx sdk.Context, body, communityID string,
+func (k Keeper) SubmitAccount(ctx sdk.Context, body, marketplaceID string,
 	creator sdk.AccAddress, source url.URL) (account Account, err sdk.Error) {
 
 	err = k.validateLength(ctx, body)
@@ -49,16 +49,16 @@ func (k Keeper) SubmitAccount(ctx sdk.Context, body, communityID string,
 	if jailed {
 		return claim, ErrCreatorJailed(creator)
 	}
-	community, err := k.communityKeeper.Community(ctx, communityID)
+	marketplace, err := k.marketplaceKeeper.Marketplace(ctx, marketplaceID)
 	if err != nil {
-		return claim, ErrInvalidCommunityID(community.ID)
+		return claim, ErrInvalidMarketplaceID(marketplace.ID)
 	}
 
 	accountID, err := k.accountID(ctx)
 	if err != nil {
 		return
 	}
-	account = NewAccount(accountID, communityID, body, creator, source,
+	account = NewAccount(accountID, marketplaceID, body, creator, source,
 		ctx.BlockHeader().Time,
 	)
 
@@ -120,129 +120,6 @@ func (k Keeper) Accounts(ctx sdk.Context) (accounts Accounts) {
 	iterator := sdk.KVStoreReversePrefixIterator(store, AccountsKeyPrefix)
 
 	return k.iterate(iterator)
-}
-
-// ClaimsBetweenIDs gets all claims between startClaimID to endClaimID
-func (k Keeper) ClaimsBetweenIDs(ctx sdk.Context, startClaimID, endClaimID uint64) (claims Claims) {
-	iterator := k.claimsIterator(ctx, startClaimID, endClaimID)
-
-	return k.iterate(iterator)
-}
-
-// ClaimsBetweenTimes gets all claims between startTime and endTime
-func (k Keeper) ClaimsBetweenTimes(ctx sdk.Context, startTime time.Time, endTime time.Time) (claims Claims) {
-	iterator := k.createdTimeRangeClaimsIterator(ctx, startTime, endTime)
-
-	return k.iterateAssociated(ctx, iterator)
-}
-
-// ClaimsBeforeTime gets all claims after a certain CreatedTime
-func (k Keeper) ClaimsBeforeTime(ctx sdk.Context, createdTime time.Time) (claims Claims) {
-	iterator := k.beforeCreatedTimeClaimsIterator(ctx, createdTime)
-
-	return k.iterateAssociated(ctx, iterator)
-}
-
-// ClaimsAfterTime gets all claims after a certain CreatedTime
-func (k Keeper) ClaimsAfterTime(ctx sdk.Context, createdTime time.Time) (claims Claims) {
-	iterator := k.afterCreatedTimeClaimsIterator(ctx, createdTime)
-
-	return k.iterateAssociated(ctx, iterator)
-}
-
-// CommunityClaims gets all the claims for a given community
-func (k Keeper) CommunityClaims(ctx sdk.Context, communityID string) (claims Claims) {
-	return k.associatedClaims(ctx, communityClaimsKey(communityID))
-}
-
-// CreatorClaims gets all the claims for a given creator
-func (k Keeper) CreatorClaims(ctx sdk.Context, creator sdk.AccAddress) (claims Claims) {
-	return k.associatedClaims(ctx, creatorClaimsKey(creator))
-}
-
-// AddBackingStake adds a stake amount to the total backing amount
-func (k Keeper) AddBackingStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
-	if !ok {
-		return ErrUnknownClaim(id)
-	}
-	claim.TotalBacked = claim.TotalBacked.Add(stake)
-	claim.TotalStakers++
-	k.setClaim(ctx, claim)
-
-	return nil
-}
-
-// AddChallengeStake adds a stake amount to the total challenge amount
-func (k Keeper) AddChallengeStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
-	if !ok {
-		return ErrUnknownClaim(id)
-	}
-	claim.TotalChallenged = claim.TotalChallenged.Add(stake)
-	claim.TotalStakers++
-	k.setClaim(ctx, claim)
-
-	return nil
-}
-
-// SubtractBackingStake adds a stake amount to the total backing amount
-func (k Keeper) SubtractBackingStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
-	if !ok {
-		return ErrUnknownClaim(id)
-	}
-	claim.TotalBacked = claim.TotalBacked.Sub(stake)
-	k.setClaim(ctx, claim)
-
-	return nil
-}
-
-// SubtractChallengeStake adds a stake amount to the total challenge amount
-func (k Keeper) SubtractChallengeStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
-	if !ok {
-		return ErrUnknownClaim(id)
-	}
-	claim.TotalChallenged = claim.TotalChallenged.Sub(stake)
-	k.setClaim(ctx, claim)
-
-	return nil
-}
-
-// SetFirstArgumentTime sets time when first argument was created on a claim
-func (k Keeper) SetFirstArgumentTime(ctx sdk.Context, id uint64, firstArgumentTime time.Time) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
-	if !ok {
-		return ErrUnknownClaim(id)
-	}
-	claim.FirstArgumentTime = firstArgumentTime
-	k.setClaim(ctx, claim)
-
-	return nil
-}
-
-// AddAdmin adds a new admin
-func (k Keeper) AddAdmin(ctx sdk.Context, admin, creator sdk.AccAddress) (err sdk.Error) {
-	params := k.GetParams(ctx)
-
-	// first admin can be added without any authorisation
-	if len(params.ClaimAdmins) > 0 && !k.isAdmin(ctx, creator) {
-		err = ErrAddressNotAuthorised()
-	}
-
-	// if already present, don't add again
-	for _, currentAdmin := range params.ClaimAdmins {
-		if currentAdmin.Equals(admin) {
-			return
-		}
-	}
-
-	params.ClaimAdmins = append(params.ClaimAdmins, admin)
-
-	k.SetParams(ctx, params)
-
-	return
 }
 
 // RemoveAdmin removes an admin
@@ -315,24 +192,7 @@ func (k Keeper) setClaim(ctx sdk.Context, claim Claim) {
 	store.Set(key(claim.ID), bz)
 }
 
-// setCommunityClaim sets a community <-> claim association in store
-func (k Keeper) setCommunityClaim(ctx sdk.Context, communityID string, claimID uint64) {
-	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(claimID)
-	store.Set(communityClaimKey(communityID, claimID), bz)
-}
 
-func (k Keeper) setCreatorClaim(ctx sdk.Context, creator sdk.AccAddress, claimID uint64) {
-	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(claimID)
-	store.Set(creatorClaimKey(creator, claimID), bz)
-}
-
-func (k Keeper) setCreatedTimeClaim(ctx sdk.Context, createdTime time.Time, claimID uint64) {
-	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(claimID)
-	store.Set(createdTimeClaimKey(createdTime, claimID), bz)
-}
 
 // claimsIterator returns an sdk.Iterator for claims from startClaimID to endClaimID
 func (k Keeper) claimsIterator(ctx sdk.Context, startClaimID, endClaimID uint64) sdk.Iterator {

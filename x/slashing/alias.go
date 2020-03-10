@@ -4,7 +4,7 @@ import "github.com/stateset/stateset/x/bank/exported"
 
 // nolint
 var (
-	WithCommunityID   = exported.WithCommunityID
+	WithMarketplaceID   = exported.WithMarketplaceID
 	ToModuleAccount   = exported.ToModuleAccount
 	FromModuleAccount = exported.FromModuleAccount
 )
