@@ -11,9 +11,9 @@ const (
 	TypeMsgCreateInvoice = "create_invoice"
 	// TypeMsgEditInvoice represents the type of the message for editing an invoice
 	TypeMsgEditInvoice = "edit_invoice"
-	// TypeMsgFactorInvoice represents the type of the message for creating new invoice
+	// TypeMsgFactorInvoice represents the type of the message for factoring an invoice
 	TypeMsgFactorInvoice = "factor_invoice"
-	// TypeMsgPayInvoice represents the type of the message for creating new invoice
+	// TypeMsgPayInvoice represents the type of the message for paying an invoice
 	TypeMsgPayInvoice = "pay_invoice"
 	// TypeMsgAddAdmin represents the type of message for adding a new admin
 	TypeMsgAddAdmin = "add_admin"
