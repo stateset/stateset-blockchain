@@ -1,4 +1,4 @@
-# Join the Stateset Blockchain Network Testnet
+# Join the Stateset Blockchain Network
 
 ::: tip 
 See the [launch repo](https://github.com/stateset/launch) for
