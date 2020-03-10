@@ -9,6 +9,8 @@ import (
 const (
 	// TypeMsgCreateInvoice represents the type of the message for creating new invoice
 	TypeMsgCreateInvoice = "create_invoice"
+	// TypeMsgEditInvoice represents the type of the message for editing an invoice
+	TypeMsgEditInvoice = "edit_invoice"
 	// TypeMsgFactorInvoice represents the type of the message for creating new invoice
 	TypeMsgFactorInvoice = "factor_invoice"
 	// TypeMsgPayInvoice represents the type of the message for creating new invoice

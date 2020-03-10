@@ -31,7 +31,7 @@ func key(invoiceID uint64) []byte {
 }
 
 // marketplaceInvoicesKey gets the first part of the marketplace invoices key based on the marketplaceID
-func markeyplaceInvoicesKey(marketplaceID string) []byte {
+func marketplaceInvoicesKey(marketplaceID string) []byte {
 	return append(MarketplaceInvoicesPrefix, []byte(marketplaceID)...)
 }
 
