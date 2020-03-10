@@ -9,6 +9,12 @@ import (
 const (
 	// TypeMsgCreateLoan represents the type of the message for creating new loan
 	TypeMsgCreateLoan = "create_loan"
+	// TypeMsgCreateLoan represents the type of the message for creating new loan
+	TypeMsgEditLoan = "edit_loan"
+	// TypeMsgDeleteLoan represents the type of the message for creating new loan
+	TypeMsgDeleteLoan = "delete_loan"
+	// TypeMsgPaybackLoan represents the type of the message for creating new loan
+	TypeMsgCreateLoan = "payback_loan"
 	// TypeMsgAddAdmin represents the type of message for adding a new admin
 	TypeMsgAddAdmin = "add_admin"
 	// TypeMsgRemoveAdmin represents the type of message for removing an admin
@@ -20,6 +26,8 @@ const (
 // verify interface at compile time
 var _ sdk.Msg = &MsgCreateLoan{}
 var _ sdk.Msg = &MsgEditLoan{}
+var _ sdk.Msg = &MsgDeleteLoan{}
+var _ sdk.Msg = &MsgPayBackLoan{}
 var _ sdk.Msg = &MsgAddAdmin{}
 var _ sdk.Msg = &MsgRemoveAdmin{}
 var _ sdk.Msg = &MsgUpdateParams{}

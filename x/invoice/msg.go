@@ -9,6 +9,10 @@ import (
 const (
 	// TypeMsgCreateInvoice represents the type of the message for creating new invoice
 	TypeMsgCreateInvoice = "create_invoice"
+	// TypeMsgFactorInvoice represents the type of the message for creating new invoice
+	TypeMsgFactorInvoice = "factor_invoice"
+	// TypeMsgPayInvoice represents the type of the message for creating new invoice
+	TypeMsgPayInvoice = "pay_invoice"
 	// TypeMsgAddAdmin represents the type of message for adding a new admin
 	TypeMsgAddAdmin = "add_admin"
 	// TypeMsgRemoveAdmin represents the type of message for removeing an admin
@@ -20,6 +24,8 @@ const (
 // verify interface at compile time
 var _ sdk.Msg = &MsgCreateInvoice{}
 var _ sdk.Msg = &MsgEditInvoice{}
+var _ sdk.Msg = &MsgFactorInvoice{}
+var _ sdk.Msg = &MsgPayInvoice{}
 var _ sdk.Msg = &MsgAddAdmin{}
 var _ sdk.Msg = &MsgRemoveAdmin{}
 var _ sdk.Msg = &MsgUpdateParams{}
