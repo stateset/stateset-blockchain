@@ -67,7 +67,7 @@ type StakeNotificationResult struct {
 	Cred    *sdk.Coin      `json:"cred,omitempty"`
 }
 
-// Staker represents a backer or challenger with the amount staked.
+// Staker represents a lender or factorer with the amount staked.
 type Staker struct {
 	Address sdk.AccAddress
 	Amount  sdk.Coin
@@ -76,9 +76,9 @@ type Staker struct {
 // CompletedStateset defines a stateset result.
 type CompletedStateset struct {
 	ID                          int64                       `json:"id"`
-	Creator                     sdk.AccAddress              `json:"creator"`
-	Backers                     []Staker                    `json:"backers"`
-	Challengers                 []Staker                    `json:"challengers"`
+	Merchant                    sdk.AccAddress              `json:"merchant"`
+	Lenders                     []Staker                    `json:"lenders"`
+	Debtors                     []Staker                    `json:"debtors"`
 	StakeDistributionResults    StakeDistributionResults    `json:"stake_destribution_results"`
 	InterestDistributionResults InterestDistributionResults `json:"interest_destribution_results"`
 }
