@@ -43,7 +43,7 @@ type QueryInvoiceIDRangeParams struct {
 	EndID   uint64 `json:"end_id"`
 }
 
-// QueryMerchantInvoiceParams for marketplace claims
+// QueryMerchantInvoiceParams for marketplace invoices
 type QueryMerchantInvoiceParams struct {
 	Merchant sdk.AccAddress `json:"merchant"`
 }
