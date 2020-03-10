@@ -111,13 +111,8 @@ type Stateset struct {
 	evidenceKeeper evidence.Keeper
 
 	// stateset keepers
-	organizationKeeper organization.Keeper
-	contactKeeper      contact.Keeper
-	dealKeeper	       deal.Keeper
-	ticketKeeper	   ticket.Keeper
-	approvalKeeper     approval.Keeper
-	quoteKeeper        quote.Keeper
-	contractKeeper     contract.Keeper
+	appAccountKeeper   account.keeper
+	marketplaceKeeper  marketplace.Keeper
 	orderKeeper        order.Keeper
 	invoiceKeeper      invoice.Keeper
 	loanKeeper         loan.Keeper
@@ -170,13 +165,7 @@ func NewStateset(
 
 
 	// stateset subspaces
-	organizationSubspace := app.paramsKeeper.Subspace(organization.DefaultParamspace)
-	contactSubspace := app.paramsKeeper.Subspace(contact.DefaultParamspace)
-	dealSubspace := app.paramsKeeper.Subspace(deal.DefaultParamspace)
-	ticketSubspace := app.paramsKeeper.Subspace(ticket.DefaultParamspace)
-	approvalSubspace := app.paramsKeeper.Subspace(approval.DefaultParamspace)
-	quoteSubspace := app.paramsKeeper.Subspace(quote.DefaultParamspace)
-	contractSubspace := app.paramsKeeper.Subspace(contract.DefaultParamspace)
+	marketplaceSubspace := app.paramsKeeper.Subspace(marketplace.DefaultParamspace)
 	orderSubspace := app.paramsKeeper.Subspace(order.DefaultParamspace)
 	invoiceSubspace := app.paramsKeeper.Subspace(invoice.DefaultParamspace)
 	loanSubspace := app.paramsKeeper.Subspace(loan.DefaultParamspace)
@@ -244,13 +233,7 @@ func NewStateset(
 		upgrade.NewAppModule(app.upgradeKeeper),
 		evidence.NewAppModule(app.evidenceKeeper),
 		// stateset modules
-		organization.NewAppModule(app.organizationKeeper),
-		contact.NewAppModule(app.contactKeeper),
-		deal.NewAppModule(app.dealKeeper),
-		ticket.NewAppModule(app.ticketKeeper),
-		approval.NewAppModule(app.approvalKeeper),
-		quote.NewAppModule(app.quoteKeeper),
-		contract.NewAppModule(app.contactKeeper),
+		marketplace.NewAppModule(app.marketplaceKeeper),
 		order.NewAppModule(app.orderKeeper),
 		invoice.NewAppModule(app.invoiceKeeper),
 		loan.NewAppModule(app.loanKeeper),

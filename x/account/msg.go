@@ -84,7 +84,7 @@ type MsgDeleteAccount struct {
 	Creator sdk.AccAddress `json:"creator"`
 }
 
-// Route is the name of the route for claim
+// Route is the name of the route for invoice
 func (msg MsgDeleteAccount) Route() string {
 	return RouterKey
 }
@@ -97,7 +97,7 @@ func (msg MsgDeleteAccount) Type() string {
 // ValidateBasic validates basic fields of the Msg
 func (msg MsgDeleteAccount) ValidateBasic() sdk.Error {
 	if msg.ID == 0 {
-		return ErrUnknownClaim(msg.ID)
+		return ErrUnknownInvoice(msg.ID)
 	}
 	if len(msg.Creator) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Creator.String())
@@ -146,7 +146,7 @@ func (msg MsgEditAccount) Type() string {
 // ValidateBasic validates basic fields of the Msg
 func (msg MsgEditAccount) ValidateBasic() sdk.Error {
 	if msg.ID == 0 {
-		return ErrUnknownClaim(msg.ID)
+		return ErrUnknownInvoice(msg.ID)
 	}
 	if len(msg.Editor) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Editor.String())
@@ -156,13 +156,13 @@ func (msg MsgEditAccount) ValidateBasic() sdk.Error {
 }
 
 // GetSignBytes gets the bytes for Msg signer to sign on
-func (msg MsgEditClaim) GetSignBytes() []byte {
+func (msg MsgEditInvoice) GetSignBytes() []byte {
 	msgBytes := ModuleCodec.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(msgBytes)
 }
 
 // GetSigners gets the signs of the Msg
-func (msg MsgEditClaim) GetSigners() []sdk.AccAddress {
+func (msg MsgEditInvoice) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Editor)}
 }
 

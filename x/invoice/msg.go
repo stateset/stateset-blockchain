@@ -1,4 +1,4 @@
-package loan
+package invoice
 
 import (
 	"fmt"
@@ -7,151 +7,173 @@ import (
 )
 
 const (
-	// TypeMsgCreateLoan represents the type of the message for creating new loan
-	TypeMsgCreateLoan = "create_loan"
+	// TypeMsgCreateInvoice represents the type of the message for creating new invoice
+	TypeMsgCreateInvoice = "create_invoice"
 	// TypeMsgAddAdmin represents the type of message for adding a new admin
 	TypeMsgAddAdmin = "add_admin"
-	// TypeMsgRemoveAdmin represents the type of message for removing an admin
+	// TypeMsgRemoveAdmin represents the type of message for removeing an admin
 	TypeMsgRemoveAdmin = "remove_admin"
 	// TypeMsgUpdateParams represents the type of
 	TypeMsgUpdateParams = "update_params"
 )
 
 // verify interface at compile time
-var _ sdk.Msg = &MsgCreateLoan{}
-var _ sdk.Msg = &MsgEditLoan{}
+var _ sdk.Msg = &MsgCreateInvoice{}
+var _ sdk.Msg = &MsgEditInvoice{}
 var _ sdk.Msg = &MsgAddAdmin{}
 var _ sdk.Msg = &MsgRemoveAdmin{}
 var _ sdk.Msg = &MsgUpdateParams{}
 
-// MsgCreateLoan defines a message to submit an loan
-type MsgCreateLoan struct {
-	MarketplaceID string             `json:"marketplace_id"`
-	InvoiceID 	  string 			 `json:"invoice_id"`
-	Body          string         	 `json:"body"`
-	Lender        sdk.AccAddress     `json:"lender"`
-	Source        string             `json:"source,omitempty"`
+// MsgCreateInvoice defines a message to submit an invoice
+type MsgCreateInvoice struct {
+	InvoiceID         uint64         `json:"invoiceId"`
+	InvoiceNumber     string         `json:"invoiceNumber`
+	InvoiceName		  string		 `json:"invoiceName"`
+	BillingReason     string		 `json:"billingReason"`
+	AmountDue	 	  sdk.Coin	     `json:"amountDue"`
+	AmountPaid		  sdk.Coin		 `json:"amountPaid"`
+	AmountRemaining   sdk.Coin       `json:"amountRemaining"`
+	Subtotal	      sdk.Coin		 `json:"subtotal"`
+	Total			  sdk.Coin 	     `json:"total"`
+	Party			  sdk.AccAddress `json:"party"`
+	Counterparty      sdk.AccAddress `json:"counterparty"`
+	DueDate			  time.Time 	 `json:"dueDate"`
+	PeriodStartDate   time.Time	     `json:"periodStartDate"`
+	PeriodEndDate	  time.Time 	 `json:"periodEndDate"`
+	Paid			  bool			 `json:"paid"`
+	Active 	          bool           `json:"active"`
+	CreatedTime       time.Time      `json:"created_time"`
 }
 
-// NewMsgCreateloan creates a new message to create a oan
-func NewMsgCreateLoan(marketplaceID, invoiceID, body string, lender sdk.AccAddress, source string) MsgCreateLoan {
-	return MsgCreateLoan {
-		MarketplaceID: marketplaceID,
-		InvoiceID:    invoiceID,
-		Body:        body,
-		Lender:     lender,
-		Source:      source,
+// NewMsgCreateInvoice creates a new message to create a invoice
+func NewMsgCreateInvoice(statesetID, invoiceId string, invoiceNumber string, billingReason string, amountDue sdk.Coin, amountpaid sdk.Coin, amountRemaining sdk.Coin, subtotal Int, total Int, dueDate Date, periodStartDate Date, periodEndDate Date, merchant sdk.AccAddress, source string) MsgCreateInvoice {
+	return MsgCreateInvoice{
+		StatesetID: statesetID,
+		Invoice: invoiceID,
+		InvoiceNumber: invoiceNumber,
+		InvoiceName: invoiceName,
+		BillingReason: billingReason,
+		AmountDue: amountDue,
+		AmountPaid: amountPaid,
+		AmountRemaining: amountRemaining,
+		Subtotal: subtotal,
+		Total: total,
+		Party: party,
+		Counterparty: counterparty,
+		DueDate: dueDate,
+		PeriodStartDate: periodStartDate
+		PeriodEndDate: periodEndDate
+		Paid: paid,
+		Active: active,
+		CreatedTime: CreatedTime
 	}
 }
 
-// Route is the name of the route for loan
-func (msg MsgCreateLoan) Route() string {
+// Route is the name of the route for invoice
+func (msg MsgCreateInvoice) Route() string {
 	return RouterKey
 }
 
 // Type is the name for the Msg
-func (msg MsgCreateLoan) Type() string {
-	return TypeMsgCreateLoan
+func (msg MsgCreateInvoice) Type() string {
+	return TypeMsgCreateInvoice
 }
 
 // ValidateBasic validates basic fields of the Msg
-func (msg MsgCreateLoan) ValidateBasic() sdk.Error {
+func (msg MsgCreateInvoice) ValidateBasic() sdk.Error {
 	if len(msg.Body) == 0 {
 		return ErrInvalidBodyTooShort(msg.Body)
 	}
-	if len(msg.MarketplaceID) == 0 {
-		return ErrInvalidMarketplaceID(msg.MarketplaceID)
+	if len(msg.StatesetID) == 0 {
+		return ErrInvalidStatesetID(msg.StatesetID)
 	}
-	if len(msg.InvoiceID) == 0 {
-		return ErrINvalidInvoiceID(msg.InvoiceID)
-	}
-	if len(msg.Lender) == 0 {
-		return sdk.ErrInvalidAddress("Invalid address: " + msg.Lender.String())
+	if len(msg.Creator) == 0 {
+		return sdk.ErrInvalidAddress("Invalid address: " + msg.Creator.String())
 	}
 
 	return nil
 }
 
 // GetSignBytes gets the bytes for Msg signer to sign on
-func (msg MsgCreateLoan) GetSignBytes() []byte {
+func (msg MsgCreateInvoice) GetSignBytes() []byte {
 	msgBytes := ModuleCodec.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(msgBytes)
 }
 
 // GetSigners gets the signs of the Msg
-func (msg MsgCreateLoan) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Lender)}
+func (msg MsgCreateInvoice) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
-// MsgDeleteLoan defines a message to delete a loan
-type MsgDeleteLoan struct {
+// MsgDeleteInvoice defines a message to submit a invoice
+type MsgDeleteInvoice struct {
 	ID      uint64         `json:"id"`
-	Lender sdk.AccAddress `json:"lender"`
+	Creator sdk.AccAddress `json:"creator"`
 }
 
-// Route is the name of the route for loan
-func (msg MsgDeleteLoan) Route() string {
+// Route is the name of the route for invoice
+func (msg MsgDeleteInvoice) Route() string {
 	return RouterKey
 }
 
 // Type is the name for the Msg
-func (msg MsgDeleteLoan) Type() string {
+func (msg MsgDeleteInvoice) Type() string {
 	return ModuleName
 }
 
 // ValidateBasic validates basic fields of the Msg
-func (msg MsgDeleteLoan) ValidateBasic() sdk.Error {
+func (msg MsgDeleteInvoice) ValidateBasic() sdk.Error {
 	if msg.ID == 0 {
-		return ErrUnknownLoan(msg.ID)
+		return ErrUnknownInvoice(msg.ID)
 	}
-	if len(msg.Lender) == 0 {
-		return sdk.ErrInvalidAddress("Invalid address: " + msg.Lender.String())
+	if len(msg.Creator) == 0 {
+		return sdk.ErrInvalidAddress("Invalid address: " + msg.Creator.String())
 	}
 
 	return nil
 }
 
 // GetSignBytes gets the bytes for Msg signer to sign on
-func (msg MsgDeleteLoan) GetSignBytes() []byte {
+func (msg MsgDeleteInvoice) GetSignBytes() []byte {
 	msgBytes := ModuleCodec.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(msgBytes)
 }
 
 // GetSigners gets the signs of the Msg
-func (msg MsgDeleteLoan) GetSigners() []sdk.AccAddress {
+func (msg MsgDeleteInvoice) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
-// MsgEditLoan defines a message to submit an loan
-type MsgEditLoan struct {
+// MsgEditInvoice defines a message to submit a story
+type MsgEditInvoice struct {
 	ID     uint64         `json:"id"`
 	Body   string         `json:"body"`
 	Editor sdk.AccAddress `json:"editor"`
 }
 
-// NewMsgEditLoan creates a new message to edit a loan
-func NewMsgEditLoan(id uint64, body string, editor sdk.AccAddress) MsgEditLoan {
-	return MsgEditLoan{
+// NewMsgEditInvoice creates a new message to edit a invoice
+func NewMsgEditInvoice(id uint64, body string, editor sdk.AccAddress) MsgEditInvoice {
+	return MsgEditInvoice{
 		ID:     id,
 		Body:   body,
 		Editor: editor,
 	}
 }
 
-// Route is the name of the route for loan
-func (msg MsgEditLoan) Route() string {
+// Route is the name of the route for invoice
+func (msg MsgEditInvoice) Route() string {
 	return RouterKey
 }
 
 // Type is the name for the Msg
-func (msg MsgEditLoan) Type() string {
+func (msg MsgEditInvoice) Type() string {
 	return ModuleName
 }
 
 // ValidateBasic validates basic fields of the Msg
-func (msg MsgEditAccount) ValidateBasic() sdk.Error {
+func (msg MsgEditInvoice) ValidateBasic() sdk.Error {
 	if msg.ID == 0 {
-		return ErrUnknownLoan(msg.ID)
+		return ErrUnknownInvoice(msg.ID)
 	}
 	if len(msg.Editor) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Editor.String())
@@ -161,27 +183,27 @@ func (msg MsgEditAccount) ValidateBasic() sdk.Error {
 }
 
 // GetSignBytes gets the bytes for Msg signer to sign on
-func (msg MsgEditLoan) GetSignBytes() []byte {
+func (msg MsgEditInvoice) GetSignBytes() []byte {
 	msgBytes := ModuleCodec.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(msgBytes)
 }
 
 // GetSigners gets the signs of the Msg
-func (msg MsgEditLoan) GetSigners() []sdk.AccAddress {
+func (msg MsgEditInvoice) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Editor)}
 }
 
 // MsgAddAdmin defines the message to add a new admin
 type MsgAddAdmin struct {
 	Admin   sdk.AccAddress `json:"admin"`
-	Lender sdk.AccAddress `json:"lender"`
+	Creator sdk.AccAddress `json:"creator"`
 }
 
 // NewMsgAddAdmin returns the messages to add a new admin
-func NewMsgAddAdmin(admin, lender sdk.AccAddress) MsgAddAdmin {
+func NewMsgAddAdmin(admin, creator sdk.AccAddress) MsgAddAdmin {
 	return MsgAddAdmin{
 		Admin:   admin,
-		Lender: lender,
+		Creator: creator,
 	}
 }
 

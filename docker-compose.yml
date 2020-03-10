@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  statesetdnode0:
+    container_name: statesetdnode0
+    image: "stateset/statesetdnode"
+    ports:
+      - "26656-26657:26656-26657"
+    environment:
+      - ID=0
+      - LOG=${LOG:-statesetd.log}
+    volumes:
+      - ./build:/truchaind:Z
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.2
+
+  statesetdnode1:
+    container_name: statesetdnode1
+    image: "stateset/statesetdnode"
+    ports:
+      - "26659-26660:26656-26657"
+    environment:
+      - ID=1
+      - LOG=${LOG:-statesetd.log}
+    volumes:
+      - ./build:/statesetd:Z
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.3
+
+  statesetdnode2:
+    container_name: statesetdnode2
+    image: "stateset/statesetdnode"
+    environment:
+      - ID=2
+      - LOG=${LOG:-statesetd.log}
+    ports:
+      - "26661-26662:26656-26657"
+    volumes:
+      - ./build:/statesetd:Z
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.4
+
+  statesetdnode3:
+    container_name: statesetdnode3
+    image: "stateset/statesetdnode"
+    environment:
+      - ID=3
+      - LOG=${LOG:-statesetd.log}
+    ports:
+      - "26663-26664:26656-26657"
+    volumes:
+      - ./build:/statesetd:Z
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.5
+
+networks:
+  localnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 192.168.10.0/16

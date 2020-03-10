@@ -1,7 +1,7 @@
-# Join the Stateset Mainnet
+# Join the Stateset Blockchain Network Testnet
 
 ::: tip 
-See the [launch repo](https://github.com/cosmos/launch) for
+See the [launch repo](https://github.com/stateset/launch) for
 information on the mainnet, including the correct version
 of the Cosmos-SDK to use and details about the genesis file.
 :::

@@ -73,10 +73,10 @@ func queryAccount(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte
 
 	account, ok := keeper.Account(ctx, params.ID)
 	if !ok {
-		return nil, ErrUnknownClaim(params.ID)
+		return nil, ErrUnknownInvoice(params.ID)
 	}
 
-	return mustMarshal(claim)
+	return mustMarshal(invoice)
 }
 
 func queryAccounts(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
@@ -98,7 +98,7 @@ func queryAccountsByIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (
 		if !ok {
 			return nil, ErrUnknownAccount(id)
 		}
-		accounts = append(accounts, claim)
+		accounts = append(accounts, invoice)
 	}
 
 	return mustMarshal(accounts)

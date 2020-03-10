@@ -10,33 +10,46 @@ import (
 
 // query endpoints
 const (
-	QueryInvoice             = "invoice"
-	QueryIncoices            = "accounts"
-	QueryAccountsByIDs       = "accounts_ids"
-	QueryAccountsIDRange     = "accounts_id_range"
-	QueryAccountsBeforeTime  = "accounts_before_time"
-	QueryAccountsAfterTime   = "accounts_after_time"
-	QueryParams              = "params"
+	QueryInvoice              = "invoice"
+	QueryInvoices             = "invoices"
+	QueryInvoiceByIDs         = "invoices_ids"
+	QueryMarketplaceInvoices  = "marketplace_invoices"
+	QueryMarketplacesInvoices = "marketplaces_invoices"
+	QueryMerchantInvoices     = "merchant_invoices"
+	QueryInvoicesIDRange      = "invoices_id_range"
+	QueryInvoiceBeforeTime    = "invoices_before_time"
+	QueryInvoicesAfterTime    = "invoices_after_time"
+	QueryParams               = "params"
 )
 
-// QueryAccountParams for a single account
-type QueryAccountParams struct {
+// QueryInvoiceParams for a single invoice
+type QueryInvoiceParams struct {
 	ID uint64 `json:"id"`
 }
 
-// QueryAccountsParams for many account
-type QueryAccountsParams struct {
+// QueryInvoicesParams for many invoices
+type QueryInvoicesParams struct {
 	IDs []uint64 `json:"ids"`
 }
 
-// QueryAccountsIDRangeParams for accounts by an id range
-type QueryAccountsIDRangeParams struct {
+// QueryMarketplaceInvoicsParams for marketplace invoices
+type QueryQueryMarketplaceInvoicesParams struct {
+	MarketplaceID string `json:"marketplace_id"`
+}
+
+// QueryInvoiceIDRangeParams for invoices by an id range
+type QueryInvoiceIDRangeParams struct {
 	StartID uint64 `json:"start_id"`
 	EndID   uint64 `json:"end_id"`
 }
 
-// QueryAccountsTimeParams for accounts by time
-type QueryAccountsTimeParams struct {
+// QueryMerchantInvoiceParams for marketplace claims
+type QueryMerchantInvoiceParams struct {
+	Merchant sdk.AccAddress `json:"merchant"`
+}
+
+// QueryInvoicesTimeParams for invoices by time
+type QueryInvoicesTimeParams struct {
 	CreatedTime time.Time `json:"created_time"`
 }
 
@@ -44,98 +57,104 @@ type QueryAccountsTimeParams struct {
 func NewQuerier(keeper Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, req abci.RequestQuery) ([]byte, sdk.Error) {
 		switch path[0] {
-		case QueryAccount:
-			return queryAccount(ctx, req, keeper)
-		case QueryAccounts:
-			return queryAccounts(ctx, req, keeper)
-		case QueryAccountsByIDs:
-			return queryAccountsByIDs(ctx, req, keeper)
-		case QueryAccountsIDRange:
-			return queryAccountsByIDRange(ctx, req, keeper)
-		case QueryAccountsBeforeTime:
-			return queryAccountsBeforeTime(ctx, req, keeper)
-		case QueryAccountsAfterTime:
-			return queryAccountsAfterTime(ctx, req, keeper)
+		case QueryInvoice:
+			return queryInvoice(ctx, req, keeper)
+		case QueryInvoices:
+			return queryInvoices(ctx, req, keeper)
+		case QueryMarketplaceInvoices:
+			return queryMarketplaceInvoices(ctx, req, keeper)
+		case QueryMarketplacesInvoices:
+			return queryMarketplacesInvoices(ctx, req, keeper)
+		case QueryMerchantInvoices:
+			return queryMerchantInvoices(ctx, req, keeper)
+		case QueryInvoicesByIDs:
+			return queryInvoicesByIDs(ctx, req, keeper)
+		case QueryInvoicesIDRange:
+			return queryInvoicesByIDRange(ctx, req, keeper)
+		case QueryInvoicesBeforeTime:
+			return queryInvoicesBeforeTime(ctx, req, keeper)
+		case QueryInvoicesAfterTime:
+			return queryInvoicesAfterTime(ctx, req, keeper)
 		case QueryParams:
 			return queryParams(ctx, keeper)
 		}
 
-		return nil, sdk.ErrUnknownRequest("Unknown account query endpoint")
+		return nil, sdk.ErrUnknownRequest("Unknown invoice query endpoint")
 	}
 }
 
-func queryAccount(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryAccountParams
+func queryInvoice(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QueryInvoiceParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
 
-	account, ok := keeper.Account(ctx, params.ID)
+	invoice, ok := keeper.Invoice(ctx, params.ID)
 	if !ok {
-		return nil, ErrUnknownClaim(params.ID)
+		return nil, ErrUnknownInvoice(params.ID)
 	}
 
-	return mustMarshal(claim)
+	return mustMarshal(invoice)
 }
 
-func queryAccounts(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	accounts := keeper.Accounts(ctx)
+func queryInvoices(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	invoices := keeper.Invoices(ctx)
 
-	return mustMarshal(accounts)
+	return mustMarshal(invoices)
 }
 
-func queryAccountsByIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryAccountsParams
+func queryInvoicesByIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QueryInvoicesParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
 
-	var accounts Accounts
+	var invoices Invoices
 	for _, id := range params.IDs {
-		account, ok := keeper.Account(ctx, id)
+		invoice, ok := keeper.Invoice(ctx, id)
 		if !ok {
-			return nil, ErrUnknownAccount(id)
+			return nil, ErrUnknownInvoice(id)
 		}
-		accounts = append(accounts, claim)
+		invoices = append(invoices, invoice)
 	}
 
-	return mustMarshal(accounts)
+	return mustMarshal(invoices)
 }
 
 
-func queryAccountssByIDRange(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryAccountsIDRangeParams
+func queryInvoicesByIDRange(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QueryInvoicesIDRangeParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
-	accounts := keeper.AccountsBetweenIDs(ctx, params.StartID, params.EndID)
+	invoices := keeper.InvoicesBetweenIDs(ctx, params.StartID, params.EndID)
 
-	return mustMarshal(accounts)
+	return mustMarshal(invoices)
 }
 
-func queryAccountsBeforeTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryAccountsTimeParams
+func queryInvoicesBeforeTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QueryInvoicesTimeParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
-	accounts := keeper.AccountsBeforeTime(ctx, params.CreatedTime)
+	invoices := keeper.InvoicesBeforeTime(ctx, params.CreatedTime)
 
-	return mustMarshal(accounts)
+	return mustMarshal(invoices)
 }
 
-func queryAccountsAfterTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryAccountsTimeParams
+func queryInvoicesAfterTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QueryInvoicesTimeParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
-	accounts := keeper.AccountsAfterTime(ctx, params.CreatedTime)
+	invoices := keeper.InvoicesAfterTime(ctx, params.CreatedTime)
 
-	return mustMarshal(accounts)
+	return mustMarshal(invoices)
 }
 
 func queryParams(ctx sdk.Context, keeper Keeper) (result []byte, err sdk.Error) {

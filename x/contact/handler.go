@@ -1,4 +1,4 @@
-package invoice
+package contact
 
 import (
 	"fmt"
@@ -11,14 +11,10 @@ import (
 func NewHandler(keeper Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
 		switch msg := msg.(type) {
-		case MsgCreateInvoice:
-			return handleMsgCreateInvoice(ctx, keeper, msg)
-		case MsgEditInvoice:
-			return handleMsgEditInvoice(ctx, keeper, msg)
-		case MsgPayInvoice:
-			return handleMsgPayInvoice(ctx, keeper, msg)
-		case MsgFactorInvoice:
-			return handleMsgFactorInvoice(ctx, keeper, msg)
+		case MsgCreateContact:
+			return handleMsgCreateContact(ctx, keeper, msg)
+		case MsgEditContact:
+			return handleMsgEditContact(ctx, keeper, msg)
 		case MsgAddAdmin:
 			return handleMsgAddAdmin(ctx, keeper, msg)
 		case MsgRemoveAdmin:
@@ -26,13 +22,13 @@ func NewHandler(keeper Keeper) sdk.Handler {
 		case MsgUpdateParams:
 			return handleMsgUpdateParams(ctx, keeper, msg)
 		default:
-			errMsg := fmt.Sprintf("Unrecognized invoice message type: %T", msg)
+			errMsg := fmt.Sprintf("Unrecognized contact message type: %T", msg)
 			return sdk.ErrUnknownRequest(errMsg).Result()
 		}
 	}
 }
 
-func handleMsgCreateInvoice(ctx sdk.Context, keeper Keeper, msg MsgCreateInvoice) sdk.Result {
+func handleMsgCreateContact(ctx sdk.Context, keeper Keeper, msg MsgCreateContact) sdk.Result {
 	if err := msg.ValidateBasic(); err != nil {
 		return err.Result()
 	}
@@ -43,12 +39,12 @@ func handleMsgCreateInvoice(ctx sdk.Context, keeper Keeper, msg MsgCreateInvoice
 		return ErrInvalidSourceURL(msg.Source).Result()
 	}
 
-	invoice, err := keeper.SubmitInvoice(ctx, msg.Body, msg.MarketplaceID, msg.Merchant, *sourceURL)
+	contact, err := keeper.SubmitContact(ctx, msg.Body, msg.CommunityID, msg.Creator, *sourceURL)
 	if err != nil {
 		return err.Result()
 	}
 
-	res, codecErr := ModuleCodec.MarshalJSON(invoice)
+	res, codecErr := ModuleCodec.MarshalJSON(contact)
 	if codecErr != nil {
 		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
 	}
@@ -58,17 +54,17 @@ func handleMsgCreateInvoice(ctx sdk.Context, keeper Keeper, msg MsgCreateInvoice
 	}
 }
 
-func handleMsgEditInvoice(ctx sdk.Context, keeper Keeper, msg MsgEditInvoice) sdk.Result {
+func handleMsgEditContact(ctx sdk.Context, keeper Keeper, msg MsgEditcontact) sdk.Result {
 	if err := msg.ValidateBasic(); err != nil {
 		return err.Result()
 	}
 
-	invoice, err := keeper.EditInvoice(ctx, msg.ID, msg.Body, msg.Editor)
+	Contact, err := keeper.EditContact(ctx, msg.ID, msg.Body, msg.Editor)
 	if err != nil {
 		return err.Result()
 	}
 
-	res, codecErr := ModuleCodec.MarshalJSON(invoice)
+	res, codecErr := ModuleCodec.MarshalJSON(contact)
 	if codecErr != nil {
 		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
 	}

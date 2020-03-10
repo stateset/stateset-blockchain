@@ -10,17 +10,17 @@ import (
 
 // query endpoints
 const (
-	QueryLoan             = "loan"
-	QueryLoans            = "loans"
-	QueryLoansByIDs       = "loans_ids"
-	QueryAccountLoan	  = "account_loans"
-	QueryAccountsLoans    = "accounts_loans"
-	QueryInvoiceLoan 	  = "invoice_loan"
-	QueryInvoicesLoans	  = "invoices_loans"
-	QueryLoansIDRange     = "loans_id_range"
-	QueryLoansBeforeTime  = "loans_before_time"
-	QueryLoansAfterTime   = "loans_after_time"
-	QueryParams           = "params"
+	QueryLoan                 = "loan"
+	QueryLoans                = "loans"
+	QueryLoansByIDs           = "loans_ids"
+	QueryLenderLoan	          = "lender_loans"
+	QueryLendersLoans         = "lenders_loans"
+	QueryMarketplaceLoan 	  = "invoice_loan"
+	QueryMarketplacesLoans	  = "invoices_loans"
+	QueryLoansIDRange         = "loans_id_range"
+	QueryLoansBeforeTime      = "loans_before_time"
+	QueryLoansAfterTime       = "loans_after_time"
+	QueryParams               = "params"
 )
 
 // QueryLoanParams for a single account
@@ -77,10 +77,10 @@ func queryLoan(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, s
 
 	loan, ok := keeper.Loan(ctx, params.ID)
 	if !ok {
-		return nil, ErrUnknownClaim(params.ID)
+		return nil, ErrUnknownLoan(params.ID)
 	}
 
-	return mustMarshal(claim)
+	return mustMarshal(loan)
 }
 
 func queryLoans(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
@@ -109,37 +109,37 @@ func queryLoansByIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]b
 }
 
 
-func queryAccountssByIDRange(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryAccountsIDRangeParams
+func queryLoansByIDRange(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QueryLoansIDRangeParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
-	accounts := keeper.AccountsBetweenIDs(ctx, params.StartID, params.EndID)
+	loans := keeper.LoansBetweenIDs(ctx, params.StartID, params.EndID)
 
-	return mustMarshal(accounts)
+	return mustMarshal(loans)
 }
 
-func queryAccountsBeforeTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryAccountsTimeParams
+func queryLoansBeforeTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QueryLoansTimeParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
-	accounts := keeper.AccountsBeforeTime(ctx, params.CreatedTime)
+	loans := keeper.LoansBeforeTime(ctx, params.CreatedTime)
 
-	return mustMarshal(accounts)
+	return mustMarshal(loans)
 }
 
-func queryAccountsAfterTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryAccountsTimeParams
+func queryLoansAfterTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QueryLoansTimeParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
-	accounts := keeper.AccountsAfterTime(ctx, params.CreatedTime)
+	loans := keeper.LoansAfterTime(ctx, params.CreatedTime)
 
-	return mustMarshal(accounts)
+	return mustMarshal(loans)
 }
 
 func queryParams(ctx sdk.Context, keeper Keeper) (result []byte, err sdk.Error) {

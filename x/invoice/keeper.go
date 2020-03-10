@@ -36,29 +36,29 @@ func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.C
 
 // SubmitInvoice creates a new invoice in the invoice key-value store
 func (k Keeper) SubmitInvoice(ctx sdk.Context, body, invoiceID string,
-	creator sdk.AccAddress, source url.URL) (invoice Invoice, err sdk.Error) {
+	merchant sdk.AccAddress, source url.URL) (invoice Invoice, err sdk.Error) {
 
 	err = k.validateLength(ctx, body)
 	if err != nil {
 		return
 	}
-	jailed, err := k.invoiceKeeper.IsJailed(ctx, creator)
+	jailed, err := k.invoiceKeeper.IsJailed(ctx, merchant)
 	if err != nil {
 		return
 	}
 	if jailed {
-		return claim, ErrCreatorJailed(creator)
+		return invoice, ErrMerchantJailed(merchant)
 	}
-	community, err := k.communityKeeper.Community(ctx, communityID)
+	marketplace, err := k.marketplaceKeeper.Marketplace(ctx, marketplaceID)
 	if err != nil {
-		return claim, ErrInvalidCommunityID(community.ID)
+		return invoice, ErrInvalidMarketplaceID(marketplace.ID)
 	}
 
 	invoiceID, err := k.invoiceID(ctx)
 	if err != nil {
 		return
 	}
-	invoice = NewInvoice(invoiceID, communityID, body, creator, source,
+	invoice = NewInvoice(invoiceID, marketplaceID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
 
@@ -136,88 +136,88 @@ func (k Keeper) InvoicesBetweenTimes(ctx sdk.Context, startTime time.Time, endTi
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// ClaimsBeforeTime gets all claims after a certain CreatedTime
-func (k Keeper) ClaimsBeforeTime(ctx sdk.Context, createdTime time.Time) (claims Claims) {
-	iterator := k.beforeCreatedTimeClaimsIterator(ctx, createdTime)
+// InvoicessBeforeTime gets all invoices after a certain CreatedTime
+func (k Keeper) InvoicesBeforeTime(ctx sdk.Context, createdTime time.Time) (invoices Invoices) {
+	iterator := k.beforeCreatedTimeInvoicesIterator(ctx, createdTime)
 
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// ClaimsAfterTime gets all claims after a certain CreatedTime
-func (k Keeper) ClaimsAfterTime(ctx sdk.Context, createdTime time.Time) (claims Claims) {
-	iterator := k.afterCreatedTimeClaimsIterator(ctx, createdTime)
+// InvoicessAfterTime gets all invoices after a certain CreatedTime
+func (k Keeper) InvoicessAfterTime(ctx sdk.Context, createdTime time.Time) (invoices Invoices) {
+	iterator := k.afterCreatedTimeInvoicesIterator(ctx, createdTime)
 
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// CommunityClaims gets all the claims for a given community
-func (k Keeper) CommunityClaims(ctx sdk.Context, communityID string) (claims Claims) {
-	return k.associatedClaims(ctx, communityClaimsKey(communityID))
+// CommunityInvoices gets all the invoices for a given community
+func (k Keeper) CommunityInvoices(ctx sdk.Context, communityID string) (invoices Invoices) {
+	return k.associatedInvoices(ctx, communityInvoicesKey(communityID))
 }
 
-// CreatorClaims gets all the claims for a given creator
-func (k Keeper) CreatorClaims(ctx sdk.Context, creator sdk.AccAddress) (claims Claims) {
-	return k.associatedClaims(ctx, creatorClaimsKey(creator))
+// MerchantInvoices gets all the invoices for a given merchant
+func (k Keeper) CreatorInvoices(ctx sdk.Context, creator sdk.AccAddress) (invoices Invoices) {
+	return k.associatedInvoices(ctx, creatorInvoicesKey(creator))
 }
 
 // AddBackingStake adds a stake amount to the total backing amount
 func (k Keeper) AddBackingStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
+	invoice, ok := k.Invoice(ctx, id)
 	if !ok {
-		return ErrUnknownClaim(id)
+		return ErrUnknownInvoice(id)
 	}
-	claim.TotalBacked = claim.TotalBacked.Add(stake)
-	claim.TotalStakers++
-	k.setClaim(ctx, claim)
+	invoice.TotalBacked = invoice.TotalBacked.Add(stake)
+	invoice.TotalStakers++
+	k.setInvoice(ctx, invoice)
 
 	return nil
 }
 
-// AddChallengeStake adds a stake amount to the total challenge amount
-func (k Keeper) AddChallengeStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
+// AddFactorStake adds a stake amount to the total factor amount
+func (k Keeper) AddFactorStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
+	, ok := k.Invoice(ctx, id)
 	if !ok {
-		return ErrUnknownClaim(id)
+		return ErrUnknownInvoice(id)
 	}
-	claim.TotalChallenged = claim.TotalChallenged.Add(stake)
-	claim.TotalStakers++
-	k.setClaim(ctx, claim)
+	invoice.TotalFactored = invoice.TotalFactored.Add(stake)
+	invoice.TotalStakers++
+	k.setInvoice(ctx, invoice)
 
 	return nil
 }
 
-// SubtractBackingStake adds a stake amount to the total backing amount
-func (k Keeper) SubtractBackingStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
+// SubtractFactorStake adds a stake amount to the total factoring amount
+func (k Keeper) SubtractFactorStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
+	invoice, ok := k.Invoice(ctx, id)
 	if !ok {
-		return ErrUnknownClaim(id)
+		return ErrUnknownInvoice(id)
 	}
-	claim.TotalBacked = claim.TotalBacked.Sub(stake)
-	k.setClaim(ctx, claim)
+	invoice.TotalFactored = invoice.TotalFactored.Sub(stake)
+	k.setIncoice(ctx, invoice)
 
 	return nil
 }
 
-// SubtractChallengeStake adds a stake amount to the total challenge amount
-func (k Keeper) SubtractChallengeStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
+// SubtractChallengeStake adds a stake amount to the total factoring amount
+func (k Keeper) SubtractFactorStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
+	invoice, ok := k.Invoice(ctx, id)
 	if !ok {
-		return ErrUnknownClaim(id)
+		return ErrUnknownInvoice(id)
 	}
-	claim.TotalChallenged = claim.TotalChallenged.Sub(stake)
-	k.setClaim(ctx, claim)
+	invoice.TotalFactored = invoice.TotalFactored.Sub(stake)
+	k.setInvoice(ctx, invoice)
 
 	return nil
 }
 
-// SetFirstArgumentTime sets time when first argument was created on a claim
+// SetFirstArgumentTime sets time when first argument was created on a invoice
 func (k Keeper) SetFirstArgumentTime(ctx sdk.Context, id uint64, firstArgumentTime time.Time) sdk.Error {
-	claim, ok := k.Claim(ctx, id)
+	invoice, ok := k.Invoice(ctx, id)
 	if !ok {
-		return ErrUnknownClaim(id)
+		return ErrUnknownInvoice(id)
 	}
-	claim.FirstArgumentTime = firstArgumentTime
-	k.setClaim(ctx, claim)
+	invoice.FirstArgumentTime = firstArgumentTime
+	k.setInvoice(ctx, invoice)
 
 	return nil
 }
@@ -227,18 +227,18 @@ func (k Keeper) AddAdmin(ctx sdk.Context, admin, creator sdk.AccAddress) (err sd
 	params := k.GetParams(ctx)
 
 	// first admin can be added without any authorisation
-	if len(params.ClaimAdmins) > 0 && !k.isAdmin(ctx, creator) {
+	if len(params.InvoiceAdmins) > 0 && !k.isAdmin(ctx, creator) {
 		err = ErrAddressNotAuthorised()
 	}
 
 	// if already present, don't add again
-	for _, currentAdmin := range params.ClaimAdmins {
+	for _, currentAdmin := range params.InvoiceAdmins {
 		if currentAdmin.Equals(admin) {
 			return
 		}
 	}
 
-	params.ClaimAdmins = append(params.ClaimAdmins, admin)
+	params.InvoiceAdmins = append(params.InvoiceAdmins, admin)
 
 	k.SetParams(ctx, params)
 
@@ -252,9 +252,9 @@ func (k Keeper) RemoveAdmin(ctx sdk.Context, admin, remover sdk.AccAddress) (err
 	}
 
 	params := k.GetParams(ctx)
-	for i, currentAdmin := range params.ClaimAdmins {
+	for i, currentAdmin := range params.InvoiceAdmins {
 		if currentAdmin.Equals(admin) {
-			params.ClaimAdmins = append(params.ClaimAdmins[:i], params.ClaimAdmins[i+1:]...)
+			params.InvoiceAdmins = append(params.InvoiceAdmins[:i], params.InvoiceAdmins[i+1:]...)
 		}
 	}
 
@@ -264,7 +264,7 @@ func (k Keeper) RemoveAdmin(ctx sdk.Context, admin, remover sdk.AccAddress) (err
 }
 
 func (k Keeper) isAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
-	for _, admin := range k.GetParams(ctx).ClaimAdmins {
+	for _, admin := range k.GetParams(ctx).InvoiceAdmins {
 		if address.Equals(admin) {
 			return true
 		}
@@ -273,125 +273,126 @@ func (k Keeper) isAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
 }
 
 func (k Keeper) validateLength(ctx sdk.Context, body string) sdk.Error {
-	var minClaimLength int
-	var maxClaimLength int
+	var minInvoiceLength int
+	var maxInvoiceLength int
 
-	k.paramStore.Get(ctx, KeyMinClaimLength, &minClaimLength)
-	k.paramStore.Get(ctx, KeyMaxClaimLength, &maxClaimLength)
+	k.paramStore.Get(ctx, KeyMinInvoiceLength, &minInvoiceLength)
+	k.paramStore.Get(ctx, KeyMaxInvoiceLength, &maxInvoiceLength)
 
 	len := len([]rune(body))
-	if len < minClaimLength {
+	if len < minInvoiceLength {
 		return ErrInvalidBodyTooShort(body)
 	}
-	if len > maxClaimLength {
+	if len > maxInvoiceLength {
 		return ErrInvalidBodyTooLong()
 	}
 
 	return nil
 }
 
-// claimID gets the highest claim ID
-func (k Keeper) claimID(ctx sdk.Context) (claimID uint64, err sdk.Error) {
+// invoiceID gets the highest invoice ID
+func (k Keeper) invoiceID(ctx sdk.Context) (invoiceID uint64, err sdk.Error) {
 	store := k.store(ctx)
-	bz := store.Get(ClaimIDKey)
+	bz := store.Get(InvoiceIDKey)
 	if bz == nil {
-		return 0, ErrUnknownClaim(claimID)
+		return 0, ErrUnknownInvoice(invoiceID)
 	}
-	k.codec.MustUnmarshalBinaryLengthPrefixed(bz, &claimID)
-	return claimID, nil
+	k.codec.MustUnmarshalBinaryLengthPrefixed(bz, &invoiceID)
+	return invoiceID, nil
 }
 
-// set the claim ID
-func (k Keeper) setClaimID(ctx sdk.Context, claimID uint64) {
+// set the invoice ID
+func (k Keeper) setInvoiceID(ctx sdk.Context, invoiceID uint64) {
 	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(claimID)
-	store.Set(ClaimIDKey, bz)
+	bz := k.codec.MustMarshalBinaryLengthPrefixed(invoiceID)
+	store.Set(InvoiceIDKey, bz)
 }
 
-// setClaim sets a claim in store
-func (k Keeper) setClaim(ctx sdk.Context, claim Claim) {
+// setInvoice sets a invoice in store
+func (k Keeper) setInvoice(ctx sdk.Context, invoice Invoice) {
 	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(claim)
-	store.Set(key(claim.ID), bz)
+	bz := k.codec.MustMarshalBinaryLengthPrefixed(invoice)
+	store.Set(key(invoice.ID), bz)
 }
 
-// setCommunityClaim sets a community <-> claim association in store
-func (k Keeper) setCommunityClaim(ctx sdk.Context, communityID string, claimID uint64) {
+// setMarketplaceInvoice sets a marketplace <-> invoice association in store
+func (k Keeper) setMarketplaceInvoice(ctx sdk.Context, marketplaceID string, invoiceID uint64) {
 	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(claimID)
-	store.Set(communityClaimKey(communityID, claimID), bz)
+	bz := k.codec.MustMarshalBinaryLengthPrefixed(invoiceID)
+	store.Set(merchantInvoiceKey(merchantID, invoiceID), bz)
 }
 
-func (k Keeper) setCreatorClaim(ctx sdk.Context, creator sdk.AccAddress, claimID uint64) {
+// setMerchantInvoice sets a merchant <-> invoice association in store
+func (k Keeper) setMerchantInvoice(ctx sdk.Context, merchant sdk.AccAddress, invoiceID uint64) {
 	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(claimID)
-	store.Set(creatorClaimKey(creator, claimID), bz)
+	bz := k.codec.MustMarshalBinaryLengthPrefixed(invoiceID)
+	store.Set(merchantInvoiceKey(merchant, invoiceID), bz)
 }
 
-func (k Keeper) setCreatedTimeClaim(ctx sdk.Context, createdTime time.Time, claimID uint64) {
+func (k Keeper) setCreatedTimeInvoice(ctx sdk.Context, createdTime time.Time, invoiceID uint64) {
 	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(claimID)
-	store.Set(createdTimeClaimKey(createdTime, claimID), bz)
+	bz := k.codec.MustMarshalBinaryLengthPrefixed(invoiceID)
+	store.Set(createdTimeInvoiceKey(createdTime, invoiceID), bz)
 }
 
-// claimsIterator returns an sdk.Iterator for claims from startClaimID to endClaimID
-func (k Keeper) claimsIterator(ctx sdk.Context, startClaimID, endClaimID uint64) sdk.Iterator {
+// invoicesIterator returns an sdk.Iterator for invoices from startInvoiceID to endInvoiceID
+func (k Keeper) invoicesIterator(ctx sdk.Context, startInvoiceID, endInvoiceID uint64) sdk.Iterator {
 	store := k.store(ctx)
-	return store.Iterator(key(startClaimID), sdk.PrefixEndBytes(key(endClaimID)))
+	return store.Iterator(key(startInvoiceID), sdk.PrefixEndBytes(key(endInvoiceID)))
 }
 
-func (k Keeper) beforeCreatedTimeClaimsIterator(ctx sdk.Context, createdTime time.Time) sdk.Iterator {
+func (k Keeper) beforeCreatedTimeInvoicesIterator(ctx sdk.Context, createdTime time.Time) sdk.Iterator {
 	store := k.store(ctx)
-	return store.Iterator(CreatedTimeClaimsPrefix, sdk.PrefixEndBytes(createdTimeClaimsKey(createdTime)))
+	return store.Iterator(CreatedTimeInvoicesPrefix, sdk.PrefixEndBytes(createdTimeInvoicesKey(createdTime)))
 }
 
-func (k Keeper) afterCreatedTimeClaimsIterator(ctx sdk.Context, createdTime time.Time) sdk.Iterator {
+func (k Keeper) afterCreatedTimeInvoicesIterator(ctx sdk.Context, createdTime time.Time) sdk.Iterator {
 	store := k.store(ctx)
-	return store.Iterator(createdTimeClaimsKey(createdTime), sdk.PrefixEndBytes(CreatedTimeClaimsPrefix))
+	return store.Iterator(createdTimeInvoicesKey(createdTime), sdk.PrefixEndBytes(CreatedTimeInvoicesPrefix))
 }
 
-// createdTimeRangeClaimsIterator returns an sdk.Iterator for all claims between startCreatedTime and endCreatedTime
-func (k Keeper) createdTimeRangeClaimsIterator(ctx sdk.Context, startCreatedTime, endCreatedTime time.Time) sdk.Iterator {
+// createdTimeRangeInvoicesIterator returns an sdk.Iterator for all invoices between startCreatedTime and endCreatedTime
+func (k Keeper) createdTimeRangeInvoicesIterator(ctx sdk.Context, startCreatedTime, endCreatedTime time.Time) sdk.Iterator {
 	store := k.store(ctx)
-	return store.Iterator(createdTimeClaimsKey(startCreatedTime), sdk.PrefixEndBytes(createdTimeClaimsKey(endCreatedTime)))
+	return store.Iterator(createdTimeInvoicesKey(startCreatedTime), sdk.PrefixEndBytes(createdTimeInvoicesKey(endCreatedTime)))
 }
 
-func (k Keeper) associatedClaims(ctx sdk.Context, prefix []byte) (claims Claims) {
+func (k Keeper) associatedInvoices(ctx sdk.Context, prefix []byte) (invoices Invoices) {
 	store := k.store(ctx)
 	iterator := sdk.KVStoreReversePrefixIterator(store, prefix)
 
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
-		var claimID uint64
-		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &claimID)
-		claim, ok := k.Claim(ctx, claimID)
+		var invoiceID uint64
+		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &invoiceID)
+		invoice, ok := k.Invoice(ctx, invoiceID)
 		if ok {
-			claims = append(claims, claim)
+			invoices = append(invoices, invoice)
 		}
 	}
 
 	return
 }
 
-func (k Keeper) iterate(iterator sdk.Iterator) (claims Claims) {
+func (k Keeper) iterate(iterator sdk.Iterator) (invoices Invoices) {
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
-		var claim Claim
-		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &claim)
-		claims = append(claims, claim)
+		var invoice Invoice
+		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &invoice)
+		invoices = append(invoices, invoice)
 	}
 
 	return
 }
 
-func (k Keeper) iterateAssociated(ctx sdk.Context, iterator sdk.Iterator) (claims Claims) {
+func (k Keeper) iterateAssociated(ctx sdk.Context, iterator sdk.Iterator) (invoices Invoices) {
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
-		var claimID uint64
-		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &claimID)
-		claim, ok := k.Claim(ctx, claimID)
+		var invoiceID uint64
+		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &invoiceID)
+		invoice, ok := k.Invoice(ctx, invoiceID)
 		if ok {
-			claims = append(claims, claim)
+			invoices = append(invoices, invoice)
 		}
 	}
 
