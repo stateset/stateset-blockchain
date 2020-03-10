@@ -199,6 +199,55 @@ func (msg MsgEditInvoice) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Editor)}
 }
 
+// MsgFactorInvoice defines a message to factor and invoice
+type MsgFactorInvoice struct {
+	ID     uint64         `json:"id"`
+	Body   string         `json:"body"`
+	Factor sdk.AccAddress `json:"factor"`
+}
+
+// NewMsgFactorInvoice creates a new message to factor an invoice
+func NewMsgFactorInvoice(id uint64, body string, factor sdk.AccAddress) MsgFactorInvoice {
+	return MsgEditInvoice{
+		ID:     id,
+		Body:   body,
+		Factor: factor,
+	}
+}
+
+// Route is the name of the route for invoice
+func (msg MsgfactorInvoice) Route() string {
+	return RouterKey
+}
+
+// Type is the name for the Msg
+func (msg MsgFactorInvoice) Type() string {
+	return ModuleName
+}
+
+// ValidateBasic validates basic fields of the Msg
+func (msg MsgFactorInvoice) ValidateBasic() sdk.Error {
+	if msg.ID == 0 {
+		return ErrUnknownInvoice(msg.ID)
+	}
+	if len(msg.Factor) == 0 {
+		return sdk.ErrInvalidAddress("Invalid address: " + msg.Factor.String())
+	}
+
+	return nil
+}
+
+// GetSignBytes gets the bytes for Msg signer to sign on
+func (msg MsgFactorInvoice) GetSignBytes() []byte {
+	msgBytes := ModuleCodec.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(msgBytes)
+}
+
+// GetSigners gets the signs of the Msg
+func (msg MsgFactorInvoice) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{sdk.AccAddress(msg.Factor)}
+}
+
 // MsgAddAdmin defines the message to add a new admin
 type MsgAddAdmin struct {
 	Admin   sdk.AccAddress `json:"admin"`
