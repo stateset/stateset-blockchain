@@ -8,7 +8,7 @@ import (
 
 const (
 	// TypeMsgNewMarketplace represents the type of the message for creating new marketplace
-	TypeMsgNewMarketplace = "new_markerplace"
+	TypeMsgNewMarketplace = "new_marketplace"
 	// TypeMsgAddAdmin represents the type of message for adding a new admin
 	TypeMsgAddAdmin = "add_admin"
 	// TypeMsgRemoveAdmin represents the type of message for removeing an admin

@@ -1,4 +1,6 @@
-# Join the Stateset Blockchain Network
+# Stateset Blockchain Network
+
+Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint.
 
 ::: tip 
 See the [launch repo](https://github.com/stateset/launch) for
@@ -10,19 +12,23 @@ of the Cosmos-SDK to use and details about the genesis file.
 **You need to [install stateset](./installation.md) before you go further**
 :::
 
-## Setting Up a New Node
-
-These instructions are for setting up a brand new full node from scratch.
-
-First, initialize the node and create the necessary config files:
+## Build Instructions
 
 ```bash
-statesetd init <your_custom_moniker>
+git clone https://github.com/stateset/stateset-blockchain.git
+cd stateset-blockchain
+make build
 ```
 
 ::: warning Note
 Monikers can contain only ASCII characters. Using Unicode characters will render your node unreachable.
 :::
+
+## Setting up a Node environment
+
+```bash
+statesetd init <your_custom_moniker>
+```
 
 You can edit this `moniker` later, in the `~/.statesetd/config/config.toml` file:
 
