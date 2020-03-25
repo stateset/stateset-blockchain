@@ -8,7 +8,7 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
-// query endpoints supported by the truchain Querier
+// query endpoints supported by the stateset Querier
 const (
 	QueryMarketplace   = "marketplace"
 	QueryMarketplaces = "marketplaces"
