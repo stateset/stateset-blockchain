@@ -8,7 +8,34 @@ Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint.
 ```bash
 git clone https://github.com/stateset/stateset-blockchain.git
 cd stateset-blockchain
+make install
+```
+
+This creates:
+
+`statesetd`: Stateset blockchain daemon
+
+`statesetcli`: Stateset blockchain client. Used for creating keys and interaction with the blockchain and underlying Tendermint node.
+
+## Getting Started
+
+## Run a single node
+
+```bash
+
+# Build the binaries
 make build
+
+# Create a wallet and save the mnemonic and passphrase
+make create-wallet
+
+# Initialize configuration files and genesis file
+# Enter passphrase from above
+make init
+
+# Start the chain
+make start
+
 ```
 
 ## Setting up a Node environment
