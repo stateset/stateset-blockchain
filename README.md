@@ -2,15 +2,6 @@
 
 Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint.
 
-::: tip 
-See the [launch repo](https://github.com/stateset/launch) for
-information on the mainnet, including the correct version
-of the Cosmos-SDK to use and details about the genesis file.
-:::
-
-::: warning
-**You need to [install stateset](./installation.md) before you go further**
-:::
 
 ## Build Instructions
 
