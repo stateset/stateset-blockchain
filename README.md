@@ -11,15 +11,15 @@ cd stateset-blockchain
 make build
 ```
 
-::: warning Note
-Monikers can contain only ASCII characters. Using Unicode characters will render your node unreachable.
-:::
-
 ## Setting up a Node environment
 
 ```bash
 statesetd init <your_custom_moniker>
 ```
+
+::: warning Note
+Monikers can contain only ASCII characters. Using Unicode characters will render your node unreachable.
+:::
 
 You can edit this `moniker` later, in the `~/.statesetd/config/config.toml` file:
 
