@@ -1,6 +1,6 @@
 PACKAGES=$(shell GO111MODULE=on go list -mod=readonly ./...)
 
-MODULES = argument backing category challenge expiration stake story
+MODULES = account agreement bank contact factor invoice loan marketpace slashing
 
 VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
 COMMIT := $(shell git log -1 --format='%H')
@@ -37,7 +37,7 @@ build-linux:
 	GOOS=linux GOARCH=amd64 go build -mod=readonly $(BUILD_FLAGS) -o build/statesetcli cmd/statesetcli/*.go
 
 doc:
-	@echo "--> Wait a few seconds and visit http://localhost:6060/pkg/github.com/TruStory/truchain/"
+	@echo "--> Wait a few seconds and visit http://localhost:6060/pkg/github.com/stateset/stateset-blockchain/"
 	godoc -http=:6060
 
 export:
