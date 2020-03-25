@@ -35,10 +35,10 @@ import (
 const appName = "stateset"
 
 var (
-	// DefaultCLIHome default home directories for gaiacli
+	// DefaultCLIHome default home directories for statesetcli
 	DefaultCLIHome = os.ExpandEnv("$HOME/.statesetcli")
 
-	// DefaultNodeHome default home directories for gaiad
+	// DefaultNodeHome default home directories for statesetd
 	DefaultNodeHome = os.ExpandEnv("$HOME/.statesetd")
 
 	// ModuleBasics The module BasicManager is in charge of setting up basic,
@@ -67,6 +67,8 @@ var (
 		mint.ModuleName:           {supply.Minter},
 		staking.BondedPoolName:    {supply.Burner, supply.Staking},
 		staking.NotBondedPoolName: {supply.Burner, supply.Staking},
+		slashing.ModuleName:          {supply.Minter},
+		slashing.PenaltyAccount:      nil,
 		gov.ModuleName:            {supply.Burner},
 	}
 )
@@ -105,7 +107,6 @@ type Stateset struct {
 	mintKeeper     mint.Keeper
 	distrKeeper    distr.Keeper
 	govKeeper      gov.Keeper
-	crisisKeeper   crisis.Keeper
 	paramsKeeper   params.Keeper
 	upgradeKeeper  upgrade.Keeper
 	evidenceKeeper evidence.Keeper
