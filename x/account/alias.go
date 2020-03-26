@@ -1,6 +1,5 @@
 package accountimport (
 	"github.com/stateset/stateset-blockchain/x/bank/exported"
-	"github.com/stateset/stateset-blockchain/x/distribution"
 )
 
 const (
