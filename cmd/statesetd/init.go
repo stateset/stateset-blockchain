@@ -85,13 +85,6 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, def
 			mintGenState.Params.MintDenom = truchain.StakeDenom
 			appState[mint.ModuleName] = cdc.MustMarshalJSON(mintGenState)
 		}
-		// migrate crisis state
-		if appState[crisis.ModuleName] != nil {
-			var crisisGenState crisis.GenesisState
-			cdc.MustUnmarshalJSON(appState[crisis.ModuleName], &crisisGenState)
-			crisisGenState.ConstantFee.Denom = truchain.StakeDenom
-			appState[crisis.ModuleName] = cdc.MustMarshalJSON(crisisGenState)
-		}
 		// migrate account state
 		if appState[account.ModuleName] != nil {
 			var accountGenState account.GenesisState
@@ -99,40 +92,54 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, def
 			accountGenState.Params.Registrar = addr
 			appState[account.ModuleName] = cdc.MustMarshalJSON(accountGenState)
 		}
-		// migrate community state
-		if appState[community.ModuleName] != nil {
-			var communityGenState community.GenesisState
-			cdc.MustUnmarshalJSON(appState[community.ModuleName], &communityGenState)
-			communityGenState.Params.CommunityAdmins = []sdk.AccAddress{addr}
-			appState[community.ModuleName] = cdc.MustMarshalJSON(communityGenState)
+		// migrate marketplace state
+		if appState[marketplace.ModuleName] != nil {
+			var marketplaceGenState marketplace.GenesisState
+			cdc.MustUnmarshalJSON(appState[marketplace.ModuleName], &marketplaceGenState)
+			marketplaceGenState.Params.MarktplaceAdmins = []sdk.AccAddress{addr}
+			appState[markerplace.ModuleName] = cdc.MustMarshalJSON(markerplaceGenState)
 		}
-		// migrate claim state
-		if appState[claim.ModuleName] != nil {
-			var genState claim.GenesisState
-			cdc.MustUnmarshalJSON(appState[claim.ModuleName], &genState)
-			genState.Params.ClaimAdmins = []sdk.AccAddress{addr}
-			appState[claim.ModuleName] = cdc.MustMarshalJSON(genState)
+		// migrate agreement state
+		if appState[agreement.ModuleName] != nil {
+			var genState agreement.GenesisState
+			cdc.MustUnmarshalJSON(appState[agreement.ModuleName], &genState)
+			genState.Params.AgreementAdmins = []sdk.AccAddress{addr}
+			appState[agreement.ModuleName] = cdc.MustMarshalJSON(genState)
+		}
+		// migrate loan state
+		if appState[loan.ModuleName] != nil {
+			var genState loan.GenesisState
+			cdc.MustUnmarshalJSON(appState[loan.ModuleName], &genState)
+			genState.Params.LoanAdmins = []sdk.AccAddress{addr}
+			appState[loan.ModuleName] = cdc.MustMarshalJSON(genState)
+		}
+		// migrate invoice state
+		if appState[invoice.ModuleName] != nil {
+			var genState invoice.GenesisState
+			cdc.MustUnmarshalJSON(appState[invoice.ModuleName], &genState)
+			genState.Params.InvoiceAdmins = []sdk.AccAddress{addr}
+			appState[invoice.ModuleName] = cdc.MustMarshalJSON(genState)
 		}
 		// migrate staking state
-		if appState[trustaking.ModuleName] != nil {
-			var genState trustaking.GenesisState
-			cdc.MustUnmarshalJSON(appState[trustaking.ModuleName], &genState)
+		if appState[statestaking.ModuleName] != nil {
+			var genState statestaking.GenesisState
+			cdc.MustUnmarshalJSON(appState[statestaking.ModuleName], &genState)
 			genState.Params.StakingAdmins = []sdk.AccAddress{addr}
-			appState[trustaking.ModuleName] = cdc.MustMarshalJSON(genState)
+			appState[statestaking.ModuleName] = cdc.MustMarshalJSON(genState)
 		}
 		// migrate slashing state
-		if appState[truslashing.ModuleName] != nil {
-			var genState truslashing.GenesisState
-			cdc.MustUnmarshalJSON(appState[truslashing.ModuleName], &genState)
+		if appState[stateslashing.ModuleName] != nil {
+			var genState stateslashing.GenesisState
+			cdc.MustUnmarshalJSON(appState[stateslashing.ModuleName], &genState)
 			genState.Params.SlashAdmins = []sdk.AccAddress{addr}
-			appState[truslashing.ModuleName] = cdc.MustMarshalJSON(genState)
+			appState[stateslashing.ModuleName] = cdc.MustMarshalJSON(genState)
 		}
 		// migrate trubank state
-		if appState[trubank.ModuleName] != nil {
-			var genState trubank.GenesisState
-			cdc.MustUnmarshalJSON(appState[trubank.ModuleName], &genState)
+		if appState[statebank.ModuleName] != nil {
+			var genState statebank.GenesisState
+			cdc.MustUnmarshalJSON(appState[statebank.ModuleName], &genState)
 			genState.Params.RewardBrokerAddress = addr
-			appState[trubank.ModuleName] = cdc.MustMarshalJSON(genState)
+			appState[statebank.ModuleName] = cdc.MustMarshalJSON(genState)
 		}
 		var err error
 		genDoc.AppState, err = cdc.MarshalJSON(appState)
