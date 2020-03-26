@@ -3,6 +3,7 @@ module github.com/stateset/stateset-blockchain
 go 1.13
 
 require (
+	github.com/TruStory/truchain v0.3.3
 	github.com/cosmos/cosmos-sdk v0.38.2
 	github.com/cosmos/gaia v1.0.0
 	github.com/gorilla/mux v1.7.3
