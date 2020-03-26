@@ -1,7 +1,7 @@
 package bank
 
 import (
-	app "github.com/staeset/stateset-blockchain/types"
+	app "github.com/stateset/stateset-blockchain/types"
 	"github.com/stateset/stateset-blockchain/x/distribution"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
