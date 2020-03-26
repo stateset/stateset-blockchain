@@ -25,6 +25,27 @@ This creates:
 
 `statesetcli`: Stateset blockchain client. Used for creating keys and interaction with the blockchain and underlying Tendermint node.
 
+
+```bash
+
+$ statesetd version --long
+$ statesetcli version --long
+
+```
+`statesetcli` should output:
+
+```bash
+
+name: stateset
+server_name: statesetd
+client_name: statesetcli
+version: 0.0.1
+commit: 2f123333312331123123213
+build_tags: dev,mainnet,ledger
+go: go version go1.12.5 darwin/amd64
+
+```
+
 ## Getting Started
 
 ## Run a single node
