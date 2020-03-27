@@ -9,7 +9,7 @@ func RegisterCodec(c *codec.Codec) {
 	c.RegisterConcrete(MsgRemoveAdmin{}, "staking/MsgRemoveAdmin", nil)
 	c.RegisterConcrete(MsgUpdateParams{}, "staking/MsgUpdateParams", nil)
 
-	c.RegisterConcrete(Stake{}, "stateset/Stake", nil)
+	c.RegisterConcrete(Factor{}, "stateset/Factor", nil)
 	c.RegisterConcrete(Loan{}, "stateset/Loan", nil)
 	c.RegisterConcrete(Invoice{}, "stateset/Invoice", nil)
 

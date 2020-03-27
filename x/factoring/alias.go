@@ -1,4 +1,4 @@
-package staking
+package factoring
 
 import "github.com/stateset/stateset/x/bank/exported"
 

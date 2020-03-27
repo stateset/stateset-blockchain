@@ -1,4 +1,4 @@
-package staking
+package factoring
 
 import (
 	"fmt"
