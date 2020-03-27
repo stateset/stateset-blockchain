@@ -25,7 +25,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 	}
 }
 
-func handleMsgFactorInvoice(ctx sdk.Context, keeper Keeper, msg MsgSubmitArgument) sdk.Result {
+func handleMsgFactorInvoice(ctx sdk.Context, keeper Keeper, msg MsgFactorInvoice) sdk.Result {
 	if err := msg.ValidateBasic(); err != nil {
 		return err.Result()
 	}
