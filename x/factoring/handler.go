@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// NewHandler creates a new handler for staking module
+// NewHandler creates a new handler for factoring module
 func NewHandler(keeper Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
 		switch msg := msg.(type) {
@@ -19,7 +19,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 		case MsgUpdateParams:
 			return handleMsgUpdateParams(ctx, keeper, msg)
 		default:
-			errMsg := fmt.Sprintf("Unrecognized staking message type: %T", msg)
+			errMsg := fmt.Sprintf("Unrecognized factoring message type: %T", msg)
 			return sdk.ErrUnknownRequest(errMsg).Result()
 		}
 	}

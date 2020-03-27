@@ -1,5 +1,4 @@
-package staking
-
+package factoring
 import (
 	"fmt"
 	"time"
@@ -9,7 +8,7 @@ import (
 	"github.com/stateset/stateset-blockchain/x/bank"
 )
 
-// Defines staking module constants
+// Defines factoring module constants
 const (
 	StoreKey          = ModuleName
 	RouterKey         = ModuleName

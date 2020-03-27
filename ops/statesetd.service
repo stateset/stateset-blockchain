@@ -15,7 +15,7 @@ After=network-online.target
 
 [Service]
 User=ubuntu
-ExecStart=/home/ubuntu/go/bin/statesetd --log_level "main:info,state:info,*:error,app:info,account:info,statebank2:info,agreement:info,marketplace:info,stateslashing:info,statestaking:info" start
+ExecStart=/home/ubuntu/go/bin/statesetd --log_level "main:info,state:info,*:error,app:info,account:info,statebank2:info,agreement:info,marketplace:info,stateslashing:info,statefactoring:info" start
 Restart=always
 RestartSec=3
 LimitNOFILE=4096

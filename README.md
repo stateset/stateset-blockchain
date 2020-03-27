@@ -231,7 +231,7 @@ invariant broken:
         pool.NotBondedTokens: 100
         sum of account tokens: 101
     CRITICAL please submit the following transaction:
-        gaiacli tx crisis invariant-broken staking supply
+        statesetcli tx crisis invariant-broken factoring supply
 
 ```
 
