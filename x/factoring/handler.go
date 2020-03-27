@@ -29,7 +29,7 @@ func handleMsgFactorInvoice(ctx sdk.Context, keeper Keeper, msg MsgSubmitArgumen
 	if err := msg.ValidateBasic(); err != nil {
 		return err.Result()
 	}
-	argument, err := keeper.FactorInvoice(ctx, msg.Body, msg.Summary, msg.Lender, msg.InvoiceID, msg.StakeType)
+	loan, err := keeper.FactorInvoice(ctx, msg.Amount, msg.Lender, msg.InvoiceID, msg.FactorType)
 	if err != nil {
 		return err.Result()
 	}

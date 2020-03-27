@@ -67,14 +67,14 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, def
 		if appState[staking.ModuleName] != nil {
 			var stakingGenState staking.GenesisState
 			cdc.MustUnmarshalJSON(appState[staking.ModuleName], &stakingGenState)
-			stakingGenState.Params.BondDenom = truchain.StakeDenom
+			factoringGenState.Params.BondDenom = stateset.FactorDenom
 			appState[staking.ModuleName] = cdc.MustMarshalJSON(stakingGenState)
 		}
 		// migrate gov state
 		if appState[gov.ModuleName] != nil {
 			var govGenState gov.GenesisState
 			cdc.MustUnmarshalJSON(appState[gov.ModuleName], &govGenState)
-			minDeposit := sdk.NewInt64Coin(truchain.StakeDenom, 10_000_000)
+			minDeposit := sdk.NewInt64Coin(stateset.FactorDenom, 10_000_000)
 			govGenState.DepositParams.MinDeposit = sdk.NewCoins(minDeposit)
 			appState[gov.ModuleName] = cdc.MustMarshalJSON(govGenState)
 		}
@@ -82,7 +82,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, def
 		if appState[mint.ModuleName] != nil {
 			var mintGenState mint.GenesisState
 			cdc.MustUnmarshalJSON(appState[mint.ModuleName], &mintGenState)
-			mintGenState.Params.MintDenom = truchain.StakeDenom
+			mintGenState.Params.MintDenom = stateset.FactorDenom
 			appState[mint.ModuleName] = cdc.MustMarshalJSON(mintGenState)
 		}
 		// migrate account state

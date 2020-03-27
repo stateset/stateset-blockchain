@@ -16,7 +16,7 @@ const (
 	DefaultParamspace = ModuleName
 
 	EventTypeInterestRewardPaid = "interest-reward-paid"
-	AttributeKeyExpiredStakes   = "expired-stakes"
+	AttributeKeyExpiredFactors   = "expired-factors"
 
 	EventTypeFactorLimitIncreased  = "factor-limit-increased"
 	AttributeKeyFactorLimitUpgrade = "factor-limit-upgrade"

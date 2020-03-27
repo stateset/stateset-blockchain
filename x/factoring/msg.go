@@ -23,16 +23,16 @@ const (
 type MsgFactorInvoice struct {
 	InvoiceID   uint64         `json:"invoice_id"`
 	Amount      uint64         `json:"amount"`
-	StakeType   StakeType      `json:"stake_type"`
+	FactorType  FactorType      `json:"factor_type"`
 	Factor      sdk.AccAddress `json:"factor"`
 }
 
 // NewMsgFactorInvoice returns a new factor invoice message.
-func NewMsgFactorInvoice(factor sdk.AccAddress, invoiceID uint64, amount, stakeType StakeType) MsgFactorInvoice {
+func NewMsgFactorInvoice(factor sdk.AccAddress, invoiceID uint64, amount, factorType FactorType) MsgFactorInvoice {
 	return MsgFactorInvoice{
 		InvoiceID:   invoiceID,
 		Amount:   amount,
-		StakeType: stakeType,
+		FactorType: factorType,
 		Factor:   factor,
 	}
 }
@@ -45,8 +45,8 @@ func (MsgFactorInvoice) Type() string {
 }
 
 func (msg MsgFactorInvoice) ValidateBasic() sdk.Error {
-	if !msg.StakeType.ValidForArgument() {
-		return ErrCodeInvalidStakeType(msg.StakeType)
+	if !msg.FactorType.ValidForArgument() {
+		return ErrCodeInvalidFactorType(msg.FactorType)
 	}
 
 	if len(msg.Factor) == 0 {

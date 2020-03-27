@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// EndBlocker called every block, process expiring stakes
+// EndBlocker called every block, process expiring factors
 func EndBlocker(ctx sdk.Context, keeper Keeper) {
 	keeper.unjailAccounts(ctx)
 }

@@ -26,15 +26,15 @@ const (
 	// Bech32PrefixAccAddr defines the Bech32 prefix of an account's address
 	Bech32PrefixAccAddr = "states"
 	// Bech32PrefixAccPub defines the Bech32 prefix of an account's public key
-	Bech32PrefixAccPub = "st8pub"
+	Bech32PrefixAccPub = "statespub"
 	// Bech32PrefixValAddr defines the Bech32 prefix of a validator's operator address
-	Bech32PrefixValAddr = "st8valoper"
+	Bech32PrefixValAddr = "statesvaloper"
 	// Bech32PrefixValPub defines the Bech32 prefix of a validator's operator public key
-	Bech32PrefixValPub = "st8valoperpub"
+	Bech32PrefixValPub = "statesvaloperpub"
 	// Bech32PrefixConsAddr defines the Bech32 prefix of a consensus node address
-	Bech32PrefixConsAddr = "st8valcons"
+	Bech32PrefixConsAddr = "statesvalcons"
 	// Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key
-	Bech32PrefixConsPub = "st8valconspub"
+	Bech32PrefixConsPub = "statesvalconspub"
 )
 
 // InitialFactor is an `sdk.Coins` representing the balance a new user is granted upon registration

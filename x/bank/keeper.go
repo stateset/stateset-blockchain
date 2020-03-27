@@ -160,7 +160,7 @@ func (k Keeper) sendState(ctx sdk.Context,
 	if !k.rewardBrokerAddress(ctx).Equals(sender) {
 		return ErrInvalidRewardBrokerAddress(sender)
 	}
-	if amount.Denom != app.StakeDenom {
+	if amount.Denom != app.FactorDenom {
 		return sdk.ErrInvalidCoins("Invalid denomination coin")
 	}
 	_, err := k.AddCoin(ctx, recipient, amount, 0, TransactionGift, FromModuleAccount(distribution.UserGrowthPoolName))
