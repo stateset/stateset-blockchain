@@ -188,12 +188,15 @@ Check that everything is running smoothly:
 statesetcli status
 ```
 
-View the status of the network with the [Stateset Explorer](https://stateset.network/launch). 
+View the status of the network with the [Stateset Explorer](https://stateset.network/launch).
 
-## Become a Validator
+## Upgrade to Validator Node
+
+You now have an active full node. What's the next step? You can upgrade your full node to become a Stateset Validator. The top 100 validators have the ability to propose new blocks to the Stateset Hub.
+
 
 ### Validator Node
-The Stateset is based on Cosmos SDK and Tendermint, which relies on a set of validators to secure the network. The role of validators is to run a full-node and participate in consensus by broadcasting votes which contain cryptographic signatures signed by their private keys. Validators commit new blocks to the blockchain and receive revenue in exchange for their work. They must also participate in governance by voting on proposals. Validators are weighted according to their total stake.
+The Stateset Blockchain is based on Cosmos SDK and Tendermint, which relies on a set of validators to secure the network. The role of validators is to run a full-node and participate in consensus by broadcasting votes which contain cryptographic signatures signed by their private keys. Validators commit new blocks to the blockchain and receive revenue in exchange for their work. They must also participate in governance by voting on proposals. Validators are weighted according to their total stake.
 
 #Validator Candidate Node
 
@@ -264,7 +267,3 @@ invariant broken:
 
 When submitting a invariant-broken transaction, transaction fee tokens are not
 deducted as the blockchain will halt (aka. this is a free transaction). 
-
-## Upgrade to Validator Node
-
-You now have an active full node. What's the next step? You can upgrade your full node to become a Stateset Validator. The top 100 validators have the ability to propose new blocks to the Stateset Hub.
