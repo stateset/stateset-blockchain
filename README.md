@@ -172,6 +172,10 @@ The initial recommended `min-gas-prices` is `0.025uatom`, but you might want to 
 
 ## Run a Full Node
 
+### Full Node
+A full-node is a program that fully validates transactions and blocks of a blockchain. It is distinct from a light-node that only processes block headers and a small subset of transactions. Running a full-node requires more resources than a light-node but is necessary in order to be a validator. In practice, running a full-node only implies running a non-compromised and up-to-date version of the software with low network latency and without downtime.
+
+
 Start the full node with this command:
 
 ```bash
@@ -187,6 +191,11 @@ statesetcli status
 View the status of the network with the [Stateset Explorer](https://stateset.network/launch). 
 
 ## Become a Validator
+
+### Validator Node
+The Stateset is based on Cosmos SDK and Tendermint, which relies on a set of validators to secure the network. The role of validators is to run a full-node and participate in consensus by broadcasting votes which contain cryptographic signatures signed by their private keys. Validators commit new blocks to the blockchain and receive revenue in exchange for their work. They must also participate in governance by voting on proposals. Validators are weighted according to their total stake.
+
+#Validator Candidate Node
 
 ```jsx
 
