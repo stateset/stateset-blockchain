@@ -9,6 +9,10 @@ import (
 const (
 	// TypeMsgCreateContact represents the type of the message for creating new contact
 	TypeMsgCreateContact = "create_contact"
+	// TypeMsgEditContact represents the type of the message for creating new contact
+	TypeMsgEditContact = "edit_contact"
+	// TypeMsgDeleteContact represents the type of the message for creating new contact
+	TypeMsgDeleteContact = "delete_contact"
 	// TypeMsgAddAdmin represents the type of message for adding a new admin
 	TypeMsgAddAdmin = "add_admin"
 	// TypeMsgRemoveAdmin represents the type of message for removeing an admin
@@ -20,22 +24,23 @@ const (
 // verify interface at compile time
 var _ sdk.Msg = &MsgCreateContact{}
 var _ sdk.Msg = &MsgEditContact{}
+var _ sdk.Msg = &MsgDeleteContact{}
 var _ sdk.Msg = &MsgAddAdmin{}
 var _ sdk.Msg = &MsgRemoveAdmin{}
 var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreateContact defines a message to submit a contact
 type MsgCreateContact struct {
-	StatesetID string         `json:"stateset_id"`
+	ContactID string         `json:"contact_id"`
 	Body        string         `json:"body"`
 	Creator     sdk.AccAddress `json:"creator"`
 	Source      string         `json:"source,omitempty"`
 }
 
 // NewMsgCreateContact creates a new message to create a Contact
-func NewMsgCreateContact(statesetID, body string, creator sdk.AccAddress, source string) MsgCreateContact {
+func NewMsgCreateContact(contactID, body string, creator sdk.AccAddress, source string) MsgCreateContact {
 	return MsgCreateContact{
-		StatesetID:  StatesetID,
+		ContactID:  ContactID,
 		Body:        body,
 		Creator:     creator,
 		Source:      source,
@@ -119,13 +124,13 @@ func (msg MsgDeleteContact) GetSigners() []sdk.AccAddress {
 
 // MsgEditContact defines a message to submit a story
 type MsgEditContact struct {
-	ID     uint64         `json:"id"`
+	ContactID     uint64         `json:"contact_id"`
 	Body   string         `json:"body"`
 	Editor sdk.AccAddress `json:"editor"`
 }
 
 // NewMsgEditContact creates a new message to edit a Contact
-func NewMsgEditContact(id uint64, body string, editor sdk.AccAddress) MsgEditContact {
+func NewMsgEditContact(contact_id uint64, body string, editor sdk.AccAddress) MsgEditContact {
 	return MsgEditContact{
 		ID:     id,
 		Body:   body,
