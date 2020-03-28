@@ -9,8 +9,8 @@ import (
 const (
 	// AppName is the name of the Cosmos app
 	AppName = "Stateset"
-	// FactorDenom is the name of the main factoring currency
-	FactorDenom = "ustates"
+	// FactorDenom is the name of the main staking currency
+	StakeDenom = "ustates"
 	// Hostname is the address the app's HTTP server will bind to
 	Hostname = "0.0.0.0"
 	// Portname is the port the app's HTTP server will bind to

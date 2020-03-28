@@ -1,4 +1,4 @@
-package stateset
+package app
 
 import (
 
@@ -32,7 +32,7 @@ import (
 	upgradeclient "github.com/cosmos/cosmos-sdk/x/upgrade/client"
 )
 
-const appName = "stateset"
+const appName = "StatesetApp"
 
 var (
 	// DefaultCLIHome default home directories for statesetcli
@@ -88,7 +88,7 @@ func MakeCodec() *codec.Codec {
 }
 
 // Stateset extended ABCI application
-type Stateset struct {
+type StatesetApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
 
@@ -128,9 +128,7 @@ type Stateset struct {
 }
 
 // NewStatetet returns a reference to an initialized Stateset.
-func NewStateset(
-	logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest bool,
-	invCheckPeriod uint, baseAppOptions ...func(*bam.BaseApp), ) *Stateset {
+func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest bool, invCheckPeriod uint, baseAppOptions ...func(*bam.BaseApp), ) *StatesetApp {
 	
 	// create and register app-level codec for TXs and accounts
 	cdc := MakeCodec()
@@ -145,7 +143,7 @@ func NewStateset(
 	)
 	tKeys := sdk.NewTransientStoreKeys(staking.TStoreKey, params.TStoreKey)
 
-	app := &Stateset{
+	app := &StatesetApp{
 		BaseApp:        bApp,
 		cdc:            cdc,
 		invCheckPeriod: invCheckPeriod,
@@ -299,17 +297,17 @@ func NewStateset(
 }
 
 // BeginBlocker application updates every begin block
-func (app *Stateset) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
+func (app *StatesetApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
 	return app.mm.BeginBlock(ctx, req)
 }
 
 // EndBlocker application updates every end block
-func (app *Stateset) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+func (app *StatesetApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
 	return app.mm.EndBlock(ctx, req)
 }
 
 // InitChainer application update at chain initialization
-func (app *Stateset) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+func (app *StatesetApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	var genesisState simapp.GenesisState
 	app.cdc.MustUnmarshalJSON(req.AppStateBytes, &genesisState)
 
@@ -317,12 +315,25 @@ func (app *Stateset) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abc
 }
 
 // LoadHeight loads a particular height
-func (app *Stateset) LoadHeight(height int64) error {
+func (app *StatesetApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height, app.keys[bam.MainStoreKey])
 }
 
+
+func (app *StatesetApp) replayToHeight(replayHeight int64, logger log.Logger) int64 {
+	loadHeight := int64(0)
+	logger.Info("Please make sure the replay height is smaller than the latest block height.")
+	if replayHeight >= DefaultSyncableHeight {
+		loadHeight = replayHeight - replayHeight%DefaultSyncableHeight
+	} else {
+		// version 1 will always be kept
+		loadHeight = 1
+	}
+	return loadHeight
+}
+
 // ModuleAccountAddrs returns all the app's module account addresses.
-func (app *Stateset) ModuleAccountAddrs() map[string]bool {
+func (app *StatesetApp) ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range maccPerms {
 		modAccAddrs[supply.NewModuleAddress(acc).String()] = true
@@ -332,7 +343,7 @@ func (app *Stateset) ModuleAccountAddrs() map[string]bool {
 }
 
 // Codec returns the application's sealed codec.
-func (app *Stateset) Codec() *codec.Codec {
+func (app *StatesetApp) Codec() *codec.Codec {
 	return app.cdc
 }
 

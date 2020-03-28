@@ -120,6 +120,13 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, def
 			genState.Params.InvoiceAdmins = []sdk.AccAddress{addr}
 			appState[invoice.ModuleName] = cdc.MustMarshalJSON(genState)
 		}
+				// migrate factoring state
+		if appState[factoring.ModuleName] != nil {
+			var genState factoring.GenesisState
+			cdc.MustUnmarshalJSON(appState[factoring.ModuleName], &genState)
+			genState.Params.FactoringAdmins = []sdk.AccAddress{addr}
+			appState[factoring.ModuleName] = cdc.MustMarshalJSON(genState)
+		}
 		// migrate staking state
 		if appState[statestaking.ModuleName] != nil {
 			var genState statestaking.GenesisState
@@ -134,7 +141,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, def
 			genState.Params.SlashAdmins = []sdk.AccAddress{addr}
 			appState[stateslashing.ModuleName] = cdc.MustMarshalJSON(genState)
 		}
-		// migrate trubank state
+		// migrate statebank state
 		if appState[statebank.ModuleName] != nil {
 			var genState statebank.GenesisState
 			cdc.MustUnmarshalJSON(appState[statebank.ModuleName], &genState)
