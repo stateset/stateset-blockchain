@@ -38,6 +38,16 @@ func (k Keeper) Codespace() sdk.CodespaceType {
 	return k.codespace
 }
 
+// GetCoins returns the coins at the addr.
+func (k Keeper) GetCoins(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins {
+	return getCoins(ctx, keeper.am, addr)
+}
+
+// GetBurnedCoins returns the burned coins
+func (k Keeper) GetBurnedCoins(ctx sdk.Context) sdk.Coins {
+	return getBurnedCoins(ctx, keeper.am)
+}
+
 // AddCoin adds a coin to an address and adds the transaction to the association list.
 func (k Keeper) AddCoin(ctx sdk.Context, addr sdk.AccAddress, amt sdk.Coin,
 	referenceID uint64, txType TransactionType, txSetters ...TransactionSetter) (sdk.Coins, sdk.Error) {
@@ -153,7 +163,7 @@ func (k Keeper) rewardBrokerAddress(ctx sdk.Context) sdk.AccAddress {
 	return address
 }
 
-func (k Keeper) sendState(ctx sdk.Context,
+func (k Keeper) send(ctx sdk.Context,
 	sender sdk.AccAddress, recipient sdk.AccAddress,
 	amount sdk.Coin) sdk.Error {
 
@@ -169,6 +179,15 @@ func (k Keeper) sendState(ctx sdk.Context,
 	}
 
 	return nil
+}
+
+
+// SendCoins moves coins from one account to another
+func (k Keeper) SendCoins(
+	ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins,
+) (sdk.Tags, sdk.Error) {
+
+	return sendCoins(ctx, keeper.am, fromAddr, toAddr, amt)
 }
 
 // Transactions gets all the transactions

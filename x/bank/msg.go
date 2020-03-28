@@ -5,34 +5,34 @@ import (
 )
 
 const (
-	TypeMsgSendState     = "send_state"
+	TypeMsgSend     = "send"
 	TypeMsgUpdateParams = "update_params"
 )
 
 var (
-	_ sdk.Msg = &MsgSendState{}
+	_ sdk.Msg = &MsgSend{}
 )
 
-type MsgSendState struct {
+type MsgSend struct {
 	Sender    sdk.AccAddress
 	Recipient sdk.AccAddress
 	Amount    sdk.Coin
 }
 
-func NewMsgSendState(sender, recipient sdk.AccAddress, amount sdk.Coin) MsgSendState {
-	return MsgSendGift{
+func NewMsgSend(sender, recipient sdk.AccAddress, amount sdk.Coin) MsgSend {
+	return MsgSend{
 		Sender:    sender,
 		Recipient: recipient,
 		Amount:    amount,
 	}
 }
-func (msg MsgSendState) Route() string { return RouterKey }
+func (msg MsgSend) Route() string { return RouterKey }
 
-func (msg MsgSendState) Type() string {
-	return TypeMsgSendState
+func (msg MsgSend) Type() string {
+	return TypeMsgSend
 }
 
-func (msg MsgSendState) ValidateBasic() sdk.Error {
+func (msg MsgSend) ValidateBasic() sdk.Error {
 	if len(msg.Sender) == 0 {
 		return sdk.ErrInvalidAddress("invalid creator address")
 	}
@@ -46,11 +46,12 @@ func (msg MsgSendState) ValidateBasic() sdk.Error {
 	return nil
 }
 
-func (msg MsgSendState) GetSigners() []sdk.AccAddress {
+func (msg MsgSend) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Sender}
 }
 
-func (msg MsgSendState) GetSignBytes() []byte {
+// Implements Msg.
+func (msg MsgSend) GetSignBytes() []byte {
 	bz := ModuleCodec.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
@@ -91,4 +92,68 @@ func (msg MsgUpdateParams) GetSignBytes() []byte {
 // GetSigners implements Msg. Returns the remover as the signer.
 func (msg MsgUpdateParams) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Updater)}
+}
+
+
+//----------------------------------------
+// MsgIssue
+
+// MsgIssue - high level transaction of the coin module
+type MsgIssue struct {
+	Banker  sdk.AccAddress `json:"banker"`
+	Outputs []Output       `json:"outputs"`
+}
+
+var _ sdk.Msg = MsgIssue{}
+
+//----------------------------------------
+// MsgBurn
+
+// MsgBurn - high level transaction of the coin module
+type MsgBurn struct {
+	Owner sdk.AccAddress `json:"owner"`
+	Coins sdk.Coins      `json:"coins"`
+}
+
+var _ sdk.Msg = MsgBurn{}
+
+
+
+
+
+
+// NewMsgIssue - construct arbitrary multi-in, multi-out send msg.
+func NewMsgBurn(owner sdk.AccAddress, coins sdk.Coins) MsgBurn {
+	return MsgBurn{Owner: owner, Coins: coins}
+}
+
+func (msg MsgBurn) Route() string { return "bank" }
+func (msg MsgBurn) Type() string  { return "burn" }
+
+// Implements Msg.
+func (msg MsgBurn) ValidateBasic() sdk.Error {
+	if len(msg.Owner) == 0 {
+		return sdk.ErrInvalidAddress(msg.Owner.String())
+	}
+	if len(msg.Coins) == 0 {
+		return ErrBurnEmptyCoins(DefaultCodespace).TraceSDK("")
+	}
+	if !msg.Coins.IsValidV0() {
+		return sdk.ErrInvalidCoins(msg.Coins.String())
+	}
+	return nil
+}
+
+// Implements Msg.
+func (msg MsgBurn) GetSignBytes() []byte {
+	b, err := msgCdc.MarshalJSON(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+// Implements Msg.
+func (msg MsgBurn) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{msg.Owner}
 }

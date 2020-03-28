@@ -11,8 +11,12 @@ import (
 func NewHandler(keeper Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
 		switch msg := msg.(type) {
-		case MsgSendState:
-			return handleMsgSendState(ctx, keeper, msg)
+		case MsgSend:
+			return handleMsgSend(ctx, keeper, msg)
+		case MsgIssue:
+			return handleMsgIssue(ctx, keeper, msg)
+		case MsgBurn:
+			return handleMsgBurn(ctx, keeper, msg)
 		case MsgUpdateParams:
 			return handleMsgUpdateParams(ctx, keeper, msg)
 		default:
@@ -22,11 +26,11 @@ func NewHandler(keeper Keeper) sdk.Handler {
 	}
 }
 
-func handleMsgSendState(ctx sdk.Context, keeper Keeper, msg MsgSendState) sdk.Result {
+func handleMsgSend(ctx sdk.Context, keeper Keeper, msg MsgSend) sdk.Result {
 	if err := msg.ValidateBasic(); err != nil {
 		return err.Result()
 	}
-	err := keeper.sendState(ctx, msg.Sender, msg.Recipient, msg.Amount)
+	err := keeper.send(ctx, msg.Sender, msg.Recipient, msg.Amount)
 	if err != nil {
 		fmt.Println("error", err)
 		return err.Result()
