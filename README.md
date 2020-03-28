@@ -186,6 +186,24 @@ statesetcli status
 
 View the status of the network with the [Stateset Explorer](https://stateset.network/launch). 
 
+## Become a Validator
+
+```jsx
+
+statesetcli stake create-validator \
+    --pubkey=$(stateset tendermint show-validator) \
+    --moniker=<your-validator-name> \
+    --amount=<amount-to-be-delegated, e.g. 10000states> \
+    --commission-rate=0.1 \
+    --gas=100000 \
+    --fee=0.6states \
+    --chain-id=statesethub \
+    --from=<key-name> \
+    --commit
+
+```
+
+
 ## Export State
 
 Stateset can dump the entire application state to a JSON file, which could be useful for manual analysis and can also be used as the genesis file of a new network.
