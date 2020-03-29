@@ -87,7 +87,7 @@ func MakeCodec() *codec.Codec {
 	return cdc.Seal()
 }
 
-// Stateset extended ABCI application
+// StatesetApp extended ABCI application
 type StatesetApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
@@ -127,7 +127,7 @@ type StatesetApp struct {
 	sm *module.SimulationManager
 }
 
-// NewStatetet returns a reference to an initialized Stateset.
+// NewStatesetApp returns a reference to an initialized Stateset.
 func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest bool, invCheckPeriod uint, baseAppOptions ...func(*bam.BaseApp), ) *StatesetApp {
 	
 	// create and register app-level codec for TXs and accounts
@@ -259,7 +259,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		&stakingKeeper,
 		app.slashingKeeper,
 	)
-	
+
 	evidenceRouter := evidence.NewRouter()
 
 	// TODO: register evidence routes

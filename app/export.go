@@ -14,7 +14,7 @@ import (
 )
 
 // ExportAppStateAndValidators export the state of gaia for a genesis file
-func (app *Stateset) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteList []string,
+func (app *StatesetApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteList []string,
 ) (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
 
 	// as if they could withdraw from the start of the next block
@@ -36,7 +36,7 @@ func (app *Stateset) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteLi
 // prepare for fresh start at zero height
 // NOTE zero height genesis is a temporary feature which will be deprecated
 //      in favour of export at a block height
-func (app *Stateset) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []string) {
+func (app *StatesetApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []string) {
 	applyWhiteList := false
 
 	//Check if there is a whitelist
