@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/stateset/stateset-blockchain/app"
 	stateset "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset/x/account"
+	"github.com/stateset/stateset-blockchain/x/account"
 	"github.com/stateset/stateset-blockchain/x/agreement"
 	statebank "github.com/stateset/stateset-blockchain/x/bank"
 	"github.com/stateset/stateset-blockchain/x/loan"
