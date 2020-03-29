@@ -10,7 +10,6 @@ import (
 	"github.com/stateset/stateset-blockchain/x/invoice"
 	"github.com/stateset/stateset-blockchain/x/marketplace"
 	stateslashing "github.com/stateset/stateset-blockchain/x/slashing"
-	statestaking "github.com/stateset/stateset-blockchain/x/staking"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	sdk "github.com/cosmos/cosmos-sdk/types"
