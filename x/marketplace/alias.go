@@ -2,7 +2,7 @@ package marketplace
 
 import (
 	"github.com/stateset/stateset-blockchain/x/marketplace/keeper"
-	"github.com/stateset/stateset-blockchain/x/market/types"
+	"github.com/stateset/stateset-blockchain/x/marketplace/types"
 )
 
 const (
