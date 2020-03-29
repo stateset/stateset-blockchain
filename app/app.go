@@ -172,26 +172,94 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 	loanSubspace := app.paramsKeeper.Subspace(loan.DefaultParamspace)
 
 	// add cosmos keepers
-	app.accountKeeper = auth.NewAccountKeeper(app.cdc, keys[auth.StoreKey], authSubspace, auth.ProtoBaseAccount)
-	app.bankKeeper = bank.NewBaseKeeper(app.accountKeeper, bankSubspace, bank.DefaultCodespace, app.ModuleAccountAddrs())
-	app.supplyKeeper = supply.NewKeeper(app.cdc, keys[supply.StoreKey], app.accountKeeper, app.bankKeeper, maccPerms)
+
+	// The AccountKeeper handles address -> account lookups
+	app.accountKeeper = auth.NewAccountKeeper(
+		app.cdc,
+		keys[auth.StoreKey],
+		authSubspace,
+		auth.ProtoBaseAccount
+	)
+
+	// The BankKeeper allows you to perofrm sdk.Coins interactions
+	app.bankKeeper = bank.NewBaseKeeper(
+		app.accountKeeper,
+		bankSubspace,
+		bank.DefaultCodespace,
+		app.ModuleAccountAddrs()
+	)
+
+
+	// The SupplyKeeper collects transaction fees and renders them to the fee distribution module
+	app.supplyKeeper = supply.NewKeeper(
+		app.cdc,
+		keys[supply.StoreKey], 
+		app.accountKeeper,
+		 app.bankKeeper,
+		maccPerms
+	)
+
+	// The staking keeper
 	stakingKeeper := staking.NewKeeper(
-		app.cdc, keys[staking.StoreKey], app.supplyKeeper, stakingSubspace, staking.DefaultCodespace,
+		app.cdc,
+		keys[staking.StoreKey],
+		app.supplyKeeper,
+		stakingSubspace,
+		staking.DefaultCodespace,
 	)
-	app.mintKeeper = mint.NewKeeper(app.cdc, keys[mint.StoreKey], mintSubspace, &stakingKeeper, app.supplyKeeper, auth.FeeCollectorName)
-	app.distrKeeper = distr.NewKeeper(app.cdc, keys[distr.StoreKey], distrSubspace, &stakingKeeper,
-		app.supplyKeeper, distr.DefaultCodespace, auth.FeeCollectorName, app.ModuleAccountAddrs())
+
+	// The mint keeper
+	app.mintKeeper = mint.NewKeeper(
+		app.cdc,
+		keys[mint.StoreKey],
+		mintSubspace,
+		&stakingKeeper,
+		app.supplyKeeper,
+		auth.FeeCollectorName
+	)
+	
+	app.distrKeeper = distr.NewKeeper(
+		app.cdc,
+		keys[distr.StoreKey],
+		distrSubspace,
+		&stakingKeeper,
+		app.supplyKeeper,
+		distr.DefaultCodespace,
+		auth.FeeCollectorName,
+		app.ModuleAccountAddrs()
+	)
+
+
 	app.slashingKeeper = slashing.NewKeeper(
-		app.cdc, keys[slashing.StoreKey], &stakingKeeper, slashingSubspace, slashing.DefaultCodespace,
+		app.cdc,
+		keys[slashing.StoreKey],
+		&stakingKeeper,
+		slashingSubspace,
+		slashing.DefaultCodespace,
 	)
-	app.crisisKeeper = crisis.NewKeeper(crisisSubspace, invCheckPeriod, app.supplyKeeper, auth.FeeCollectorName)
-	app.upgradeKeeper = upgrade.NewKeeper(keys[upgrade.StoreKey], app.cdc)
+
+	app.crisisKeeper = crisis.NewKeeper(
+		crisisSubspace,
+		invCheckPeriod,
+		app.supplyKeeper,
+		auth.FeeCollectorName
+	)
+	
+	app.upgradeKeeper = upgrade.NewKeeper(
+		keys[upgrade.StoreKey],
+		 app.cdc
+	)
 
 	// create evidence keeper with evidence router
 	evidenceKeeper := evidence.NewKeeper(
-		app.cdc, keys[evidence.StoreKey], evidenceSubspace, evidence.DefaultCodespace,
-		&stakingKeeper, app.slashingKeeper,
+		app.cdc,
+		keys[evidence.StoreKey],
+		evidenceSubspace,
+		evidence.DefaultCodespace,
+		&stakingKeeper,
+		app.slashingKeeper,
 	)
+	
 	evidenceRouter := evidence.NewRouter()
 
 	// TODO: register evidence routes
