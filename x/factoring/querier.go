@@ -11,7 +11,7 @@ const (
 	QueryInvoiceArguments      = "invoice_loans"
 	QueryUserArguments       = "user_loans"
 	QueryLoanStakes      = "loan_stakes"
-	QueryMarketplaceStakes     = "markeplace_stakes"
+	QueryMarketplaceStakes     = "marketplace_stakes"
 	QueryStake               = "stake"
 	QueryLoansByIDs      = "loans_ids"
 	QueryUserStakes          = "user_stakes"
@@ -38,7 +38,7 @@ type QueryLoanStakesParams struct {
 	LoanID uint64 `json:"loan_id"`
 }
 
-type QueryMarkeplaceStakesParams struct {
+type QueryMarketplaceStakesParams struct {
 	MarketplaceeID string `json:"marketplace_id"`
 }
 

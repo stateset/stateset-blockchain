@@ -85,7 +85,7 @@ func (k Keeper) LoanStakes(ctx sdk.Context, loanID uint64) []Stake {
 	return stakes
 }
 
-func (k Keeper) MarketplaceStakes(ctx sdk.Context, markeplaceID string) []Stake {
+func (k Keeper) MarketplaceStakes(ctx sdk.Context, marketplaceID string) []Stake {
 	stakes := make([]Stake, 0)
 	k.IterateMarketplaceStakes(ctx, marketplaceID, func(stake Stake) bool {
 		stakes = append(stakes, stake)
@@ -157,7 +157,7 @@ func (k Keeper) FactorInvoice(ctx sdk.Context, amount,
 		ID:           loanID,
 		Factor:       factor,
 		invoiceID:    invoiceID,
-		MarkeplaceID: invoice.MarketplaceID,
+		MarketplaceID: invoice.MarketplaceID,
 		Amount:       amount,
 		StakeType:    stakeType,
 		CreatedTime:  ctx.BlockHeader().Time,

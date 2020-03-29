@@ -26,7 +26,7 @@ var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreateAccount defines a message to submit an account
 type MsgCreateAccount struct {
-	MarkeplaceID string         `json:"marketplace_id"`
+	MarketplaceID string         `json:"marketplace_id"`
 	Body        string         `json:"body"`
 	Creator     sdk.AccAddress `json:"creator"`
 	Source      string         `json:"source,omitempty"`
