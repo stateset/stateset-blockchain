@@ -178,7 +178,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		app.cdc,
 		keys[auth.StoreKey],
 		authSubspace,
-		auth.ProtoBaseAccount
+		auth.ProtoBaseAccount,
 	)
 
 	// The BankKeeper allows you to perofrm sdk.Coins interactions
