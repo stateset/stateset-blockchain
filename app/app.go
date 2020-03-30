@@ -181,7 +181,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		app.accountKeeper,
 		bankSubspace,
 		bank.DefaultCodespace,
-		app.ModuleAccountAddrs()
+		app.ModuleAccountAddrs(),
 	)
 
 
@@ -191,7 +191,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		keys[supply.StoreKey], 
 		app.accountKeeper,
 		 app.bankKeeper,
-		maccPerms
+		maccPerms,
 	)
 
 	// The staking keeper
@@ -210,7 +210,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		mintSubspace,
 		&stakingKeeper,
 		app.supplyKeeper,
-		auth.FeeCollectorName
+		auth.FeeCollectorName,
 	)
 	
 	app.distrKeeper = distr.NewKeeper(
@@ -221,7 +221,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		app.supplyKeeper,
 		distr.DefaultCodespace,
 		auth.FeeCollectorName,
-		app.ModuleAccountAddrs()
+		app.ModuleAccountAddrs(),
 	)
 
 
@@ -237,12 +237,12 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		crisisSubspace,
 		invCheckPeriod,
 		app.supplyKeeper,
-		auth.FeeCollectorName
+		auth.FeeCollectorName,
 	)
 	
 	app.upgradeKeeper = upgrade.NewKeeper(
 		keys[upgrade.StoreKey],
-		 app.cdc
+		 app.cdc,
 	)
 
 	// create evidence keeper with evidence router
