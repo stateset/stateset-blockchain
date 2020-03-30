@@ -11,7 +11,6 @@ const (
 	QuerierRoute      = types.QuerierRoute
 	DefaultParamspace = types.DefaultParamspace
 
-	Transaction                           	   = exported.Transaction
 	TransactionBacking                         = exported.TransactionBacking
 	TransactionBackingReturned                 = exported.TransactionBackingReturned
 	TransactionChallenge                       = exported.TransactionChallenge
@@ -49,7 +48,6 @@ var (
 )
 
 type (
-	TransactionType                  = exported.TransactionType
 	TransactionSetter                = exported.TransactionSetter
 	Filter                           = exported.Filter
 	SortOrderType                    = exported.SortOrderType

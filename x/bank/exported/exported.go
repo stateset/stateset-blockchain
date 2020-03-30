@@ -27,12 +27,8 @@ type TransactionType int8
 // Types of transactions
 const (
 	TransactionState TransactionType = iota
-	TransactionBacking
-	TransactionBackingReturned
-	TransactionChallenge
-	TransactionChallengeReturned
-	TransactionUpvote
-	TransactionUpvoteReturned
+	TransactionLending
+	TransactionLendingReturned
 	TransactionInterestArgumentCreation
 	TransactionInterestUpvoteReceived
 	TransactionInterestUpvoteGiven
@@ -47,12 +43,8 @@ const (
 
 var TransactionTypeName = []string{
 	TransactionState:                           "TransactionState",
-	TransactionBacking:                         "TransactionBacking",
-	TransactionBackingReturned:                 "TransactionBackingReturned",
-	TransactionChallenge:                       "TransactionChallenge",
-	TransactionChallengeReturned:               "TransactionChallengeReturned",
-	TransactionUpvote:                          "TransactionUpvote",
-	TransactionUpvoteReturned:                  "TransactionUpvoteReturned",
+	TransactionLending:                         "TransactionLending",
+	TransactionLendingReturned:                 "TransactionLendingReturned",
 	TransactionInterestArgumentCreation:        "TransactionInterestArgumentCreation",
 	TransactionInterestUpvoteReceived:          "TransactionInterestUpvoteReceived",
 	TransactionInterestUpvoteGiven:             "TransactionInterestUpvoteGiven",
@@ -72,10 +64,8 @@ func (t TransactionType) String() string {
 }
 
 var AllowedTransactionsForAddition = []TransactionType{
-	TransactionState,
-	TransactionBackingReturned,
-	TransactionChallengeReturned,
-	TransactionUpvoteReturned,
+	TransactionLending,
+	TransactionLendingReturned,
 	TransactionInterestArgumentCreation,
 	TransactionInterestUpvoteReceived,
 	TransactionInterestUpvoteGiven,
@@ -96,9 +86,7 @@ var AllowedTransactionsForEarningDeduction = []TransactionType{
 }
 
 var AllowedTransactionsForDeduction = []TransactionType{
-	TransactionBacking,
-	TransactionChallenge,
-	TransactionUpvote,
+	TransactionLending,
 	TransactionInterestArgumentCreationSlashed,
 	TransactionInterestUpvoteReceivedSlashed,
 	TransactionInterestUpvoteGivenSlashed,
