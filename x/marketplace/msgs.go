@@ -37,7 +37,7 @@ func NewMsgNewMarketplace(id, name, description string, merchant sdk.AccAddress)
 
 // ValidateBasic implements Msg
 func (msg MsgNewMarketplace) ValidateBasic() sdk.Error {
-	if len(msg.Merhchant) == 0 {
+	if len(msg.Merchant) == 0 {
 		return sdk.ErrInvalidAddress(fmt.Sprintf("Invalid address: %s", msg.Merchant.String()))
 	}
 
