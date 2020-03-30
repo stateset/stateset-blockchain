@@ -9,7 +9,7 @@ import (
 const (
 	// AppName is the name of the Cosmos app
 	AppName = "Stateset"
-	// FactorDenom is the name of the main staking currency
+	// StakeDenom is the name of the main staking currency
 	StakeDenom = "ustates"
 	// Hostname is the address the app's HTTP server will bind to
 	Hostname = "0.0.0.0"
@@ -37,19 +37,19 @@ const (
 	Bech32PrefixConsPub = "statesvalconspub"
 )
 
-// InitialFactor is an `sdk.Coins` representing the balance a new user is granted upon registration
-var InitialFactor = sdk.Coin{Amount: sdk.NewInt(300 * Set), Denom: FactorDenom}
+// InitialStake is an `sdk.Coins` representing the balance a new user is granted upon registration
+var InitialStake = sdk.Coin{Amount: sdk.NewInt(300 * Set), Denom: StakeDenom}
 
 // RegistrationFee is an `auth.StdFee` representing the coin and gas cost of registering a new account
 // TODO: Use more accurate gas estimate [notduncansmith]
 var RegistrationFee = auth.StdFee{
-	Amount: sdk.Coins{sdk.Coin{Amount: sdk.NewInt(1), Denom: FactorDenom}},
+	Amount: sdk.Coins{sdk.Coin{Amount: sdk.NewInt(1), Denom: StakeDenom}},
 	Gas:    20000,
 }
 
 // NewStatesetCoin returns the desired amount in sets
 func NewStatesetCoin(amount int64) sdk.Coin {
-	return sdk.NewInt64Coin(FactorDenom, amount*Set)
+	return sdk.NewInt64Coin(StakeDenom, amount*Set)
 }
 
 // MsgResult is the default success response for a chain request
@@ -57,8 +57,8 @@ type MsgResult struct {
 	ID int64 `json:"id"`
 }
 
-// FactorNotificationResult defines data for a factor push notification
-type FactorNotificationResult struct {
+// StakeNotificationResult defines data for a Stake push notification
+type StakeNotificationResult struct {
 	MsgResult
 	StateID int64          `json:"state_id"`
 	From    sdk.AccAddress `json:"from,omitempty"`
@@ -67,8 +67,8 @@ type FactorNotificationResult struct {
 	Cred    *sdk.Coin      `json:"cred,omitempty"`
 }
 
-// Factor represents a lender with the amount factored.
-type Factor struct {
+// Stake represents a lender with the amount Stakeed.
+type Stake struct {
 	Address sdk.AccAddress
 	Amount  sdk.Coin
 }
@@ -77,9 +77,9 @@ type Factor struct {
 type CompletedStateset struct {
 	ID                          int64                       `json:"id"`
 	Merchant                    sdk.AccAddress              `json:"merchant"`
-	Lenders                     []Factor                    `json:"lenders"`
-	Debtors                     []Factor                    `json:"debtors"`
-	FactorDistributionResults   FactorDistributionResults   `json:"factor_destribution_results"`
+	Lenders                     []Stake                    `json:"lenders"`
+	Debtors                     []Stake                    `json:"debtors"`
+	StakeDistributionResults   StakeDistributionResults   `json:"Stake_destribution_results"`
 	InterestDistributionResults InterestDistributionResults `json:"interest_destribution_results"`
 }
 
@@ -89,30 +89,30 @@ type CompletedStatesetNotificationResult struct {
 	Statesets []CompletedStateset `json:"statesets"`
 }
 
-// FactorReward represents the amount of the invoice factored by a user.
-type FactorReward struct {
+// StakeReward represents the amount of the invoice Stakeed by a user.
+type StakeReward struct {
 	Account sdk.AccAddress `json:"account"`
 	Amount  sdk.Coin       `json:"amount"`
 }
 
-// FactorDistributionResultsType indicates who wins the pool.
-type FactorDistributionResultsType int64
+// StakeDistributionResultsType indicates who wins the pool.
+type StakeDistributionResultsType int64
 
 // Distribution result constants
 const (
-	DistributionMajorityNotReached FactorDistributionResultsType = iota
+	DistributionMajorityNotReached StakeDistributionResultsType = iota
 	DistributionBackersWin
 	DistributionChallengersWin
 )
 
-// FactorDistributionResults contains how the factor was distributed after the invoice is paid.
-type FactorDistributionResults struct {
-	Type        FactorDistributionResultsType `json:"type"`
+// StakeDistributionResults contains how the Stake was distributed after the invoice is paid.
+type StakeDistributionResults struct {
+	Type        StakeDistributionResultsType `json:"type"`
 	TotalAmount sdk.Coin                     `json:"total_amount"`
-	Rewards     []FactorReward                `json:"rewards"`
+	Rewards     []StakeReward                `json:"rewards"`
 }
 
-// Interest represents the amount of interest earned by factoring the invoice
+// Interest represents the amount of interest earned by Stakeing the invoice
 type Interest struct {
 	Account sdk.AccAddress `json:"account"`
 	Amount  sdk.Coin       `json:"amount"`
