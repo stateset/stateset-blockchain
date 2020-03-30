@@ -1,4 +1,4 @@
-package community
+package marketplace
 
 import (
 	"fmt"

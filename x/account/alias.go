@@ -1,12 +1,12 @@
-package accountimport (
+package account
+
+(
 	"github.com/stateset/stateset-blockchain/x/bank/exported"
 )
 
 const (
-	TransactionGift    = exported.TransactionGift
-	TransactionBacking = exported.TransactionBacking
+	TransactionSend    = exported.TransactionSend
 
-	UserGrowthPoolName = distribution.UserGrowthPoolName
 )
 
 var (

@@ -1,4 +1,4 @@
-package invoice
+package loan
 
 import (
 	"fmt"

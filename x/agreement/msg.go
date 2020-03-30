@@ -1,4 +1,4 @@
-package agreements
+package agreement
 
 import (
 	"fmt"
