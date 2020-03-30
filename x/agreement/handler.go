@@ -3,9 +3,6 @@ package agreement
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stateset/stateset-blockchain/x/agreement/types"
-
-	"github.com/stateset/stateset-blockchain/x/agreement/keeper"
 )
 
 func NewHandler(keeper Keeper) sdk.Handler {

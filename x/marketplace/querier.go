@@ -1,4 +1,4 @@
-package markerplace
+package marketplace
 
 import (
 	"fmt"
