@@ -7,7 +7,11 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
-
+	"github.com/stateset/stateset-blockchain/x/marketplace"
+	"github.com/stateset/stateset-blockchain/x/agreement"
+	"github.com/stateset/stateset-blockchain/x/invoice"
+	"github.com/stateset/stateset-blockchain/x/loan"
+	"github.com/stateset/stateset-blockchain/x/factoring"
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -50,6 +54,12 @@ var (
 		supply.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
+		//stateset modules
+		marketplace.AppModuleBasic{},
+		agreement.AppModuleBasic{},
+		invoice.AppModuleBasic{},
+		loan.AppModuleBasic{},
+
 	)
 
 	// module account permissions
@@ -96,20 +106,16 @@ type StatesetApp struct {
 	supplyKeeper   supply.Keeper
 	stakingKeeper  staking.Keeper
 	slashingKeeper slashing.Keeper
-	mintKeeper     mint.Keeper
 	distrKeeper    distr.Keeper
-	govKeeper      gov.Keeper
 	paramsKeeper   params.Keeper
-	upgradeKeeper  upgrade.Keeper
-	evidenceKeeper evidence.Keeper
 
 	// stateset keepers
 	appAccountKeeper   account.Keeper
 	marketplaceKeeper  marketplace.Keeper
 	agreementKeeper    agreement.Keeper
-	orderKeeper        order.Keeper
 	invoiceKeeper      invoice.Keeper
 	loanKeeper         loan.Keeper
+	factoringKeeper    factoring.Keeper
 
 
 	// the module manager
