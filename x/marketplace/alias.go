@@ -1,10 +1,5 @@
 package marketplace
 
-import (
-	"github.com/stateset/stateset-blockchain/x/marketplace/keeper"
-	"github.com/stateset/stateset-blockchain/x/marketplace/types"
-)
-
 const (
 	ModuleName   = types.ModuleName
 	RouterKey    = types.RouterKey
