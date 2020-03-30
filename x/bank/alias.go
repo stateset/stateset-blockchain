@@ -11,12 +11,8 @@ const (
 	QuerierRoute      = types.QuerierRoute
 	DefaultParamspace = types.DefaultParamspace
 
-	TransactionBacking                         = exported.TransactionBacking
-	TransactionBackingReturned                 = exported.TransactionBackingReturned
-	TransactionChallenge                       = exported.TransactionChallenge
-	TransactionChallengeReturned               = exported.TransactionChallengeReturned
-	TransactionUpvote                          = exported.TransactionUpvote
-	TransactionUpvoteReturned                  = exported.TransactionUpvoteReturned
+	TransactionLending                        = exported.TransactionLending
+	TransactionLendingReturned                 = exported.TransactionLendingReturned
 	TransactionInterestArgumentCreation        = exported.TransactionInterestArgumentCreation
 	TransactionInterestUpvoteReceived          = exported.TransactionInterestUpvoteReceived
 	TransactionInterestUpvoteGiven             = exported.TransactionInterestUpvoteGiven
