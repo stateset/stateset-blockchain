@@ -12,7 +12,7 @@ const (
 )
 
 // Marketplace represents the state of a marketplace on Stateset
-type Martketplace struct {
+type Marketplace struct {
 	ID          string    `json:"id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description,omitempty"`
