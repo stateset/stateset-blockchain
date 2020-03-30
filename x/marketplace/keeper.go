@@ -51,7 +51,7 @@ func (k Keeper) NewMarketplace(ctx sdk.Context, id string, name string, descript
 func (k Keeper) Marketplace(ctx sdk.Context, id string) (marketplace Marketplace, err sdk.Error) {
 	store := k.store(ctx)
 	marketplaceBytes := store.Get(key(id))
-	if markerplaceBytes == nil {
+	if marketplaceBytes == nil {
 		return marketplace, ErrMarketplaceNotFound(marketplace.ID)
 	}
 	k.codec.MustUnmarshalBinaryLengthPrefixed(marketplaceBytes, &marketplace)
@@ -106,7 +106,7 @@ func (k Keeper) RemoveAdmin(ctx sdk.Context, admin, remover sdk.AccAddress) (err
 	params := k.GetParams(ctx)
 	for i, currentAdmin := range params.MarketplaceAdmins {
 		if currentAdmin.Equals(admin) {
-			params.MarkerplaceAdmins = append(params.MarkerplaceAdmins[:i], params.MarketplaceAdmins[i+1:]...)
+			params.MarketplaceAdmins = append(params.MarketplaceAdmins[:i], params.MarketplaceAdmins[i+1:]...)
 		}
 	}
 
@@ -118,7 +118,7 @@ func (k Keeper) RemoveAdmin(ctx sdk.Context, admin, remover sdk.AccAddress) (err
 func (k Keeper) validateParams(ctx sdk.Context, id, name, description string, creator sdk.AccAddress) (err sdk.Error) {
 	params := k.GetParams(ctx)
 	if len(id) < params.MinIDLength || len(id) > params.MaxIDLength {
-		err = ErrInvalidMarkerplaceMsg(
+		err = ErrInvalidMarketplaceMsg(
 			fmt.Sprintf("ID must be between %d-%d chars in length", params.MinIDLength, params.MaxIDLength),
 		)
 	}
@@ -128,7 +128,7 @@ func (k Keeper) validateParams(ctx sdk.Context, id, name, description string, cr
 		)
 	}
 	if len(description) > params.MaxDescriptionLength {
-		err = ErrInvalidMarkerplaceyMsg(
+		err = ErrInvalidMarketplaceyMsg(
 			fmt.Sprintf("Description must be less than %d chars in length", params.MaxDescriptionLength),
 		)
 	}
@@ -140,7 +140,7 @@ func (k Keeper) validateParams(ctx sdk.Context, id, name, description string, cr
 	return
 }
 
-func (k Keeper) setMarkerplace(ctx sdk.Context, marketplace Marketplace) {
+func (k Keeper) setMarketplace(ctx sdk.Context, marketplace Marketplace) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(marketplace)
 	store.Set(key(marketplace.ID), bz)

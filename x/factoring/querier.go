@@ -56,7 +56,7 @@ type QueryUserStakesParams struct {
 
 type QueryUserMarketplaceStakesParams struct {
 	Address     sdk.AccAddress `json:"address"`
-	MarketplaceID string         `json:"markerplace_id"`
+	MarketplaceID string         `json:"marketplace_id"`
 }
 
 type QueryInvoiceTopLoanParams struct {

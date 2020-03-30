@@ -404,7 +404,7 @@ func (k Keeper) newStake(ctx sdk.Context, amount sdk.Coin, factor sdk.AccAddress
 	k.InsertActiveStakeQueue(ctx, stakeID, stake.EndTime)
 	k.setLoanStake(ctx, loanID, stake.ID)
 	k.setUserStake(ctx, factor, stake.CreatedTime, stake.ID)
-	k.setMarkerplaceStake(ctx, marketplaceID, stake.ID)
+	k.setMarketplaceStake(ctx, marketplaceID, stake.ID)
 	k.setUserMarketplaceStake(ctx, stake.Factor, marketplaceID, stakeID)
 	return stake, nil
 }

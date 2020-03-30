@@ -150,7 +150,7 @@ func (k Keeper) AgreementsAfterTime(ctx sdk.Context, createdTime time.Time) (agr
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// MarketplaceAgreements gets all the agreements for a given markerplace
+// MarketplaceAgreements gets all the agreements for a given marketplace
 func (k Keeper) MarketplaceAgreements(ctx sdk.Context, marketplaceID string) (agreements Agreements) {
 	return k.associatedAgreements(ctx, marketplaceAgreementsKey(marketplaceID))
 }

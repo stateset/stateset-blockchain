@@ -96,7 +96,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, def
 			var marketplaceGenState marketplace.GenesisState
 			cdc.MustUnmarshalJSON(appState[marketplace.ModuleName], &marketplaceGenState)
 			marketplaceGenState.Params.MarktplaceAdmins = []sdk.AccAddress{addr}
-			appState[markerplace.ModuleName] = cdc.MustMarshalJSON(markerplaceGenState)
+			appState[marketplace.ModuleName] = cdc.MustMarshalJSON(marketplaceGenState)
 		}
 		// migrate agreement state
 		if appState[agreement.ModuleName] != nil {

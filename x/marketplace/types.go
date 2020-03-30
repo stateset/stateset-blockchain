@@ -4,7 +4,6 @@ package marketplace
 import (
 	"fmt"
 	"time"
-
 )
 
 // Defines module constants
@@ -22,7 +21,7 @@ type Marketplace struct {
 	CreatedTime time.Time `json:"created_time,omitempty"`
 }
 
-// Marketplace is a slice of markerplaces
+// Marketplace is a slice of marketplaces
 type Marketplaces []Marketplace
 
 // NewMarketplace creates a new Marktplace

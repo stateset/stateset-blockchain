@@ -50,7 +50,7 @@ func ErrUnknownLoan(id uint64) sdk.Error {
 }
 
 // ErrInvalidMarketplaceID throws an error on invalid marketplace id
-func ErrInvalidMarkerplaceID(id string) sdk.Error {
+func ErrInvalidMarketplaceID(id string) sdk.Error {
 	return sdk.NewError(
 		DefaultCodespace,
 		ErrorCodeLoansWithMarketplaceNotFound,

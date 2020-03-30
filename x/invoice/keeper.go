@@ -20,7 +20,7 @@ type Keeper struct {
 	paramStore params.Subspace
 
 	accountKeeper   AccountKeeper
-	markerplaceKeeper marketplace.Keeper
+	marketplaceKeeper marketplace.Keeper
 }
 
 // NewKeeper creates a new account keeper
@@ -150,7 +150,7 @@ func (k Keeper) InvoicessAfterTime(ctx sdk.Context, createdTime time.Time) (invo
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// MarketplaceInvoices gets all the invoices for a given markerplace
+// MarketplaceInvoices gets all the invoices for a given marketplace
 func (k Keeper) MarketplaceInvoices(ctx sdk.Context, marketplaceID string) (invoices Invoices) {
 	return k.associatedInvoices(ctx, marketplaceInvoicesKey(marketplaceID))
 }

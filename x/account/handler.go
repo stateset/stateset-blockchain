@@ -39,7 +39,7 @@ func handleMsgCreateAccount(ctx sdk.Context, keeper Keeper, msg MsgCreateAccount
 		return ErrInvalidSourceURL(msg.Source).Result()
 	}
 
-	account, err := keeper.SubmitAccount(ctx, msg.Body, msg.MarkerplaceID, msg.Merchant, *sourceURL)
+	account, err := keeper.SubmitAccount(ctx, msg.Body, msg.MarketplaceID, msg.Merchant, *sourceURL)
 	if err != nil {
 		return err.Result()
 	}
