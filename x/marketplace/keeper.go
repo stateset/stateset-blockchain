@@ -59,7 +59,7 @@ func (k Keeper) Marketplace(ctx sdk.Context, id string) (marketplace Marketplace
 	return marketplace, nil
 }
 
-// Marketplacesz gets all marketplaces from the KVStore
+// Marketplaces gets all marketplaces from the KVStore
 func (k Keeper) Marketplaces(ctx sdk.Context) (marketplaces []Marketplace) {
 	store := k.store(ctx)
 	iterator := sdk.KVStorePrefixIterator(store, MarketplaceKeyPrefix)

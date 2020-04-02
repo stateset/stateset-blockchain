@@ -29,7 +29,7 @@ func DefaultGenesisState() GenesisState {
 	return NewGenesisState(Marketplaces{marketplace1, marketplace2}, DefaultParams())
 }
 
-// InitGenesis initializes community state from genesis file
+// InitGenesis initializes marketplace state from genesis file
 func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
 	for _, marketplace := range data.Marketplaces {
 		keeper.setMarketplace(ctx, marketplace)
@@ -67,8 +67,8 @@ func ValidateGenesis(data GenesisState) error {
 		return fmt.Errorf("Param: MaxDescriptionLength, must have a positive value")
 	}
 
-	if len(data.Params.CommunityAdmins) < 1 {
-		return fmt.Errorf("Param: CommunityAdmins, must have atleast one admin")
+	if len(data.Params.MarketplaceAdmins) < 1 {
+		return fmt.Errorf("Param: MarketplaceAdmins, must have atleast one admin")
 	}
 
 	return nil

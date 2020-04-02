@@ -77,7 +77,7 @@ func (k Keeper) CreateAgreement(ctx sdk.Context, body, agreementID string,
 	return agreement, nil
 }
 
-// EditInvoice allows admins to edit the body of an invoice
+// EditAgreement allows admins to edit the details of an agreement
 
 func (k Keeper) EditAgreement(ctx sdk.Context, id uint64, body string, editor sdk.AccAddress) (agreement Agreement, err sdk.Error) {
 	if !k.isAdmin(ctx, editor) {
@@ -102,7 +102,7 @@ func (k Keeper) EditAgreement(ctx sdk.Context, id uint64, body string, editor sd
 	return
 }
 
-// Invoice gets a single invoice by its ID
+// Agreement gets a single agreement by its ID
 func (k Keeper) Agreement(ctx sdk.Context, id uint64) (agreement Agreement, ok bool) {
 	store := k.store(ctx)
 	agreementBytes := store.Get(key(id))
@@ -155,14 +155,14 @@ func (k Keeper) MarketplaceAgreements(ctx sdk.Context, marketplaceID string) (ag
 	return k.associatedAgreements(ctx, marketplaceAgreementsKey(marketplaceID))
 }
 
-// MerchantInvoices gets all the agreements for a given merchant
+// MerchantAgreements gets all the agreements for a given merchant
 func (k Keeper) MerchantAgreements(ctx sdk.Context, creator sdk.AccAddress) (agreements Agreements) {
 	return k.associatedAgreements(ctx, merchantAgreementsKey(merchant))
 }
 
 
 // agreememtID gets the highest agreement ID
-func (k Keeper) invoiceID(ctx sdk.Context) (agreementID uint64, err sdk.Error) {
+func (k Keeper) agreementID(ctx sdk.Context) (agreementID uint64, err sdk.Error) {
 	store := k.store(ctx)
 	bz := store.Get(AgreementIDKey)
 	if bz == nil {
@@ -186,18 +186,18 @@ func (k Keeper) setAgreement(ctx sdk.Context, agreement Agreement) {
 	store.Set(key(agreement.ID), bz)
 }
 
-// setMarketplaceInvoice sets a marketplace <-> invoice association in store
-func (k Keeper) setMarketplaceAgreement(ctx sdk.Context, agreementID string, agreementID uint64) {
+// setMarketplaceAgreement sets a marketplace <-> agreement association in store
+func (k Keeper) setMarketplaceAgreement(ctx sdk.Context, marketplaceID uint64, agreementID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(agreementID)
-	store.Set(merchantAgreementKey(agreementID, agreementID), bz)
+	store.Set(merchantAgreementKey(marketplaceID, agreementID), bz)
 }
 
-// setMerchantInvoice sets a merchant <-> invoice association in store
+// setMerchantAgreement sets a merchant <-> agreement association in store
 func (k Keeper) setMerchantAgreement(ctx sdk.Context, merchant sdk.AccAddress, agreementID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(agreementID)
-	store.Set(merchantInvoiceKey(merchant, invoiceID), bz)
+	store.Set(merchantAgreementKey(merchant, agreementID), bz)
 }
 
 

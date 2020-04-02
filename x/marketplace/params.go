@@ -48,27 +48,27 @@ func (p *Params) ParamSetPairs() params.ParamSetPairs {
 		{Key: KeyMinIDLength, Value: &p.MinIDLength},
 		{Key: KeyMaxIDLength, Value: &p.MaxIDLength},
 		{Key: KeyMaxDescriptionLength, Value: &p.MaxDescriptionLength},
-		{Key: KeyCommunityAdmins, Value: &p.CommunityAdmins},
+		{Key: KeyMarketplaceAdmins, Value: &p.MarketplaceAdmins},
 	}
 }
 
-// ParamKeyTable for community module
+// ParamKeyTable for Marketplace module
 func ParamKeyTable() params.KeyTable {
 	return params.NewKeyTable().RegisterParamSet(&Params{})
 }
 
-// GetParams gets the genesis params for the community
+// GetParams gets the genesis params for the Marketplace
 func (k Keeper) GetParams(ctx sdk.Context) Params {
 	var paramSet Params
 	k.paramStore.GetParamSet(ctx, &paramSet)
 	return paramSet
 }
 
-// SetParams sets the params for the community
+// SetParams sets the params for the Marketplace
 func (k Keeper) SetParams(ctx sdk.Context, params Params) {
 	logger := ctx.Logger().With("module", ModuleName)
 	k.paramStore.SetParamSet(ctx, &params)
-	logger.Info(fmt.Sprintf("Loaded community params: %+v", params))
+	logger.Info(fmt.Sprintf("Loaded Marketplace params: %+v", params))
 }
 
 // UpdateParams updates the required params
