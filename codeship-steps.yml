@@ -1,0 +1,20 @@
+- type: serial
+  steps:
+    - name: Codeship Build Attrs
+      type: serial
+      steps:
+      - name: codeship_build_attrs
+        service: buildattrs
+        command: /bin/sh -c "mkdir -p ./build_attrs; env | grep CI_ | sed -E 's/=(.*)/="\1"/g' | sed 's/^/export\ /g' > ./build_attrs/.build_attrs.env"
+
+
+    - name: Docker Push
+      type: serial
+      steps:
+        - name: Stateset Blockchain Push - master branch
+          service: stateset-blockchain
+          type: push
+          image_tag: latest
+          image_name: gcr.io/stateset-28/stateset-blockchain
+          registry: https://gcr.io
+          dockercfg_service: codeship-gcr-dockercfg
