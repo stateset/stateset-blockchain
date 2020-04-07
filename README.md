@@ -132,14 +132,11 @@ Your node needs to know how to find peers. You'll need to add healthy seed nodes
 
 If those seeds aren't working, you can find more seeds and persistent peers on a Stateset Hub explorer (a list can be found on the [launch page](https://stateset.network/launch)). 
 
-You can also ask for peers on the [Validators Riot Room](https://riot.im/app/#/room/#cosmos-validators:matrix.org)
-
-For more information on seeds and peers, you can [read this](https://docs.tendermint.com/master/spec/p2p/peer.html).
 
 ## A Note on Gas and Fees
 
 ::: warning
-On Statest Hub mainnet, the accepted denom is `uatom`, where `1atom = 1.000.000uatom`
+On Statest Hub mainnet, the accepted denom is `ustate`, where `1state = 1.000.000ustate`
 :::
 
 Transactions on the Stateset Hub network need to include a transaction fee in order to be processed. This fee pays for the gas required to run the transaction. The formula is the following:
@@ -155,14 +152,14 @@ The `gasPrice` is the price of each unit of `gas`. Each validator sets a `min-ga
 The transaction `fees` are the product of `gas` and `gasPrice`. As a user, you have to input 2 out of 3. The higher the `gasPrice`/`fees`, the higher the chance that your transaction will get included in a block. 
 
 ::: tip
-For mainnet, the recommended `gas-prices` is `0.025uatom`. 
+For mainnet, the recommended `gas-prices` is `0.025ustate`. 
 ::: 
 
 ## Set `minimum-gas-prices`
 
-Your full-node keeps unconfirmed transactions in its mempool. In order to protect it from spam, it is better to set a `minimum-gas-prices` that the transaction must meet in order to be accepted in your node's mempool. This parameter can be set in the following file `~/.gaiad/config/gaiad.toml`.
+Your full-node keeps unconfirmed transactions in its mempool. In order to protect it from spam, it is better to set a `minimum-gas-prices` that the transaction must meet in order to be accepted in your node's mempool. This parameter can be set in the following file `~/.stated/config/gaiad.toml`.
 
-The initial recommended `min-gas-prices` is `0.025uatom`, but you might want to change it later. 
+The initial recommended `min-gas-prices` is `0.025ustate`, but you might want to change it later. 
 
 ## Run a Full Node
 
@@ -199,10 +196,10 @@ The Stateset Blockchain is based on Cosmos SDK and Tendermint, which relies on a
 statesetcli stake create-validator \
     --pubkey=$(stateset tendermint show-validator) \
     --moniker=<your-validator-name> \
-    --amount=<amount-to-be-delegated, e.g. 10000states> \
+    --amount=<amount-to-be-delegated, e.g. 10000state> \
     --commission-rate=0.1 \
     --gas=100000 \
-    --fee=0.6states \
+    --fee=0.6state \
     --chain-id=statesethub \
     --from=<key-name> \
     --commit
