@@ -7,6 +7,25 @@ Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint. State
 
 ## Build Instructions
 
+```jsx
+                ^  +-------------------------------+  ^
+                |  |                               |  |
+                |  |  State-machine = Application  |  |
+                |  |                               |  |   Built with Cosmos SDK
+                |  |            ^      +           |  |
+                |  +----------- | ABCI | ----------+  v
+                |  |            +      v           |  ^
+                |  |                               |  |
+Blockchain Node |  |           Consensus           |  |
+                |  |                               |  |
+                |  +-------------------------------+  |   Tendermint Core
+                |  |                               |  |
+                |  |           Networking          |  |
+                |  |                               |  |
+                v  +-------------------------------+  v
+
+```
+
 ## Installation
 
 1. Install Go by following the [official docs](https://golang.org/doc/install). 
