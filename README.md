@@ -1,13 +1,18 @@
 # Stateset Blockchain Network
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint. Stateset is a receivables factoring blockchain network for merchants and lenders (factors).
 
-![Stateset](stateset-blockchain.png)
+
+```
+    _____       _____                 _____
+    _________  /______ __  /___________________  /_
+    __  ___/  __/  __ `/  __/  _ \_  ___/  _ \  __/
+    _(__  )/ /_ / /_/ // /_ /  __/(__  )/  __/ /_
+    /____/ \__/ \__,_/ \__/ \___//____/ \___/\__/
 
 
-## Build Instructions
-
-```jsx
                 ^  +-------------------------------+  ^
                 |  |                               |  |
                 |  |  State-machine = Application  |  |
