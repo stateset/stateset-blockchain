@@ -10,7 +10,7 @@
 # journalctl -u statesetd.service -f
 
 [Unit]
-Description=Cosmos Stateset Node
+Description=Stateset Node
 After=network-online.target
 
 [Service]
