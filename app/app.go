@@ -10,6 +10,7 @@ import (
 	"github.com/stateset/stateset-blockchain/x/marketplace"
 	"github.com/stateset/stateset-blockchain/x/agreement"
 	"github.com/stateset/stateset-blockchain/x/invoice"
+	"github.com/stateset/stateset-blockchain/x/purchaseorder"
 	"github.com/stateset/stateset-blockchain/x/loan"
 	"github.com/stateset/stateset-blockchain/x/factoring"
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
@@ -57,6 +58,7 @@ var (
 		//stateset modules
 		marketplace.AppModuleBasic{},
 		agreement.AppModuleBasic{},
+		purchasorder.AppModuleBasic{},
 		invoice.AppModuleBasic{},
 		loan.AppModuleBasic{},
 
@@ -113,6 +115,7 @@ type StatesetApp struct {
 	appAccountKeeper   account.Keeper
 	marketplaceKeeper  marketplace.Keeper
 	agreementKeeper    agreement.Keeper
+	purchaseorderKeeper purchaseorder.Keeper
 	invoiceKeeper      invoice.Keeper
 	loanKeeper         loan.Keeper
 	factoringKeeper    factoring.Keeper
@@ -165,7 +168,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 	// stateset subspaces
 	marketplaceSubspace := app.paramsKeeper.Subspace(marketplace.DefaultParamspace)
 	agreementSubspace := app.paramsKeeper.Subspace(agreement.DefaultParamspace)
-	orderSubspace := app.paramsKeeper.Subspace(order.DefaultParamspace)
+	purchaseorderSubspace := app.paramsKeeper.Subspace(purchaseorder.DefaultParamspace)
 	invoiceSubspace := app.paramsKeeper.Subspace(invoice.DefaultParamspace)
 	loanSubspace := app.paramsKeeper.Subspace(loan.DefaultParamspace)
 
@@ -302,7 +305,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		// stateset modules
 		marketplace.NewAppModule(app.marketplaceKeeper),
 		agreement.NewAppModule(app.agreementKeeper),
-		order.NewAppModule(app.orderKeeper),
+		purchaseorder.NewAppModule(app.purchaseorderKeeper),
 		invoice.NewAppModule(app.invoiceKeeper),
 		loan.NewAppModule(app.loanKeeper),
 		
