@@ -77,14 +77,13 @@ type Stake struct {
 type CompletedStateset struct {
 	ID                          int64                       `json:"id"`
 	Merchant                    sdk.AccAddress              `json:"merchant"`
-	Lenders                     []Stake                    `json:"lenders"`
-	Debtors                     []Stake                    `json:"debtors"`
-	StakeDistributionResults   StakeDistributionResults   `json:"Stake_destribution_results"`
-	InterestDistributionResults InterestDistributionResults `json:"interest_destribution_results"`
+	Depositors                  []Stake                    `json:"depositors"`
+	Borrowers                   []Stake                    `json:"borrowers"`
+	StakeDistributionResults   StakeDistributionResults   `json:"Stake_distribution_results"`
+	InterestDistributionResults InterestDistributionResults `json:"interest_distribution_results"`
 }
 
-// CompletedStatesetNotificationResult defines the notification result of
-// completed stateset in a new Block.
+// CompletedStatesetNotificationResult defines the notification result of completed a Stateset in a new Block.
 type CompletedStatesetNotificationResult struct {
 	Statesets []CompletedStateset `json:"statesets"`
 }
@@ -105,14 +104,14 @@ const (
 	DistributionChallengersWin
 )
 
-// StakeDistributionResults contains how the Stake was distributed after the invoice is paid.
+// StakeDistributionResults contains how the Stake was distributed after the Purchase Order or Invoice is paid.
 type StakeDistributionResults struct {
 	Type        StakeDistributionResultsType `json:"type"`
 	TotalAmount sdk.Coin                     `json:"total_amount"`
 	Rewards     []StakeReward                `json:"rewards"`
 }
 
-// Interest represents the amount of interest earned by Stakeing the invoice
+// Interest represents the amount of interest earned by Stakeing the Purchase Order or Invoice
 type Interest struct {
 	Account sdk.AccAddress `json:"account"`
 	Amount  sdk.Coin       `json:"amount"`
