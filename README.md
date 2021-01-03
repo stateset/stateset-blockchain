@@ -4,35 +4,7 @@
 
 Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint.
 
-<img src="stateset-blockchain.png" width=500>
-
-<br/>
-
-```
-    _____       _____                 _____
-    _________  /______ __  /___________________  /_
-    __  ___/  __/  __ `/  __/  _ \_  ___/  _ \  __/
-    _(__  )/ /_ / /_/ // /_ /  __/(__  )/  __/ /_
-    /____/ \__/ \__,_/ \__/ \___//____/ \___/\__/
-
-
-                ^  +-------------------------------+  ^
-                |  |                               |  |
-                |  |  State-machine = Application  |  |
-                |  |                               |  |   Built with Cosmos SDK
-                |  |            ^      +           |  |
-                |  +----------- | ABCI | ----------+  v
-                |  |            +      v           |  ^
-                |  |                               |  |
-Blockchain Node |  |           Consensus           |  |
-                |  |                               |  |
-                |  +-------------------------------+  |   Tendermint Core
-                |  |                               |  |
-                |  |           Networking          |  |
-                |  |                               |  |
-                v  +-------------------------------+  v
-
-```
+<img src="stateset-blockchain.png">
 
 <br/>
 
@@ -198,6 +170,33 @@ Your full-node keeps unconfirmed transactions in its mempool. In order to protec
 The initial recommended `min-gas-prices` is `0.025ustate`, but you might want to change it later. 
 
 ## Run a Full Node
+
+
+```
+    _____       _____                 _____
+    _________  /______ __  /___________________  /_
+    __  ___/  __/  __ `/  __/  _ \_  ___/  _ \  __/
+    _(__  )/ /_ / /_/ // /_ /  __/(__  )/  __/ /_
+    /____/ \__/ \__,_/ \__/ \___//____/ \___/\__/
+
+
+                ^  +-------------------------------+  ^
+                |  |                               |  |
+                |  |  State-machine = Application  |  |
+                |  |                               |  |   Built with Cosmos SDK
+                |  |            ^      +           |  |
+                |  +----------- | ABCI | ----------+  v
+                |  |            +      v           |  ^
+                |  |                               |  |
+Blockchain Node |  |           Consensus           |  |
+                |  |                               |  |
+                |  +-------------------------------+  |   Tendermint Core
+                |  |                               |  |
+                |  |           Networking          |  |
+                |  |                               |  |
+                v  +-------------------------------+  v
+
+```
 
 ### Full Node
 A full-node is a program that fully validates transactions and blocks of a blockchain. It is distinct from a light-node that only processes block headers and a small subset of transactions. Running a full-node requires more resources than a light-node but is necessary in order to be a validator. In practice, running a full-node only implies running a non-compromised and up-to-date version of the software with low network latency and without downtime.
