@@ -10,7 +10,7 @@ Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint.
 
 ## What is Stateset?
 
-**[Stateset](https://stateset.io)** is a blockchain protocol for commerce finance.
+**[Stateset](https://stateset.io)** is a blockchain protocol for decentralized commerce.
 
 **Stateset Core** is the reference implementation of the Stateset protocol, written in Golang. Stateset Core is built atop [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) and uses [Tendermint](https://github.com/tendermint/tendermint) BFT consensus. If you intend to work on Stateset Core source, it is recommended that you familiarize yourself with the concepts in those projects.
 
