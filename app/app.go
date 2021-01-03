@@ -32,10 +32,8 @@ import (
 const appName = "StatesetApp"
 
 var (
-	// DefaultCLIHome default home directories for statesetcli
+	// default home directories for stateset binaries
 	DefaultCLIHome = os.ExpandEnv("$HOME/.statesetcli")
-
-	// DefaultNodeHome default home directories for statesetd
 	DefaultNodeHome = os.ExpandEnv("$HOME/.statesetd")
 
 	// ModuleBasics The module BasicManager is in charge of setting up basic,

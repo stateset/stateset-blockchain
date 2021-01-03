@@ -13,7 +13,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 )
 
-// ExportAppStateAndValidators export the state of gaia for a genesis file
+// ExportAppStateAndValidators export the stateset for a genesis file
 func (app *StatesetApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteList []string,
 ) (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
 
@@ -84,10 +84,10 @@ func (app *StatesetApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList 
 	// reinitialize all validators
 	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val staking.ValidatorI) (stop bool) {
 
-		// donate any unwithdrawn outstanding reward fraction tokens to the marketplace pool
+		// donate any unwithdrawn outstanding reward fraction tokens to the community pool
 		scraps := app.distrKeeper.GetValidatorOutstandingRewards(ctx, val.GetOperator())
 		feePool := app.distrKeeper.GetFeePool(ctx)
-		feePool.MarketplacePool = feePool.MarketplacePool.Add(scraps)
+		feePool.CommunityPool = feePool.CommunityPool.Add(scraps)
 		app.distrKeeper.SetFeePool(ctx, feePool)
 
 		app.distrKeeper.Hooks().AfterValidatorCreated(ctx, val.GetOperator())
