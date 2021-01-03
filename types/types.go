@@ -19,9 +19,9 @@ const (
 
 // Coin units
 const (
-	State = 1
-	Set  = 1000000 * State
+	STE = 1
 )
+
 const (
 	// Bech32PrefixAccAddr defines the Bech32 prefix of an account's address
 	Bech32PrefixAccAddr = "states"
@@ -38,7 +38,7 @@ const (
 )
 
 // InitialStake is an `sdk.Coins` representing the balance a new user is granted upon registration
-var InitialStake = sdk.Coin{Amount: sdk.NewInt(300 * Set), Denom: StakeDenom}
+var InitialStake = sdk.Coin{Amount: sdk.NewInt(300 * STE), Denom: StakeDenom}
 
 // RegistrationFee is an `auth.StdFee` representing the coin and gas cost of registering a new account
 // TODO: Use more accurate gas estimate [notduncansmith]
@@ -49,7 +49,7 @@ var RegistrationFee = auth.StdFee{
 
 // NewStatesetCoin returns the desired amount in sets
 func NewStatesetCoin(amount int64) sdk.Coin {
-	return sdk.NewInt64Coin(StakeDenom, amount*Set)
+	return sdk.NewInt64Coin(StakeDenom, amount*STE)
 }
 
 // MsgResult is the default success response for a chain request
