@@ -13,7 +13,7 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/stateset/stateset-blockchain/app"
+	"github.com/stateset/stateset/app"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client/debug"
@@ -26,7 +26,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 )
 
-
 const flagInvCheckPeriod = "inv-check-period"
 
 var invCheckPeriod uint
@@ -34,18 +33,13 @@ var invCheckPeriod uint
 func main() {
 	cdc := app.MakeCodec()
 
-	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(sdk.Bech32PrefixAccAddr, sdk.Bech32PrefixAccPub)
-	config.SetBech32PrefixForValidator(sdk.Bech32PrefixValAddr, sdk.Bech32PrefixValPub)
-	config.SetBech32PrefixForConsensusNode(sdk.Bech32PrefixConsAddr, sdk.Bech32PrefixConsPub)
-	config.SetKeyringServiceName("stateset")
-	config.Seal()
+	app.SetConfig()
 
 	ctx := server.NewDefaultContext()
 	cobra.EnableCommandSorting = false
 	rootCmd := &cobra.Command{
 		Use:               "statesetd",
-		Short:             "Stateset Daemon (server)",
+		Short:             "app Daemon (server)",
 		PersistentPreRunE: server.PersistentPreRunEFn(ctx),
 	}
 
@@ -54,21 +48,19 @@ func main() {
 	rootCmd.AddCommand(genutilcli.MigrateGenesisCmd(ctx, cdc))
 	rootCmd.AddCommand(
 		genutilcli.GenTxCmd(
-			ctx, cdc, app.ModuleBasics, factoring.AppModuleBasic{},
+			ctx, cdc, app.ModuleBasics, staking.AppModuleBasic{},
 			auth.GenesisAccountIterator{}, app.DefaultNodeHome, app.DefaultCLIHome,
 		),
 	)
 	rootCmd.AddCommand(genutilcli.ValidateGenesisCmd(ctx, cdc, app.ModuleBasics))
 	rootCmd.AddCommand(AddGenesisAccountCmd(ctx, cdc, app.DefaultNodeHome, app.DefaultCLIHome))
-	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
-	rootCmd.AddCommand(testnetCmd(ctx, cdc, app.ModuleBasics, auth.GenesisAccountIterator{}))
-	rootCmd.AddCommand(replayCmd())
+	rootCmd.AddCommand(flags.NewCompletionCmd(rootCmd, true))
 	rootCmd.AddCommand(debug.Cmd(cdc))
 
 	server.AddCommands(ctx, cdc, rootCmd, newApp, exportAppStateAndTMValidators)
 
 	// prepare and add flags
-	executor := cli.PrepareBaseCmd(rootCmd, "GA", app.DefaultNodeHome)
+	executor := cli.PrepareBaseCmd(rootCmd, "AU", app.DefaultNodeHome)
 	rootCmd.PersistentFlags().UintVar(&invCheckPeriod, flagInvCheckPeriod,
 		0, "Assert registered invariants every N blocks")
 	err := executor.Execute()
@@ -83,10 +75,13 @@ func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application
 	if viper.GetBool(server.FlagInterBlockCache) {
 		cache = store.NewCommitKVStoreCacheManager()
 	}
-
-	return app.NewStatesetApp(
+	pruningOpts, err := server.GetPruningOptionsFromFlags()
+	if err != nil {
+		panic(err)
+	}
+	return app.NewInitApp(
 		logger, db, traceStore, true, invCheckPeriod,
-		baseapp.SetPruning(store.NewPruningOptionsFromString(viper.GetString("pruning"))),
+		baseapp.SetPruning(pruningOpts),
 		baseapp.SetMinGasPrices(viper.GetString(server.FlagMinGasPrices)),
 		baseapp.SetHaltHeight(viper.GetUint64(server.FlagHaltHeight)),
 		baseapp.SetHaltTime(viper.GetUint64(server.FlagHaltTime)),
@@ -99,14 +94,15 @@ func exportAppStateAndTMValidators(
 ) (json.RawMessage, []tmtypes.GenesisValidator, error) {
 
 	if height != -1 {
-		stateset := app.NewStatesetApp(logger, db, traceStore, false, uint(1))
-		err := stateset.LoadHeight(height)
+		aApp := app.NewInitApp(logger, db, traceStore, false, uint(1))
+		err := aApp.LoadHeight(height)
 		if err != nil {
 			return nil, nil, err
 		}
-		return stateset.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
+		return aApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 	}
 
-	stateset := app.NewStatesetApp(logger, db, traceStore, true, uint(1))
-	return stateset.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
+	aApp := app.NewInitApp(logger, db, traceStore, true, uint(1))
+
+	return aApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 }
