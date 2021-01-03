@@ -19,7 +19,7 @@ const (
 
 // Coin units
 const (
-	STE = 1
+	STATE = 1
 )
 
 const (
@@ -38,7 +38,7 @@ const (
 )
 
 // InitialStake is an `sdk.Coins` representing the balance a new user is granted upon registration
-var InitialStake = sdk.Coin{Amount: sdk.NewInt(300 * STE), Denom: StakeDenom}
+var InitialStake = sdk.Coin{Amount: sdk.NewInt(300 * STATE), Denom: StakeDenom}
 
 // RegistrationFee is an `auth.StdFee` representing the coin and gas cost of registering a new account
 // TODO: Use more accurate gas estimate [notduncansmith]
@@ -49,7 +49,7 @@ var RegistrationFee = auth.StdFee{
 
 // NewStatesetCoin returns the desired amount in sets
 func NewStatesetCoin(amount int64) sdk.Coin {
-	return sdk.NewInt64Coin(StakeDenom, amount*STE)
+	return sdk.NewInt64Coin(StakeDenom, amount*STATE)
 }
 
 // MsgResult is the default success response for a chain request
