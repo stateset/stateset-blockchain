@@ -4,6 +4,9 @@
 
 Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint.
 
+<img src="stateset-blockchain.png" width=500>
+
+<br/>
 
 ```
     _____       _____                 _____
