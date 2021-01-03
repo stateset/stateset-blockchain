@@ -83,7 +83,7 @@ func (msg MsgCreateContact) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
-// MsgDeleteContact defines a message to submit a story
+// MsgDeleteContact defines a message to submit a contact
 type MsgDeleteContact struct {
 	ID      uint64         `json:"id"`
 	Creator sdk.AccAddress `json:"creator"`
@@ -122,7 +122,7 @@ func (msg MsgDeleteContact) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
-// MsgEditContact defines a message to submit a story
+// MsgEditContact defines a message to submit a contact
 type MsgEditContact struct {
 	ContactID     uint64         `json:"contact_id"`
 	Body   string         `json:"body"`

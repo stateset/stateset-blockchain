@@ -152,7 +152,7 @@ func (msg MsgDeleteInvoice) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
-// MsgEditInvoice defines a message to submit a story
+// MsgEditInvoice defines a message to submit a invoice
 type MsgEditInvoice struct {
 	ID     uint64         `json:"id"`
 	Body   string         `json:"body"`

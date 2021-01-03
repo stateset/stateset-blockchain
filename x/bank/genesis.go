@@ -28,7 +28,7 @@ func DefaultGenesisState() GenesisState {
 	}
 }
 
-// InitGenesis initializes story state from genesis file
+// InitGenesis initializes stateset from genesis file
 func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
 	keeper.SetParams(ctx, data.Params)
 	for _, tx := range data.Transactions {

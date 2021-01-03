@@ -23,7 +23,7 @@ func NewGenesisState() GenesisState {
 // DefaultGenesisState returns a default genesis state
 func DefaultGenesisState() GenesisState { return NewGenesisState() }
 
-// InitGenesis initializes story state from genesis file
+// InitGenesis initializes stateset from genesis file
 func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) {
 	for _, c := range data.Loans {
 		k.setLoan(ctx, c)

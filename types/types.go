@@ -118,7 +118,7 @@ type Interest struct {
 	Rate    sdk.Int        `json:"rate"`
 }
 
-// InterestDistributionResults contains how the interest was applied after a story completes.
+// InterestDistributionResults contains how the interest was applied after a stateset completes.
 type InterestDistributionResults struct {
 	TotalAmount sdk.Coin   `json:"total_amount"`
 	Interests   []Interest `json:"interests"`
