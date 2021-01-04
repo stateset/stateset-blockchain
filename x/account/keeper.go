@@ -5,7 +5,7 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/marketplace"
+	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,22 +20,22 @@ type Keeper struct {
 	paramStore params.Subspace
 
 	accountKeeper   AccountKeeper
-	marketplaceKeeper marketplace.Keeper
+	marketKeeper market.Keeper
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketplaceKeeper marketplace.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketKeeper market.Keeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,
 		paramStore.WithKeyTable(ParamKeyTable()),
 		accountKeeper,
-		marketplaceKeeper,
+		marketKeeper,
 	}
 }
 
 // SubmitAccount creates a new account in the account key-value store
-func (k Keeper) SubmitAccount(ctx sdk.Context, body, marketplaceID string,
+func (k Keeper) SubmitAccount(ctx sdk.Context, body, marketID string,
 	creator sdk.AccAddress, source url.URL) (account Account, err sdk.Error) {
 
 	err = k.validateLength(ctx, body)
@@ -49,16 +49,16 @@ func (k Keeper) SubmitAccount(ctx sdk.Context, body, marketplaceID string,
 	if jailed {
 		return claim, ErrCreatorJailed(creator)
 	}
-	marketplace, err := k.marketplaceKeeper.Marketplace(ctx, marketplaceID)
+	market, err := k.marketKeeper.market(ctx, marketID)
 	if err != nil {
-		return claim, ErrInvalidMarketplaceID(marketplace.ID)
+		return claim, ErrInvalidmarketID(market.ID)
 	}
 
 	accountID, err := k.accountID(ctx)
 	if err != nil {
 		return
 	}
-	account = NewAccount(accountID, marketplaceID, body, creator, source,
+	account = NewAccount(accountID, marketID, body, creator, source,
 		ctx.BlockHeader().Time,
 	)
 

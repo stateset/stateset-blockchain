@@ -18,7 +18,7 @@ const (
 	ErrorCodeInvalidID                   CodeType = 103
 	ErrorCodeNotFound                    CodeType = 104
 	ErrorCodeInvalidSType                CodeType = 105
-	ErrorCodeLoansWithMarketplaceNotFound CodeType = 106
+	ErrorCodeLoansWithmarketNotFound CodeType = 106
 	ErrorCodeInvalidSourceURL            CodeType = 107
 	ErrorCodeLenderJailed               CodeType = 108
 	ErrorCodeAddressNotAuthorised        CodeType = 109
@@ -49,12 +49,12 @@ func ErrUnknownLoan(id uint64) sdk.Error {
 		fmt.Sprintf("Unknown loan id: %d", id))
 }
 
-// ErrInvalidMarketplaceID throws an error on invalid marketplace id
-func ErrInvalidMarketplaceID(id string) sdk.Error {
+// ErrInvalidmarketID throws an error on invalid market id
+func ErrInvalidmarketID(id string) sdk.Error {
 	return sdk.NewError(
 		DefaultCodespace,
-		ErrorCodeLoansWithMarketplaceNotFound,
-		fmt.Sprintf("Invalid marketplace id: %s", id))
+		ErrorCodeLoansWithmarketNotFound,
+		fmt.Sprintf("Invalid market id: %s", id))
 }
 
 // ErrInvalidSourceURL throws an error when a URL in invalid

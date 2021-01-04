@@ -43,7 +43,7 @@ func handleMsgCreateInvoice(ctx sdk.Context, keeper Keeper, msg MsgCreateInvoice
 		return ErrInvalidSourceURL(msg.Source).Result()
 	}
 
-	invoice, err := keeper.SubmitInvoice(ctx, msg.Body, msg.MarketplaceID, msg.Merchant, *sourceURL)
+	invoice, err := keeper.SubmitInvoice(ctx, msg.Body, msg.marketID, msg.Merchant, *sourceURL)
 	if err != nil {
 		return err.Result()
 	}

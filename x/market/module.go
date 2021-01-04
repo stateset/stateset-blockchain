@@ -1,4 +1,4 @@
-package marketplace
+package market
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ var (
 )
 
 // ModuleName is the name of this module
-const ModuleName = "marketplace"
+const ModuleName = "market"
 
 // AppModuleBasic defines the internal data for the module
 // ----------------------------------------------------------------------------
@@ -50,16 +50,16 @@ func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 	return ValidateGenesis(data)
 }
 
-// RegisterRESTRoutes registers the REST routes for the marketplace module.
+// RegisterRESTRoutes registers the REST routes for the market module.
 func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
 	// no REST routes, use GraphQL API endpoint
 	// i.e: rest.RegisterRoutes(ctx, rtr)
 }
 
-// GetTxCmd returns the root tx command for the marketplace module.
+// GetTxCmd returns the root tx command for the market module.
 func (AppModuleBasic) GetTxCmd(_ *codec.Codec) *cobra.Command { return nil }
 
-// GetQueryCmd returns no root query command for the marketplace module.
+// GetQueryCmd returns no root query command for the market module.
 func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 	return nil
 }

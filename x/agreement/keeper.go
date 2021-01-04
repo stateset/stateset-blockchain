@@ -5,7 +5,7 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/marketplace"
+	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,17 +20,17 @@ type Keeper struct {
 	paramStore params.Subspace
 
 	accountKeeper   AccountKeeper
-	marketplaceKeeper marketplace.Keeper
+	marketKeeper market.Keeper
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketplaceKeeper marketplace.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketKeeper market.Keeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,
 		paramStore.WithKeyTable(ParamKeyTable()),
 		accountKeeper,
-		marketplaceKeeper,
+		marketKeeper,
 	}
 }
 
@@ -49,16 +49,16 @@ func (k Keeper) CreateAgreement(ctx sdk.Context, body, agreementID string,
 	if jailed {
 		return agreement, ErrMerchantJailed(merchant)
 	}
-	marketplace, err := k.marketplaceKeeper.Marketplace(ctx, marketplaceID)
+	market, err := k.marketKeeper.market(ctx, marketID)
 	if err != nil {
-		return invoice, ErrInvalidMarketplaceID(marketplace.ID)
+		return invoice, ErrInvalidmarketID(market.ID)
 	}
 
 	agreementID, err := k.agreementID(ctx)
 	if err != nil {
 		return
 	}
-	agreement = NewAgreement(agreementID, marketplaceID, body, merchant, source,
+	agreement = NewAgreement(agreementID, marketID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
 
@@ -150,9 +150,9 @@ func (k Keeper) AgreementsAfterTime(ctx sdk.Context, createdTime time.Time) (agr
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// MarketplaceAgreements gets all the agreements for a given marketplace
-func (k Keeper) MarketplaceAgreements(ctx sdk.Context, marketplaceID string) (agreements Agreements) {
-	return k.associatedAgreements(ctx, marketplaceAgreementsKey(marketplaceID))
+// marketAgreements gets all the agreements for a given market
+func (k Keeper) marketAgreements(ctx sdk.Context, marketID string) (agreements Agreements) {
+	return k.associatedAgreements(ctx, marketAgreementsKey(marketID))
 }
 
 // MerchantAgreements gets all the agreements for a given merchant
@@ -186,11 +186,11 @@ func (k Keeper) setAgreement(ctx sdk.Context, agreement Agreement) {
 	store.Set(key(agreement.ID), bz)
 }
 
-// setMarketplaceAgreement sets a marketplace <-> agreement association in store
-func (k Keeper) setMarketplaceAgreement(ctx sdk.Context, marketplaceID uint64, agreementID uint64) {
+// setmarketAgreement sets a market <-> agreement association in store
+func (k Keeper) setmarketAgreement(ctx sdk.Context, marketID uint64, agreementID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(agreementID)
-	store.Set(merchantAgreementKey(marketplaceID, agreementID), bz)
+	store.Set(merchantAgreementKey(marketID, agreementID), bz)
 }
 
 // setMerchantAgreement sets a merchant <-> agreement association in store

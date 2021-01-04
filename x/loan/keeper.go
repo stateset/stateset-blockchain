@@ -5,7 +5,7 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/marketplace"
+	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,17 +20,17 @@ type Keeper struct {
 	paramStore params.Subspace
 
 	accountKeeper   AccountKeeper
-	marketplaceKeeper marketplace.Keeper
+	marketKeeper market.Keeper
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketplaceKeeper marketplace.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketKeeper market.Keeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,
 		paramStore.WithKeyTable(ParamKeyTable()),
 		accountKeeper,
-		marketplaceKeeper,
+		marketKeeper,
 	}
 }
 
@@ -49,9 +49,9 @@ func (k Keeper) SubmitLoan(ctx sdk.Context, body, loanID string,
 	if jailed {
 		return loan, ErrCreatorJailed(lender)
 	}
-	marketplace, err := k.marketplaceKeeper.Marketplace(ctx, marketplaceID)
+	market, err := k.marketKeeper.market(ctx, marketID)
 	if err != nil {
-		return loan, ErrInvalidMarketplaceID(marketplaceID.ID)
+		return loan, ErrInvalidmarketID(marketID.ID)
 	}
 
 	loanID, err := k.loanID(ctx)

@@ -1,15 +1,15 @@
-package marketplace
+package market
 
 import "github.com/cosmos/cosmos-sdk/codec"
 
 // RegisterCodec registers messages into the codec
 func RegisterCodec(c *codec.Codec) {
-	c.RegisterConcrete(MsgNewMarketplace{}, "marketplace/MsgNewMarketplace", nil)
-	c.RegisterConcrete(MsgAddItem{}, "marketplace/MsgAddItem", nil)
-	c.RegisterConcrete(MsgCancelItem{}, "marketplace/MsgCancelItem", nil)
-	c.RegisterConcrete(MsgAddAdmin{}, "marketplace/MsgAddAdmin", nil)
-	c.RegisterConcrete(MsgRemoveAdmin{}, "marketplace/MsgRemoveAdmin", nil)
-	c.RegisterConcrete(MsgUpdateParams{}, "marketplace/MsgUpdateParams", nil)
+	c.RegisterConcrete(MsgNewmarket{}, "market/MsgNewmarket", nil)
+	c.RegisterConcrete(MsgAddItem{}, "market/MsgAddItem", nil)
+	c.RegisterConcrete(MsgCancelItem{}, "market/MsgCancelItem", nil)
+	c.RegisterConcrete(MsgAddAdmin{}, "market/MsgAddAdmin", nil)
+	c.RegisterConcrete(MsgRemoveAdmin{}, "market/MsgRemoveAdmin", nil)
+	c.RegisterConcrete(MsgUpdateParams{}, "market/MsgUpdateParams", nil)
 }
 
 // ModuleCodec encodes module codec

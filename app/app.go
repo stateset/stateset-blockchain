@@ -7,7 +7,7 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
-	"github.com/stateset/stateset-blockchain/x/marketplace"
+	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/stateset/stateset-blockchain/x/agreement"
 	"github.com/stateset/stateset-blockchain/x/invoice"
 	"github.com/stateset/stateset-blockchain/x/purchaseorder"
@@ -54,7 +54,7 @@ var (
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
 		//stateset modules
-		marketplace.AppModuleBasic{},
+		market.AppModuleBasic{},
 		agreement.AppModuleBasic{},
 		purchasorder.AppModuleBasic{},
 		invoice.AppModuleBasic{},
@@ -111,7 +111,7 @@ type StatesetApp struct {
 
 	// stateset keepers
 	appAccountKeeper   account.Keeper
-	marketplaceKeeper  marketplace.Keeper
+	marketKeeper  market.Keeper
 	agreementKeeper    agreement.Keeper
 	purchaseorderKeeper purchaseorder.Keeper
 	invoiceKeeper      invoice.Keeper
@@ -164,7 +164,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 
 
 	// stateset subspaces
-	marketplaceSubspace := app.paramsKeeper.Subspace(marketplace.DefaultParamspace)
+	marketSubspace := app.paramsKeeper.Subspace(market.DefaultParamspace)
 	agreementSubspace := app.paramsKeeper.Subspace(agreement.DefaultParamspace)
 	purchaseorderSubspace := app.paramsKeeper.Subspace(purchaseorder.DefaultParamspace)
 	invoiceSubspace := app.paramsKeeper.Subspace(invoice.DefaultParamspace)
@@ -270,7 +270,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 	govRouter := gov.NewRouter()
 	govRouter.AddRoute(gov.RouterKey, gov.ProposalHandler).
 		AddRoute(params.RouterKey, params.NewParamChangeProposalHandler(app.paramsKeeper)).
-		AddRoute(distr.RouterKey, distr.NewMarketplacePoolSpendProposalHandler(app.distrKeeper)).
+		AddRoute(distr.RouterKey, distr.NewmarketPoolSpendProposalHandler(app.distrKeeper)).
 		AddRoute(upgrade.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.upgradeKeeper))
 	app.govKeeper = gov.NewKeeper(
 		app.cdc, keys[gov.StoreKey], govSubspace,
@@ -301,7 +301,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		upgrade.NewAppModule(app.upgradeKeeper),
 		evidence.NewAppModule(app.evidenceKeeper),
 		// stateset modules
-		marketplace.NewAppModule(app.marketplaceKeeper),
+		market.NewAppModule(app.marketKeeper),
 		agreement.NewAppModule(app.agreementKeeper),
 		purchaseorder.NewAppModule(app.purchaseorderKeeper),
 		invoice.NewAppModule(app.invoiceKeeper),

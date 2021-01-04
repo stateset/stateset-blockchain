@@ -85,9 +85,9 @@ func (k Keeper) LoanStakes(ctx sdk.Context, loanID uint64) []Stake {
 	return stakes
 }
 
-func (k Keeper) MarketplaceStakes(ctx sdk.Context, marketplaceID string) []Stake {
+func (k Keeper) marketStakes(ctx sdk.Context, marketID string) []Stake {
 	stakes := make([]Stake, 0)
-	k.IterateMarketplaceStakes(ctx, marketplaceID, func(stake Stake) bool {
+	k.IteratemarketStakes(ctx, marketID, func(stake Stake) bool {
 		stakes = append(stakes, stake)
 		return false
 	})
@@ -103,9 +103,9 @@ func (k Keeper) UserStakes(ctx sdk.Context, address sdk.AccAddress) []Stake {
 	return stakes
 }
 
-func (k Keeper) UserMarketplaceStakes(ctx sdk.Context, address sdk.AccAddress, marketplaceID string) []Stake {
+func (k Keeper) UsermarketStakes(ctx sdk.Context, address sdk.AccAddress, marketID string) []Stake {
 	stakes := make([]Stake, 0)
-	k.IterateUserMarketplaceStakes(ctx, address, marketplaceID, func(stake Stake) bool {
+	k.IterateUsermarketStakes(ctx, address, marketID, func(stake Stake) bool {
 		stakes = append(stakes, stake)
 		return false
 	})
@@ -157,7 +157,7 @@ func (k Keeper) FactorInvoice(ctx sdk.Context, amount,
 		ID:           loanID,
 		Factor:       factor,
 		invoiceID:    invoiceID,
-		MarketplaceID: invoice.MarketplaceID,
+		marketID: invoice.marketID,
 		Amount:       amount,
 		StakeType:    stakeType,
 		CreatedTime:  ctx.BlockHeader().Time,
@@ -166,7 +166,7 @@ func (k Keeper) FactorInvoice(ctx sdk.Context, amount,
 		EditedTime:   ctx.BlockHeader().Time,
 		Edited:       false,
 	}
-	_, err = k.newStake(ctx, loanAmount, factor, stakeType, loan.ID, invoice.MarketplaceID)
+	_, err = k.newStake(ctx, loanAmount, factor, stakeType, loan.ID, invoice.marketID)
 	if err != nil {
 		return Loan{}, err
 	}
@@ -367,7 +367,7 @@ func (k Keeper) TotalEarnedCoins(ctx sdk.Context, factor sdk.AccAddress) sdk.Int
 }
 
 func (k Keeper) newStake(ctx sdk.Context, amount sdk.Coin, factor sdk.AccAddress,
-	stakeType StakeType, loanID uint64, marketplaceID string) (Stake, sdk.Error) {
+	stakeType StakeType, loanID uint64, marketID string) (Stake, sdk.Error) {
 	if !stakeType.Valid() {
 		return Stake{}, ErrCodeInvalidStakeType(stakeType)
 	}
@@ -382,7 +382,7 @@ func (k Keeper) newStake(ctx sdk.Context, amount sdk.Coin, factor sdk.AccAddress
 	}
 
 	_, err = k.bankKeeper.SubtractCoin(ctx, creator, amount,
-		argumentID, stakeType.BankTransactionType(), WithMarkerplaceID(marketplaceID),
+		argumentID, stakeType.BankTransactionType(), WithMarkerplaceID(marketID),
 		ToModuleAccount(UserStakesPoolName),
 	)
 	if err != nil {
@@ -392,7 +392,7 @@ func (k Keeper) newStake(ctx sdk.Context, amount sdk.Coin, factor sdk.AccAddress
 	stake := Stake{
 		ID:          stakeID,
 		LoanID:  	 loanID,
-		MarketplaceID: marketplaceID,
+		marketID: marketID,
 		CreatedTime: ctx.BlockHeader().Time,
 		EndTime:     ctx.BlockHeader().Time.Add(period),
 		Factor:      factor,
@@ -404,8 +404,8 @@ func (k Keeper) newStake(ctx sdk.Context, amount sdk.Coin, factor sdk.AccAddress
 	k.InsertActiveStakeQueue(ctx, stakeID, stake.EndTime)
 	k.setLoanStake(ctx, loanID, stake.ID)
 	k.setUserStake(ctx, factor, stake.CreatedTime, stake.ID)
-	k.setMarketplaceStake(ctx, marketplaceID, stake.ID)
-	k.setUserMarketplaceStake(ctx, stake.Factor, marketplaceID, stakeID)
+	k.setmarketStake(ctx, marketID, stake.ID)
+	k.setUsermarketStake(ctx, stake.Factor, marketID, stakeID)
 	return stake, nil
 }
 
@@ -456,15 +456,15 @@ func (k Keeper) setEarnedCoins(ctx sdk.Context, user sdk.AccAddress, earnedCoins
 	k.store(ctx).Set(userEarnedCoinsKey(user), b)
 }
 
-func (k Keeper) addEarnedCoin(ctx sdk.Context, user sdk.AccAddress, marketplaceID string, amount sdk.Int) {
+func (k Keeper) addEarnedCoin(ctx sdk.Context, user sdk.AccAddress, marketID string, amount sdk.Int) {
 	earnedCoins := k.getEarnedCoins(ctx, user)
-	earnedCoins = earnedCoins.Add(sdk.NewCoins(sdk.NewCoin(marketplaceID, amount)))
+	earnedCoins = earnedCoins.Add(sdk.NewCoins(sdk.NewCoin(marketID, amount)))
 	k.setEarnedCoins(ctx, user, earnedCoins)
 }
 
-func (k Keeper) SubtractEarnedCoin(ctx sdk.Context, user sdk.AccAddress, marketplaceID string, amount sdk.Int) {
+func (k Keeper) SubtractEarnedCoin(ctx sdk.Context, user sdk.AccAddress, marketID string, amount sdk.Int) {
 	earnedCoins := k.getEarnedCoins(ctx, user)
-	earnedCoins = earnedCoins.Sub(sdk.NewCoins(sdk.NewCoin(marketplaceID, amount)))
+	earnedCoins = earnedCoins.Sub(sdk.NewCoins(sdk.NewCoin(marketID, amount)))
 	k.setEarnedCoins(ctx, user, earnedCoins)
 }
 

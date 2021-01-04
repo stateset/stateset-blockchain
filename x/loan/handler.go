@@ -41,7 +41,7 @@ func handleMsgCreateLoan(ctx sdk.Context, keeper Keeper, msg MsgCreateLoan) sdk.
 		return ErrInvalidSourceURL(msg.Source).Result()
 	}
 
-	loan, err := keeper.SubmitLoan(ctx, msg.Body, msg.MarketplaceID, msg.Merchant, *sourceURL)
+	loan, err := keeper.SubmitLoan(ctx, msg.Body, msg.marketID, msg.Merchant, *sourceURL)
 	if err != nil {
 		return err.Result()
 	}

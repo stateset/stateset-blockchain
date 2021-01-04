@@ -1,4 +1,4 @@
-package marketplace
+package market
 
 import (
 	"fmt"
@@ -9,30 +9,30 @@ import (
 
 // GenesisState defines genesis data for the module
 type GenesisState struct {
-	Marketplaces []Marketplace `json:"marketplaces"`
+	markets []market `json:"markets"`
 	Params      Params      `json:"params"`
 }
 
 // NewGenesisState creates a new genesis state.
-func NewGenesisState(marketplaces []Marketplace, params Params) GenesisState {
+func NewGenesisState(markets []market, params Params) GenesisState {
 	return GenesisState{
-		Marketplaces: marketplaces,
+		markets: markets,
 		Params:      params,
 	}
 }
 
 // DefaultGenesisState returns a default genesis state
 func DefaultGenesisState() GenesisState {
-	marketplace1 := NewMarketplace("crypto", "Cryptocurrency", "description string", time.Now())
-	marketplace2 := NewMarketplace("meme", "Memes", "description string", time.Now())
+	market1 := Newmarket("crypto", "Cryptocurrency", "description string", time.Now())
+	market2 := Newmarket("meme", "Memes", "description string", time.Now())
 
-	return NewGenesisState(Marketplaces{marketplace1, marketplace2}, DefaultParams())
+	return NewGenesisState(markets{market1, market2}, DefaultParams())
 }
 
-// InitGenesis initializes marketplace state from genesis file
+// InitGenesis initializes market state from genesis file
 func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
-	for _, marketplace := range data.Marketplaces {
-		keeper.setMarketplace(ctx, marketplace)
+	for _, market := range data.markets {
+		keeper.setmarket(ctx, market)
 	}
 	keeper.SetParams(ctx, data.Params)
 }
@@ -40,7 +40,7 @@ func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
 // ExportGenesis exports the genesis state
 func ExportGenesis(ctx sdk.Context, keeper Keeper) GenesisState {
 	return GenesisState{
-		Marketplaces: keeper.Marketplaces(ctx),
+		markets: keeper.markets(ctx),
 		Params:      keeper.GetParams(ctx),
 	}
 }
@@ -67,8 +67,8 @@ func ValidateGenesis(data GenesisState) error {
 		return fmt.Errorf("Param: MaxDescriptionLength, must have a positive value")
 	}
 
-	if len(data.Params.MarketplaceAdmins) < 1 {
-		return fmt.Errorf("Param: MarketplaceAdmins, must have atleast one admin")
+	if len(data.Params.marketAdmins) < 1 {
+		return fmt.Errorf("Param: marketAdmins, must have atleast one admin")
 	}
 
 	return nil

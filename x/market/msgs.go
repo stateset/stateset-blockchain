@@ -1,4 +1,4 @@
-package marketplace
+package market
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	// TypeMsgNewMarketplace represents the type of the message for creating new marketplace
-	TypeMsgNewMarketplace = "new_marketplace"
+	// TypeMsgNewmarket represents the type of the message for creating new market
+	TypeMsgNewmarket = "new_market"
 	// TypeMsgAddAdmin represents the type of message for adding a new admin
 	TypeMsgAddAdmin = "add_admin"
 	// TypeMsgRemoveAdmin represents the type of message for removeing an admin
@@ -17,17 +17,17 @@ const (
 	TypeMsgUpdateParams = "update_params"
 )
 
-// MsgNewMarketplace defines the message to add a new admin
-type MsgNewMarketplace struct {
+// MsgNewmarket defines the message to add a new admin
+type MsgNewmarket struct {
 	Name        string         `json:"name"`
 	ID          string         `json:"id"`
 	Description string         `json:"description"`
 	Merchant     sdk.AccAddress `json:"merchant"`
 }
 
-// NewMsgNewMarketplace returns the messages to create a new marketplace
-func NewMsgNewMarketplace(id, name, description string, merchant sdk.AccAddress) MsgNewMarketplace {
-	return MsgNewMarketplace{
+// NewMsgNewmarket returns the messages to create a new market
+func NewMsgNewmarket(id, name, description string, merchant sdk.AccAddress) MsgNewmarket {
+	return MsgNewmarket{
 		Name:        name,
 		ID:          id,
 		Description: description,
@@ -36,7 +36,7 @@ func NewMsgNewMarketplace(id, name, description string, merchant sdk.AccAddress)
 }
 
 // ValidateBasic implements Msg
-func (msg MsgNewMarketplace) ValidateBasic() sdk.Error {
+func (msg MsgNewmarket) ValidateBasic() sdk.Error {
 	if len(msg.Merchant) == 0 {
 		return sdk.ErrInvalidAddress(fmt.Sprintf("Invalid address: %s", msg.Merchant.String()))
 	}
@@ -45,19 +45,19 @@ func (msg MsgNewMarketplace) ValidateBasic() sdk.Error {
 }
 
 // Route implements Msg
-func (msg MsgNewMarketplace) Route() string { return RouterKey }
+func (msg MsgNewmarket) Route() string { return RouterKey }
 
 // Type implements Msg
-func (msg MsgNewMarketplace) Type() string { return TypeMsgNewMarketplace }
+func (msg MsgNewmarket) Type() string { return TypeMsgNewmarket }
 
 // GetSignBytes implements Msg
-func (msg MsgNewMarketplace) GetSignBytes() []byte {
+func (msg MsgNewmarket) GetSignBytes() []byte {
 	msgBytes := ModuleCodec.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(msgBytes)
 }
 
 // GetSigners implements Msg. Returns the merchant as the signer.
-func (msg MsgNewMarketplace) GetSigners() []sdk.AccAddress {
+func (msg MsgNewmarket) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Merchant)}
 }
 

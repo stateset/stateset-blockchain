@@ -5,7 +5,7 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/marketplace"
+	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,17 +20,17 @@ type Keeper struct {
 	paramStore params.Subspace
 
 	accountKeeper   AccountKeeper
-	marketplaceKeeper marketplace.Keeper
+	marketKeeper market.Keeper
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketplaceKeeper marketplace.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketKeeper market.Keeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,
 		paramStore.WithKeyTable(ParamKeyTable()),
 		accountKeeper,
-		marketplaceKeeper,
+		marketKeeper,
 	}
 }
 
@@ -49,16 +49,16 @@ func (k Keeper) CreateInvoice(ctx sdk.Context, body, invoiceID string,
 	if jailed {
 		return invoice, ErrMerchantJailed(merchant)
 	}
-	marketplace, err := k.marketplaceKeeper.Marketplace(ctx, marketplaceID)
+	market, err := k.marketKeeper.market(ctx, marketID)
 	if err != nil {
-		return invoice, ErrInvalidMarketplaceID(marketplace.ID)
+		return invoice, ErrInvalidmarketID(market.ID)
 	}
 
 	invoiceID, err := k.invoiceID(ctx)
 	if err != nil {
 		return
 	}
-	invoice = NewInvoice(invoiceID, marketplaceID, body, merchant, source,
+	invoice = NewInvoice(invoiceID, marketID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
 
@@ -150,9 +150,9 @@ func (k Keeper) InvoicessAfterTime(ctx sdk.Context, createdTime time.Time) (invo
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// MarketplaceInvoices gets all the invoices for a given marketplace
-func (k Keeper) MarketplaceInvoices(ctx sdk.Context, marketplaceID string) (invoices Invoices) {
-	return k.associatedInvoices(ctx, marketplaceInvoicesKey(marketplaceID))
+// marketInvoices gets all the invoices for a given market
+func (k Keeper) marketInvoices(ctx sdk.Context, marketID string) (invoices Invoices) {
+	return k.associatedInvoices(ctx, marketInvoicesKey(marketID))
 }
 
 // MerchantInvoices gets all the invoices for a given merchant
@@ -315,8 +315,8 @@ func (k Keeper) setInvoice(ctx sdk.Context, invoice Invoice) {
 	store.Set(key(invoice.ID), bz)
 }
 
-// setMarketplaceInvoice sets a marketplace <-> invoice association in store
-func (k Keeper) setMarketplaceInvoice(ctx sdk.Context, marketplaceID string, invoiceID uint64) {
+// setmarketInvoice sets a market <-> invoice association in store
+func (k Keeper) setmarketInvoice(ctx sdk.Context, marketID string, invoiceID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(invoiceID)
 	store.Set(merchantInvoiceKey(merchantID, invoiceID), bz)

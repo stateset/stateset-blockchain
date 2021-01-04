@@ -14,7 +14,7 @@ type Transaction struct {
 	Type              TransactionType `json:"type"`
 	AppAccountAddress sdk.AccAddress  `json:"app_account_address"`
 	ReferenceID       uint64          `json:"reference_id"`
-	MarketplaceID     string          `json:"marketplace_id"`
+	marketID     string          `json:"market_id"`
 	Amount            sdk.Coin        `json:"amount"`
 	CreatedTime       time.Time       `json:"created_time"`
 	FromModuleAccount string          `json:"sender_module_account"`
@@ -113,9 +113,9 @@ func (t TransactionType) OneOf(types []TransactionType) bool {
 
 type TransactionSetter func(*Transaction)
 
-func WithMarketplaceID(marketplaceID string) TransactionSetter {
+func WithmarketID(marketID string) TransactionSetter {
 	return func(tx *Transaction) {
-		tx.MarketplaceID = marketplaceID
+		tx.marketID = marketID
 	}
 }
 

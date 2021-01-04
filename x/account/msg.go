@@ -26,16 +26,16 @@ var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreateAccount defines a message to submit an account
 type MsgCreateAccount struct {
-	MarketplaceID string         `json:"marketplace_id"`
+	marketID string         `json:"market_id"`
 	Body        string         `json:"body"`
 	Creator     sdk.AccAddress `json:"creator"`
 	Source      string         `json:"source,omitempty"`
 }
 
 // NewMsgCreateAccount creates a new message to create an account
-func NewMsgCreateAccount(marketplaceID, body string, creator sdk.AccAddress, source string) MsgCreateAccount {
+func NewMsgCreateAccount(marketID, body string, creator sdk.AccAddress, source string) MsgCreateAccount {
 	return MsgCreateAccount{
-		MarketplaceID: marketplaceID,
+		marketID: marketID,
 		Body:        body,
 		Creator:     creator,
 		Source:      source,
@@ -57,8 +57,8 @@ func (msg MsgCreateAccount) ValidateBasic() sdk.Error {
 	if len(msg.Body) == 0 {
 		return ErrInvalidBodyTooShort(msg.Body)
 	}
-	if len(msg.MarketplaceID) == 0 {
-		return ErrInvalidMarketplaceID(msg.MarketplaceID)
+	if len(msg.marketID) == 0 {
+		return ErrInvalidmarketID(msg.marketID)
 	}
 	if len(msg.Creator) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Creator.String())
@@ -78,7 +78,7 @@ func (msg MsgCreateAccount) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
-// MsgDeleteAccount defines a message to submit a story
+// MsgDeleteAccount defines a message to submit a account
 type MsgDeleteAccount struct {
 	ID      uint64         `json:"id"`
 	Creator sdk.AccAddress `json:"creator"`

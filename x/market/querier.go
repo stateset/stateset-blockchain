@@ -1,4 +1,4 @@
-package marketplace
+package market
 
 import (
 	"fmt"
@@ -10,13 +10,13 @@ import (
 
 // query endpoints supported by the stateset Querier
 const (
-	QueryMarketplace   = "marketplace"
-	QueryMarketplaces = "marketplaces"
+	Querymarket   = "market"
+	Querymarkets = "markets"
 	QueryParams      = "params"
 )
 
-// QueryMarketplaceParams are params for querying marketplaces by id queries
-type QueryMarketplaceParams struct {
+// QuerymarketParams are params for querying markets by id queries
+type QuerymarketParams struct {
 	ID string
 }
 
@@ -24,10 +24,10 @@ type QueryMarketplaceParams struct {
 func NewQuerier(k Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, request abci.RequestQuery) (result []byte, err sdk.Error) {
 		switch path[0] {
-		case QueryMarketplace:
-			return queryMarketplace(ctx, request, k)
-		case QueryMarketplaces:
-			return queryMarketplaces(ctx, k)
+		case Querymarket:
+			return querymarket(ctx, request, k)
+		case Querymarkets:
+			return querymarkets(ctx, k)
 		case QueryParams:
 			return queryParams(ctx, k)
 		default:
@@ -36,24 +36,24 @@ func NewQuerier(k Keeper) sdk.Querier {
 	}
 }
 
-func queryMarketplace(ctx sdk.Context, req abci.RequestQuery, k Keeper) (result []byte, err sdk.Error) {
-	var params QueryMarketplaceParams
+func querymarket(ctx sdk.Context, req abci.RequestQuery, k Keeper) (result []byte, err sdk.Error) {
+	var params QuerymarketParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
 
-	marketplace, err := k.Marketplace(ctx, params.ID)
+	market, err := k.market(ctx, params.ID)
 	if err != nil {
 		return
 	}
 
-	return mustMarshal(marketplace)
+	return mustMarshal(market)
 }
 
-func queryMarketplaces(ctx sdk.Context, k Keeper) (result []byte, err sdk.Error) {
-	marketplaces := k.Marketplaces(ctx)
-	return mustMarshal(marketplaces)
+func querymarkets(ctx sdk.Context, k Keeper) (result []byte, err sdk.Error) {
+	markets := k.markets(ctx)
+	return mustMarshal(markets)
 }
 
 func queryParams(ctx sdk.Context, keeper Keeper) (result []byte, err sdk.Error) {

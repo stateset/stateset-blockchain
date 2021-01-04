@@ -42,7 +42,7 @@ var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreateAgreement defines a message to create an agreement
 type MsgCreateAgreement struct {
-	MarketplaceID string             `json:"marketplace_id"`
+	marketID string             `json:"market_id"`
 	AgreementID 	  string 			 `json:"agreement_id"`
 	Body          string         	 `json:"body"`
 	Lender        sdk.AccAddress     `json:"counterparty"`
@@ -50,9 +50,9 @@ type MsgCreateAgreement struct {
 }
 
 // NewMsgCreateAgreement creates a new message to create an agreement
-func NewMsgCreateAgreement(marketplaceID, agreementID, body string, lender sdk.AccAddress, source string) MsgCreateAgreement {
+func NewMsgCreateAgreement(marketID, agreementID, body string, lender sdk.AccAddress, source string) MsgCreateAgreement {
 	return MsgCreateLoan {
-		MarketplaceID: marketplaceID,
+		marketID: marketID,
 		AgreementID:    agreementID,
 		Body:        body,
 		Lender:     lender,
@@ -75,8 +75,8 @@ func (msg MsgCreateAgreement) ValidateBasic() sdk.Error {
 	if len(msg.Body) == 0 {
 		return ErrInvalidBodyTooShort(msg.Body)
 	}
-	if len(msg.MarketplaceID) == 0 {
-		return ErrInvalidMarketplaceID(msg.MarketplaceID)
+	if len(msg.marketID) == 0 {
+		return ErrInvalidmarketID(msg.marketID)
 	}
 	if len(msg.InvoiceID) == 0 {
 		return ErrINvalidInvoiceID(msg.AgreementID)

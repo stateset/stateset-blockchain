@@ -5,7 +5,7 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/marketplace"
+	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,17 +20,17 @@ type Keeper struct {
 	paramStore params.Subspace
 
 	accountKeeper   AccountKeeper
-	marketplaceKeeper marketplace.Keeper
+	marketKeeper market.Keeper
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketplaceKeeper marketplace.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketKeeper market.Keeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,
 		paramStore.WithKeyTable(ParamKeyTable()),
 		accountKeeper,
-		marketplaceKeeper,
+		marketKeeper,
 	}
 }
 
@@ -49,16 +49,16 @@ func (k Keeper) CreatePurchaseOrder(ctx sdk.Context, body, purchaseorderID strin
 	if jailed {
 		return purchaseorder, ErrMerchantJailed(merchant)
 	}
-	marketplace, err := k.marketplaceKeeper.Marketplace(ctx, marketplaceID)
+	market, err := k.marketKeeper.market(ctx, marketID)
 	if err != nil {
-		return purchaseorder, ErrInvalidMarketplaceID(marketplace.ID)
+		return purchaseorder, ErrInvalidmarketID(market.ID)
 	}
 
 	purchaseorderID, err := k.purchaseorderID(ctx)
 	if err != nil {
 		return
 	}
-	purchaseorder = NewPurchaseOrder(purchaseorderID, marketplaceID, body, merchant, source,
+	purchaseorder = NewPurchaseOrder(purchaseorderID, marketID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
 
@@ -150,9 +150,9 @@ func (k Keeper) PurchaseOrderssAfterTime(ctx sdk.Context, createdTime time.Time)
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// MarketplacePurchaseOrders gets all the purchaseorders for a given marketplace
-func (k Keeper) MarketplacePurchaseOrders(ctx sdk.Context, marketplaceID string) (purchaseorders PurchaseOrders) {
-	return k.associatedPurchaseOrders(ctx, marketplacePurchaseOrdersKey(marketplaceID))
+// marketPurchaseOrders gets all the purchaseorders for a given market
+func (k Keeper) marketPurchaseOrders(ctx sdk.Context, marketID string) (purchaseorders PurchaseOrders) {
+	return k.associatedPurchaseOrders(ctx, marketPurchaseOrdersKey(marketID))
 }
 
 // MerchantPurchaseOrders gets all the purchaseorders for a given merchant
@@ -187,10 +187,10 @@ func (k Keeper) AddFinanceStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.
 }
 
 // SubtractFactorStake adds a stake amount to the total factoring amount
-func (k Keeper) SubtractFactorStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	purchaseorder, ok := k.Invoice(ctx, id)
+func (k Keeper) SubtractFinanceStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
+	purchaseorder, ok := k.PurchaseOrder(ctx, id)
 	if !ok {
-		return ErrUnknownInvoice(id)
+		return ErrUnknownPurchaseOrder(id)
 	}
 	purchaseorder.TotalFactored = purchaseorder.TotalFactored.Sub(stake)
 	k.setIncoice(ctx, purchaseorder)
@@ -198,26 +198,14 @@ func (k Keeper) SubtractFactorStake(ctx sdk.Context, id uint64, stake sdk.Coin) 
 	return nil
 }
 
-// SubtractChallengeStake adds a stake amount to the total factoring amount
-func (k Keeper) SubtractFactorStake(ctx sdk.Context, id uint64, stake sdk.Coin) sdk.Error {
-	purchaseorder, ok := k.Invoice(ctx, id)
-	if !ok {
-		return ErrUnknownInvoice(id)
-	}
-	purchaseorder.TotalFactored = purchaseorder.TotalFactored.Sub(stake)
-	k.setInvoice(ctx, purchaseorder)
-
-	return nil
-}
-
 // SetFirstArgumentTime sets time when first argument was created on a purchaseorder
 func (k Keeper) SetFirstArgumentTime(ctx sdk.Context, id uint64, firstArgumentTime time.Time) sdk.Error {
-	purchaseorder, ok := k.Invoice(ctx, id)
+	purchaseorder, ok := k.PurchaseOrder(ctx, id)
 	if !ok {
-		return ErrUnknownInvoice(id)
+		return ErrUnknownPurchaseOrder(id)
 	}
 	purchaseorder.FirstArgumentTime = firstArgumentTime
-	k.setInvoice(ctx, purchaseorder)
+	k.setPurchaseOrder(ctx, purchaseorder)
 
 	return nil
 }
@@ -227,18 +215,18 @@ func (k Keeper) AddAdmin(ctx sdk.Context, admin, creator sdk.AccAddress) (err sd
 	params := k.GetParams(ctx)
 
 	// first admin can be added without any authorisation
-	if len(params.InvoiceAdmins) > 0 && !k.isAdmin(ctx, creator) {
+	if len(params.PurchaseOrderAdmins) > 0 && !k.isAdmin(ctx, creator) {
 		err = ErrAddressNotAuthorised()
 	}
 
 	// if already present, don't add again
-	for _, currentAdmin := range params.InvoiceAdmins {
+	for _, currentAdmin := range params.PurchaseOrderAdmins {
 		if currentAdmin.Equals(admin) {
 			return
 		}
 	}
 
-	params.InvoiceAdmins = append(params.InvoiceAdmins, admin)
+	params.PurchaseOrderAdmins = append(params.PurchaseOrderAdmins, admin)
 
 	k.SetParams(ctx, params)
 
@@ -252,9 +240,9 @@ func (k Keeper) RemoveAdmin(ctx sdk.Context, admin, remover sdk.AccAddress) (err
 	}
 
 	params := k.GetParams(ctx)
-	for i, currentAdmin := range params.InvoiceAdmins {
+	for i, currentAdmin := range params.PurchaseOrderAdmins {
 		if currentAdmin.Equals(admin) {
-			params.InvoiceAdmins = append(params.InvoiceAdmins[:i], params.InvoiceAdmins[i+1:]...)
+			params.PurchaseOrderAdmins = append(params.PurchaseOrderAdmins[:i], params.PurchaseOrderAdmins[i+1:]...)
 		}
 	}
 
@@ -264,7 +252,7 @@ func (k Keeper) RemoveAdmin(ctx sdk.Context, admin, remover sdk.AccAddress) (err
 }
 
 func (k Keeper) isAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
-	for _, admin := range k.GetParams(ctx).InvoiceAdmins {
+	for _, admin := range k.GetParams(ctx).PurchaseOrderAdmins {
 		if address.Equals(admin) {
 			return true
 		}
@@ -273,17 +261,17 @@ func (k Keeper) isAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
 }
 
 func (k Keeper) validateLength(ctx sdk.Context, body string) sdk.Error {
-	var minInvoiceLength int
-	var maxInvoiceLength int
+	var minPurchaseOrderLength int
+	var maxPurchaseOrderLength int
 
-	k.paramStore.Get(ctx, KeyMinInvoiceLength, &minInvoiceLength)
-	k.paramStore.Get(ctx, KeyMaxInvoiceLength, &maxInvoiceLength)
+	k.paramStore.Get(ctx, KeyMinPurchaseOrderLength, &minPurchaseOrderLength)
+	k.paramStore.Get(ctx, KeyMaxPurchaseOrderLength, &maxPurchaseOrderLength)
 
 	len := len([]rune(body))
-	if len < minInvoiceLength {
+	if len < minPurchaseOrderLength {
 		return ErrInvalidBodyTooShort(body)
 	}
-	if len > maxInvoiceLength {
+	if len > maxPurchaseOrderLength {
 		return ErrInvalidBodyTooLong()
 	}
 
@@ -293,71 +281,71 @@ func (k Keeper) validateLength(ctx sdk.Context, body string) sdk.Error {
 // purchaseorderID gets the highest purchaseorder ID
 func (k Keeper) purchaseorderID(ctx sdk.Context) (purchaseorderID uint64, err sdk.Error) {
 	store := k.store(ctx)
-	bz := store.Get(InvoiceIDKey)
+	bz := store.Get(PurchaseOrderIDKey)
 	if bz == nil {
-		return 0, ErrUnknownInvoice(purchaseorderID)
+		return 0, ErrUnknownPurchaseOrder(purchaseorderID)
 	}
 	k.codec.MustUnmarshalBinaryLengthPrefixed(bz, &purchaseorderID)
 	return purchaseorderID, nil
 }
 
 // set the purchaseorder ID
-func (k Keeper) setInvoiceID(ctx sdk.Context, purchaseorderID uint64) {
+func (k Keeper) setPurchaseOrderID(ctx sdk.Context, purchaseorderID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(purchaseorderID)
-	store.Set(InvoiceIDKey, bz)
+	store.Set(PurchaseOrderIDKey, bz)
 }
 
-// setInvoice sets a purchaseorder in store
-func (k Keeper) setInvoice(ctx sdk.Context, purchaseorder Invoice) {
+// setPurchaseOrder sets a purchaseorder in store
+func (k Keeper) setPurchaseOrder(ctx sdk.Context, purchaseorder PurchaseOrder) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(purchaseorder)
 	store.Set(key(purchaseorder.ID), bz)
 }
 
-// setMarketplaceInvoice sets a marketplace <-> purchaseorder association in store
-func (k Keeper) setMarketplaceInvoice(ctx sdk.Context, marketplaceID string, purchaseorderID uint64) {
+// setmarketPurchaseOrder sets a market <-> purchaseorder association in store
+func (k Keeper) setmarketPurchaseOrder(ctx sdk.Context, marketID string, purchaseorderID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(purchaseorderID)
-	store.Set(merchantInvoiceKey(merchantID, purchaseorderID), bz)
+	store.Set(merchantPurchaseOrderKey(merchantID, purchaseorderID), bz)
 }
 
-// setMerchantInvoice sets a merchant <-> purchaseorder association in store
-func (k Keeper) setMerchantInvoice(ctx sdk.Context, merchant sdk.AccAddress, purchaseorderID uint64) {
+// setMerchantPurchaseOrder sets a merchant <-> purchaseorder association in store
+func (k Keeper) setMerchantPurchaseOrder(ctx sdk.Context, merchant sdk.AccAddress, purchaseorderID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(purchaseorderID)
-	store.Set(merchantInvoiceKey(merchant, purchaseorderID), bz)
+	store.Set(merchantPurchaseOrderKey(merchant, purchaseorderID), bz)
 }
 
-func (k Keeper) setCreatedTimeInvoice(ctx sdk.Context, createdTime time.Time, purchaseorderID uint64) {
+func (k Keeper) setCreatedTimePurchaseOrder(ctx sdk.Context, createdTime time.Time, purchaseorderID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(purchaseorderID)
-	store.Set(createdTimeInvoiceKey(createdTime, purchaseorderID), bz)
+	store.Set(createdTimePurchaseOrderKey(createdTime, purchaseorderID), bz)
 }
 
-// purchaseordersIterator returns an sdk.Iterator for purchaseorders from startInvoiceID to endInvoiceID
-func (k Keeper) purchaseordersIterator(ctx sdk.Context, startInvoiceID, endInvoiceID uint64) sdk.Iterator {
+// purchaseordersIterator returns an sdk.Iterator for purchaseorders from startPurchaseOrderID to endPurchaseOrderID
+func (k Keeper) purchaseordersIterator(ctx sdk.Context, startPurchaseOrderID, endPurchaseOrderID uint64) sdk.Iterator {
 	store := k.store(ctx)
-	return store.Iterator(key(startInvoiceID), sdk.PrefixEndBytes(key(endInvoiceID)))
+	return store.Iterator(key(startPurchaseOrderID), sdk.PrefixEndBytes(key(endPurchaseOrderID)))
 }
 
-func (k Keeper) beforeCreatedTimeInvoicesIterator(ctx sdk.Context, createdTime time.Time) sdk.Iterator {
+func (k Keeper) beforeCreatedTimePurchaseOrdersIterator(ctx sdk.Context, createdTime time.Time) sdk.Iterator {
 	store := k.store(ctx)
-	return store.Iterator(CreatedTimeInvoicesPrefix, sdk.PrefixEndBytes(createdTimeInvoicesKey(createdTime)))
+	return store.Iterator(CreatedTimePurchaseOrdersPrefix, sdk.PrefixEndBytes(createdTimePurchaseOrdersKey(createdTime)))
 }
 
-func (k Keeper) afterCreatedTimeInvoicesIterator(ctx sdk.Context, createdTime time.Time) sdk.Iterator {
+func (k Keeper) afterCreatedTimePurchaseOrdersIterator(ctx sdk.Context, createdTime time.Time) sdk.Iterator {
 	store := k.store(ctx)
-	return store.Iterator(createdTimeInvoicesKey(createdTime), sdk.PrefixEndBytes(CreatedTimeInvoicesPrefix))
+	return store.Iterator(createdTimePurchaseOrdersKey(createdTime), sdk.PrefixEndBytes(CreatedTimePurchaseOrdersPrefix))
 }
 
-// createdTimeRangeInvoicesIterator returns an sdk.Iterator for all purchaseorders between startCreatedTime and endCreatedTime
-func (k Keeper) createdTimeRangeInvoicesIterator(ctx sdk.Context, startCreatedTime, endCreatedTime time.Time) sdk.Iterator {
+// createdTimeRangePurchaseOrdersIterator returns an sdk.Iterator for all purchaseorders between startCreatedTime and endCreatedTime
+func (k Keeper) createdTimeRangePurchaseOrdersIterator(ctx sdk.Context, startCreatedTime, endCreatedTime time.Time) sdk.Iterator {
 	store := k.store(ctx)
-	return store.Iterator(createdTimeInvoicesKey(startCreatedTime), sdk.PrefixEndBytes(createdTimeInvoicesKey(endCreatedTime)))
+	return store.Iterator(createdTimePurchaseOrdersKey(startCreatedTime), sdk.PrefixEndBytes(createdTimePurchaseOrdersKey(endCreatedTime)))
 }
 
-func (k Keeper) associatedInvoices(ctx sdk.Context, prefix []byte) (purchaseorders Invoices) {
+func (k Keeper) associatedPurchaseOrders(ctx sdk.Context, prefix []byte) (purchaseorders PurchaseOrders) {
 	store := k.store(ctx)
 	iterator := sdk.KVStoreReversePrefixIterator(store, prefix)
 
@@ -365,7 +353,7 @@ func (k Keeper) associatedInvoices(ctx sdk.Context, prefix []byte) (purchaseorde
 	for ; iterator.Valid(); iterator.Next() {
 		var purchaseorderID uint64
 		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &purchaseorderID)
-		purchaseorder, ok := k.Invoice(ctx, purchaseorderID)
+		purchaseorder, ok := k.PurchaseOrder(ctx, purchaseorderID)
 		if ok {
 			purchaseorders = append(purchaseorders, purchaseorder)
 		}
@@ -374,10 +362,10 @@ func (k Keeper) associatedInvoices(ctx sdk.Context, prefix []byte) (purchaseorde
 	return
 }
 
-func (k Keeper) iterate(iterator sdk.Iterator) (purchaseorders Invoices) {
+func (k Keeper) iterate(iterator sdk.Iterator) (purchaseorders PurchaseOrders) {
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
-		var purchaseorder Invoice
+		var purchaseorder PurchaseOrder
 		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &purchaseorder)
 		purchaseorders = append(purchaseorders, purchaseorder)
 	}
@@ -385,12 +373,12 @@ func (k Keeper) iterate(iterator sdk.Iterator) (purchaseorders Invoices) {
 	return
 }
 
-func (k Keeper) iterateAssociated(ctx sdk.Context, iterator sdk.Iterator) (purchaseorders Invoices) {
+func (k Keeper) iterateAssociated(ctx sdk.Context, iterator sdk.Iterator) (purchaseorders PurchaseOrders) {
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
 		var purchaseorderID uint64
 		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &purchaseorderID)
-		purchaseorder, ok := k.Invoice(ctx, purchaseorderID)
+		purchaseorder, ok := k.PurchaseOrder(ctx, purchaseorderID)
 		if ok {
 			purchaseorders = append(purchaseorders, purchaseorder)
 		}

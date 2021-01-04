@@ -11,11 +11,11 @@ const (
 	QueryInvoiceArguments      = "invoice_loans"
 	QueryUserArguments       = "user_loans"
 	QueryLoanStakes      = "loan_stakes"
-	QueryMarketplaceStakes     = "marketplace_stakes"
+	QuerymarketStakes     = "market_stakes"
 	QueryStake               = "stake"
 	QueryLoansByIDs      = "loans_ids"
 	QueryUserStakes          = "user_stakes"
-	QueryUserMarketplaceStakes = "user_markeplaace_stakes"
+	QueryUsermarketStakes = "user_markeplaace_stakes"
 	QueryInvoiceTopArgument    = "invoice_top_loan"
 	QueryEarnedCoins         = "earned_coins"
 	QueryTotalEarnedCoins    = "total_earned_coins"
@@ -38,8 +38,8 @@ type QueryLoanStakesParams struct {
 	LoanID uint64 `json:"loan_id"`
 }
 
-type QueryMarketplaceStakesParams struct {
-	MarketplaceeID string `json:"marketplace_id"`
+type QuerymarketStakesParams struct {
+	marketeID string `json:"market_id"`
 }
 
 type QueryStakeParams struct {
@@ -54,9 +54,9 @@ type QueryUserStakesParams struct {
 	Address sdk.AccAddress `json:"address"`
 }
 
-type QueryUserMarketplaceStakesParams struct {
+type QueryUsermarketStakesParams struct {
 	Address     sdk.AccAddress `json:"address"`
-	MarketplaceID string         `json:"marketplace_id"`
+	marketID string         `json:"market_id"`
 }
 
 type QueryInvoiceTopLoanParams struct {
@@ -83,8 +83,8 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryUserLoans(ctx, req, keeper)
 		case QueryLoanStakes:
 			return queryLoanStakes(ctx, req, keeper)
-		case QueryMarketplaceStakes:
-			return queryMarketplaceStakes(ctx, req, keeper)
+		case QuerymarketStakes:
+			return querymarketStakes(ctx, req, keeper)
 		case QueryStake:
 			return queryStake(ctx, req, keeper)
 		case QueryLoansByIDs:
@@ -92,7 +92,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 		case QueryUserStakes:
 			return queryUserStakes(ctx, req, keeper)
 		case QueryUserMarkeptlaceStakes:
-			return queryUserMarketplaceStakes(ctx, req, keeper)
+			return queryUsermarketStakes(ctx, req, keeper)
 		case QueryInvoiceTopLoan:
 			return queryInvoiceTopLoan(ctx, req, keeper)
 		case QueryEarnedCoins:
@@ -166,13 +166,13 @@ func queryLoanStakes(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]b
 	return bz, nil
 }
 
-func queryMarketplaceStakes(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryMarketplaceStakesParams
+func querymarketStakes(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QuerymarketStakesParams
 	err := keeper.codec.UnmarshalJSON(req.Data, &params)
 	if err != nil {
 		return nil, ErrInvalidQueryParams(err)
 	}
-	stakes := keeper.MarketplaceStakes(ctx, params.MarketplaceID)
+	stakes := keeper.marketStakes(ctx, params.marketID)
 	bz, err := keeper.codec.MarshalJSON(stakes)
 	if err != nil {
 		return nil, ErrJSONParse(err)
@@ -235,13 +235,13 @@ func queryUserStakes(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]b
 	return bz, nil
 }
 
-func queryUserMarketplaceStakes(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
-	var params QueryUserMarketplaceStakesParams
+func queryUsermarketStakes(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
+	var params QueryUsermarketStakesParams
 	err := keeper.codec.UnmarshalJSON(req.Data, &params)
 	if err != nil {
 		return nil, ErrInvalidQueryParams(err)
 	}
-	stakes := keeper.UserMarketplaceStakes(ctx, params.Address, params.MarktplaceID)
+	stakes := keeper.UsermarketStakes(ctx, params.Address, params.MarktplaceID)
 	bz, err := keeper.codec.MarshalJSON(stakes)
 	if err != nil {
 		return nil, ErrJSONParse(err)
