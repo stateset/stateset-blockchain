@@ -39,7 +39,7 @@ func main() {
 	cobra.EnableCommandSorting = false
 	rootCmd := &cobra.Command{
 		Use:               "statesetd",
-		Short:             "app Daemon (server)",
+		Short:             "stateset App Daemon (server)",
 		PersistentPreRunE: server.PersistentPreRunEFn(ctx),
 	}
 
