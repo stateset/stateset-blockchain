@@ -15,7 +15,7 @@ var (
 	KeyMinNameLength        = []byte("minNameLength")
 	KeyMaxNameLength        = []byte("maxNameLength")
 	KeyMaxDescriptionLength = []byte("maxDescriptionLength")
-	KeyMarketAdmins      = []byte("marketplaceAdmins")
+	KeyMarketAdmins      = []byte("marketAdmins")
 )
 
 // Params holds parameters for a Market
@@ -25,7 +25,7 @@ type Params struct {
 	MinNameLength        int              `json:"min_name_length"`
 	MaxNameLength        int              `json:"max_name_length"`
 	MaxDescriptionLength int              `json:"max_description_length"`
-	MarketAdmins      []sdk.AccAddress `json:"marketplace_admins"`
+	MarketAdmins      []sdk.AccAddress `json:"market_admins"`
 }
 
 // DefaultParams is the Market params for testing

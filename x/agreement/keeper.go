@@ -58,7 +58,7 @@ func (k Keeper) CreateAgreement(ctx sdk.Context, body, agreementID string,
 	if err != nil {
 		return
 	}
-	agreement = NewAgreement(agreementID, MarketID, body, merchant, source,
+	agreement = NewAgreement(agreementID, marketID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
 
