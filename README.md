@@ -10,7 +10,7 @@ Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint.
 
 ## What is Stateset?
 
-**[Stateset](https://stateset.io)** is a blockchain protocol for decentralized commerce finance. Non-custodial liquidiity Pools using the STATE token are used for purchase order financing and invoice factoring where users can participate as lenders or borrowers. 
+**[Stateset](https://stateset.io)** is a blockchain protocol for decentralized commerce finance. Non-custodial liquidity pools using the STATE token are used for purchase order financing and invoice factoring where users can participate as lenders or borrowers. 
 
 **Stateset Core** is the reference implementation of the Stateset protocol, written in Golang. Stateset Core is built atop [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) and uses [Tendermint](https://github.com/tendermint/tendermint) BFT consensus. If you intend to work on Stateset Core source, it is recommended that you familiarize yourself with the concepts in those projects.
 
