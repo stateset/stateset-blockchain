@@ -4,6 +4,7 @@ package market
 import (
 	"fmt"
 	"time"
+
 )
 
 // Defines module constants
@@ -11,6 +12,7 @@ const (
 	RouterKey    = ModuleName
 	QuerierRoute = ModuleName
 	StoreKey     = ModuleName
+	DefaultParamspace = ModuleName
 )
 
 // Market represents the state of a Market on Stateset
@@ -25,9 +27,9 @@ type Market struct {
 type Markets []Market
 
 // NewMarket creates a new Markets
-func NewMarket(id, name, description string, createdTime time.Time) Market {
+func NewMarket(id uint64, name string, description string, createdTime time.Time) Market {
 	return Market{
-		ID:          id,
+		MarketID:    marketId,
 		Name:        name,
 		Description: description,
 		CreatedTime: createdTime,
@@ -36,9 +38,9 @@ func NewMarket(id, name, description string, createdTime time.Time) Market {
 
 func (c Market) String() string {
 	return fmt.Sprintf(`Market:
-   ID: 			    %s
+   MarketID: 			    %s
    Name: 			%s
    Description:  	%s
    CreatedTime: 	%s`,
-		c.ID, c.Name, c.Description, c.CreatedTime.String())
+		c.MarketID, c.Name, c.Description, c.CreatedTime.String())
 }

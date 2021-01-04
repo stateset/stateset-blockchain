@@ -1,5 +1,4 @@
 package market
-
 import (
 	"fmt"
 
@@ -13,7 +12,7 @@ type CodeType = sdk.CodeType
 const (
 	DefaultCodespace sdk.CodespaceType = ModuleName
 
-	ErrorCodeInvalidBodyTooShort        CodeType = 101
+	ErrorCodeInvalidBodyTooShort         CodeType = 101
 	ErrorCodeInvalidBodyTooLong          CodeType = 102
 	ErrorCodeInvalidID                   CodeType = 103
 	ErrorCodeNotFound                    CodeType = 104

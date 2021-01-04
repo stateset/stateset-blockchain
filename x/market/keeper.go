@@ -28,8 +28,10 @@ func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.C
 }
 
 // NewMarket creates a new Market
-func (k Keeper) NewMarket(ctx sdk.Context, id string, name string, description string, creator sdk.AccAddress) (market Market, err sdk.Error) {
-	err = k.validateParams(ctx, id, name, description, creator)
+func (k Keeper) CreateMarket(ctx sdk.Context, id string, name string, description string,
+	merchant sdk.AccAddress) (market Market, err sdk.Error) {
+
+	err = k.validateParams(ctx, id, name, description, merhcant)
 	if err != nil {
 		return
 	}
