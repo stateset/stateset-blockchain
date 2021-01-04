@@ -5,34 +5,34 @@ import (
 )
 
 const (
-	TypeMsgSend     = "send"
+	TypeMsgSendState     = "send"
 	TypeMsgUpdateParams = "update_params"
 )
 
 var (
-	_ sdk.Msg = &MsgSend{}
+	_ sdk.Msg = &MsgSendState{}
 )
 
-type MsgSend struct {
+type MsgSendState struct {
 	Sender    sdk.AccAddress
 	Recipient sdk.AccAddress
 	Amount    sdk.Coin
 }
 
-func NewMsgSend(sender, recipient sdk.AccAddress, amount sdk.Coin) MsgSend {
-	return MsgSend{
+func NewMsgSendState(sender, recipient sdk.AccAddress, amount sdk.Coin) MsgSendState {
+	return MsgSendState{
 		Sender:    sender,
 		Recipient: recipient,
 		Amount:    amount,
 	}
 }
-func (msg MsgSend) Route() string { return RouterKey }
+func (msg MsgSendState) Route() string { return RouterKey }
 
-func (msg MsgSend) Type() string {
-	return TypeMsgSend
+func (msg MsgSendState) Type() string {
+	return TypeMsgSendState
 }
 
-func (msg MsgSend) ValidateBasic() sdk.Error {
+func (msg MsgSendState) ValidateBasic() sdk.Error {
 	if len(msg.Sender) == 0 {
 		return sdk.ErrInvalidAddress("invalid creator address")
 	}
@@ -46,12 +46,12 @@ func (msg MsgSend) ValidateBasic() sdk.Error {
 	return nil
 }
 
-func (msg MsgSend) GetSigners() []sdk.AccAddress {
+func (msg MsgSendState) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Sender}
 }
 
 // Implements Msg.
-func (msg MsgSend) GetSignBytes() []byte {
+func (msg MsgSendState) GetSignBytes() []byte {
 	bz := ModuleCodec.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
@@ -99,23 +99,23 @@ func (msg MsgUpdateParams) GetSigners() []sdk.AccAddress {
 // MsgIssue
 
 // MsgIssue - high level transaction of the coin module
-type MsgIssue struct {
+type MsgIssueState struct {
 	Banker  sdk.AccAddress `json:"banker"`
 	Outputs []Output       `json:"outputs"`
 }
 
-var _ sdk.Msg = MsgIssue{}
+var _ sdk.Msg = MsgIssueState{}
 
 //----------------------------------------
 // MsgBurn
 
 // MsgBurn - high level transaction of the coin module
-type MsgBurn struct {
+type MsgBurnState struct {
 	Owner sdk.AccAddress `json:"owner"`
 	Coins sdk.Coins      `json:"coins"`
 }
 
-var _ sdk.Msg = MsgBurn{}
+var _ sdk.Msg = MsgBurnState{}
 
 
 
@@ -123,15 +123,15 @@ var _ sdk.Msg = MsgBurn{}
 
 
 // NewMsgIssue - construct arbitrary multi-in, multi-out send msg.
-func NewMsgBurn(owner sdk.AccAddress, coins sdk.Coins) MsgBurn {
-	return MsgBurn{Owner: owner, Coins: coins}
+func NewMsgBurnState(owner sdk.AccAddress, coins sdk.Coins) MsgBurnState {
+	return MsgBurnState{Owner: owner, Coins: coins}
 }
 
-func (msg MsgBurn) Route() string { return "bank" }
-func (msg MsgBurn) Type() string  { return "burn" }
+func (msg MsgBurnState) Route() string { return "bank" }
+func (msg MsgBurnState) Type() string  { return "burn" }
 
 // Implements Msg.
-func (msg MsgBurn) ValidateBasic() sdk.Error {
+func (msg MsgBurnState) ValidateBasic() sdk.Error {
 	if len(msg.Owner) == 0 {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
@@ -145,7 +145,7 @@ func (msg MsgBurn) ValidateBasic() sdk.Error {
 }
 
 // Implements Msg.
-func (msg MsgBurn) GetSignBytes() []byte {
+func (msg MsgBurnState) GetSignBytes() []byte {
 	b, err := msgCdc.MarshalJSON(msg)
 	if err != nil {
 		panic(err)
@@ -154,6 +154,6 @@ func (msg MsgBurn) GetSignBytes() []byte {
 }
 
 // Implements Msg.
-func (msg MsgBurn) GetSigners() []sdk.AccAddress {
+func (msg MsgBurnState) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
