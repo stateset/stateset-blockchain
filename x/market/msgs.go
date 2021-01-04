@@ -17,6 +17,15 @@ const (
 	TypeMsgUpdateParams = "update_params"
 )
 
+
+// verify interface at compile time
+var _ sdk.Msg = &MsgNewMarket{}
+var _ sdk.Msg = &MsgAddAdmin{}
+var _ sdk.Msg = &MsgRemoveAdmin{}
+var _ sdk.Msg = &MsgUpdateParams{}
+
+
+
 // MsgNewMarket defines the message to add a new admin
 type MsgNewMarket struct {
 	Name        string         `json:"name"`
@@ -81,10 +90,6 @@ func (msg MsgAddAdmin) ValidateBasic() sdk.Error {
 		return sdk.ErrInvalidAddress(fmt.Sprintf("Invalid address: %s", msg.Admin.String()))
 	}
 
-	if len(msg.Creator) == 0 {
-		return sdk.ErrInvalidAddress(fmt.Sprintf("Invalid address: %s", msg.Creator.String()))
-	}
-
 	return nil
 }
 
@@ -100,9 +105,9 @@ func (msg MsgAddAdmin) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgBytes)
 }
 
-// GetSigners implements Msg. Returns the creator as the signer.
+// GetSigners implements Msg. Returns the Merchant as the signer.
 func (msg MsgAddAdmin) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Merchant)}
 }
 
 // MsgRemoveAdmin defines the message to remove an admin
@@ -123,10 +128,6 @@ func NewMsgRemoveAdmin(admin, remover sdk.AccAddress) MsgRemoveAdmin {
 func (msg MsgRemoveAdmin) ValidateBasic() sdk.Error {
 	if len(msg.Admin) == 0 {
 		return sdk.ErrInvalidAddress(fmt.Sprintf("Invalid address: %s", msg.Admin.String()))
-	}
-
-	if len(msg.Remover) == 0 {
-		return sdk.ErrInvalidAddress(fmt.Sprintf("Invalid address: %s", msg.Remover.String()))
 	}
 
 	return nil

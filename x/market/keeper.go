@@ -75,11 +75,11 @@ func (k Keeper) Markets(ctx sdk.Context) (markets []Market) {
 }
 
 // AddAdmin adds a new admin
-func (k Keeper) AddAdmin(ctx sdk.Context, admin, creator sdk.AccAddress) (err sdk.Error) {
+func (k Keeper) AddAdmin(ctx sdk.Context, admin, merchant sdk.AccAddress) (err sdk.Error) {
 	params := k.GetParams(ctx)
 
 	// first admin can be added without any authorisation
-	if len(params.MarketAdmins) > 0 && !k.isAdmin(ctx, creator) {
+	if len(params.MarketAdmins) > 0 && !k.isAdmin(ctx, merchant) {
 		err = ErrAddressNotAuthorised()
 	}
 
@@ -115,7 +115,7 @@ func (k Keeper) RemoveAdmin(ctx sdk.Context, admin, remover sdk.AccAddress) (err
 	return
 }
 
-func (k Keeper) validateParams(ctx sdk.Context, id, name, description string, creator sdk.AccAddress) (err sdk.Error) {
+func (k Keeper) validateParams(ctx sdk.Context, id, name, description string, merchant sdk.AccAddress) (err sdk.Error) {
 	params := k.GetParams(ctx)
 	if len(id) < params.MinIDLength || len(id) > params.MaxIDLength {
 		err = ErrInvalidMarketMsg(

@@ -50,8 +50,8 @@ type MsgCreateAgreement struct {
 }
 
 // NewMsgCreateAgreement creates a new message to create an agreement
-func NewMsgCreateAgreement(MarketID, agreementID, body string, lender sdk.AccAddress, source string) MsgCreateAgreement {
-	return MsgCreateLoan {
+func NewMsgCreateAgreement(marketID, agreementID, body string, lender sdk.AccAddress, source string) MsgCreateAgreement {
+	return MsgCreateAgreement {
 		MarketID: MarketID,
 		AgreementID:    agreementID,
 		Body:        body,
@@ -60,7 +60,7 @@ func NewMsgCreateAgreement(MarketID, agreementID, body string, lender sdk.AccAdd
 	}
 }
 
-// Route is the name of the route for loan
+// Route is the name of the route for agreement
 func (msg MsgCreateAgreement) Route() string {
 	return RouterKey
 }
