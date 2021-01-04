@@ -13,7 +13,7 @@ const (
 	StoreKey     = ModuleName
 )
 
-// Market represents the state of a marketplace on Stateset
+// Market represents the state of a market on Stateset
 type Market struct {
 	ID          string    `json:"id"`
 	Name        string    `json:"name"`

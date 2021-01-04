@@ -18,7 +18,7 @@ const (
 	ErrorCodeInvalidID                   CodeType = 103
 	ErrorCodeNotFound                    CodeType = 104
 	ErrorCodeInvalidSType                CodeType = 105
-	ErrorCodeLoansWithmarketNotFound CodeType = 106
+	ErrorCodeLoansWithMarketNotFound CodeType = 106
 	ErrorCodeInvalidSourceURL            CodeType = 107
 	ErrorCodeLenderJailed               CodeType = 108
 	ErrorCodeAddressNotAuthorised        CodeType = 109
@@ -53,7 +53,7 @@ func ErrUnknownLoan(id uint64) sdk.Error {
 func ErrInvalidMarketID(id string) sdk.Error {
 	return sdk.NewError(
 		DefaultCodespace,
-		ErrorCodeLoansWithmarketNotFound,
+		ErrorCodeLoansWithMarketNotFound,
 		fmt.Sprintf("Invalid market id: %s", id))
 }
 

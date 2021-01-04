@@ -10,7 +10,7 @@ These are the modules that make Stateset:
 - `x/invoice`: Invoice logic.
 - `x/purchaseorder`: Purchase Order logic.
 - `x/loan`: Loan logic.
-- `x/market`: market logic.
+- `x/market`: Market logic.
 - `x/factoring`: Factoring logic.
 - `x/mint`: Inflation logic.
 - `x/distribution`: Fee distribution logic.

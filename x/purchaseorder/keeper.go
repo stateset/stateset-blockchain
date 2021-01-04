@@ -150,14 +150,14 @@ func (k Keeper) PurchaseOrderssAfterTime(ctx sdk.Context, createdTime time.Time)
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// marketPurchaseOrders gets all the purchaseorders for a given market
-func (k Keeper) marketPurchaseOrders(ctx sdk.Context, MarketID string) (purchaseorders PurchaseOrders) {
+// MarketPurchaseOrders gets all the purchaseorders for a given market
+func (k Keeper) MarketPurchaseOrders(ctx sdk.Context, MarketID string) (purchaseorders PurchaseOrders) {
 	return k.associatedPurchaseOrders(ctx, marketPurchaseOrdersKey(MarketID))
 }
 
 // MerchantPurchaseOrders gets all the purchaseorders for a given merchant
 func (k Keeper) MerchantPurchaseOrders(ctx sdk.Context, creator sdk.AccAddress) (purchaseorders PurchaseOrders) {
-	return k.associatedPurchaseOrders(ctx, creatorPurchaseOrdersKey(creator))
+	return k.associatedPurchaseOrders(ctx, merchantPurchaseOrdersKey(merchant))
 }
 
 // AddBackingStake adds a stake amount to the total backing amount
@@ -303,8 +303,8 @@ func (k Keeper) setPurchaseOrder(ctx sdk.Context, purchaseorder PurchaseOrder) {
 	store.Set(key(purchaseorder.ID), bz)
 }
 
-// setmarketPurchaseOrder sets a market <-> purchaseorder association in store
-func (k Keeper) setmarketPurchaseOrder(ctx sdk.Context, MarketID string, purchaseorderID uint64) {
+// setMarketPurchaseOrder sets a market <-> purchaseorder association in store
+func (k Keeper) setMarketPurchaseOrder(ctx sdk.Context, MarketID string, purchaseorderID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(purchaseorderID)
 	store.Set(merchantPurchaseOrderKey(merchantID, purchaseorderID), bz)

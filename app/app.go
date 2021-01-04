@@ -111,7 +111,7 @@ type StatesetApp struct {
 
 	// stateset keepers
 	appAccountKeeper   account.Keeper
-	marketKeeper  market.Keeper
+	marketKeeper  		market.Keeper
 	agreementKeeper    agreement.Keeper
 	purchaseorderKeeper purchaseorder.Keeper
 	invoiceKeeper      invoice.Keeper
@@ -270,7 +270,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 	govRouter := gov.NewRouter()
 	govRouter.AddRoute(gov.RouterKey, gov.ProposalHandler).
 		AddRoute(params.RouterKey, params.NewParamChangeProposalHandler(app.paramsKeeper)).
-		AddRoute(distr.RouterKey, distr.NewmarketPoolSpendProposalHandler(app.distrKeeper)).
+		AddRoute(distr.RouterKey, distr.NewMarketPoolSpendProposalHandler(app.distrKeeper)).
 		AddRoute(upgrade.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.upgradeKeeper))
 	app.govKeeper = gov.NewKeeper(
 		app.cdc, keys[gov.StoreKey], govSubspace,

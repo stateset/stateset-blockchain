@@ -186,8 +186,8 @@ func (k Keeper) setAgreement(ctx sdk.Context, agreement Agreement) {
 	store.Set(key(agreement.ID), bz)
 }
 
-// setmarketAgreement sets a market <-> agreement association in store
-func (k Keeper) setmarketAgreement(ctx sdk.Context, MarketID uint64, agreementID uint64) {
+// setMarketAgreement sets a Market <-> agreement association in store
+func (k Keeper) setMarketAgreement(ctx sdk.Context, MarketID uint64, agreementID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(agreementID)
 	store.Set(merchantAgreementKey(MarketID, agreementID), bz)

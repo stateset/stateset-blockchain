@@ -150,8 +150,8 @@ func (k Keeper) InvoicessAfterTime(ctx sdk.Context, createdTime time.Time) (invo
 	return k.iterateAssociated(ctx, iterator)
 }
 
-// marketInvoices gets all the invoices for a given market
-func (k Keeper) marketInvoices(ctx sdk.Context, MarketID string) (invoices Invoices) {
+// MarketInvoices gets all the invoices for a given market
+func (k Keeper) MarketInvoices(ctx sdk.Context, MarketID string) (invoices Invoices) {
 	return k.associatedInvoices(ctx, marketInvoicesKey(MarketID))
 }
 
@@ -316,7 +316,7 @@ func (k Keeper) setInvoice(ctx sdk.Context, invoice Invoice) {
 }
 
 // setmarketInvoice sets a market <-> invoice association in store
-func (k Keeper) setmarketInvoice(ctx sdk.Context, MarketID string, invoiceID uint64) {
+func (k Keeper) setMarketInvoice(ctx sdk.Context, MarketID string, invoiceID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(invoiceID)
 	store.Set(merchantInvoiceKey(merchantID, invoiceID), bz)

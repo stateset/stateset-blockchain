@@ -65,7 +65,7 @@ reset:
 restart: build_daemon reset start
 
 start:
-	bin/statesetd start --inv-check-period 10 --log_level "main:info,state:info,*:error,app:info,account:info,statebank:info,agreement:info,invoice:info,loan:info,market:info,stateslashing:info,statefactoring:info"
+	bin/statesetd start --inv-check-period 10 --log_level "main:info,state:info,*:error,app:info,account:info,statebank:info,agreement:info,purchaseoerder:info,invoice:info,loan:info,market:info,stateslashing:info,statefactoring:info"
 
 check:
 	@echo "--> Running golangci"

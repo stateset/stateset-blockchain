@@ -32,8 +32,8 @@ type QueryInvoicesParams struct {
 	IDs []uint64 `json:"ids"`
 }
 
-// QuerymarketInvoicsParams for market invoices
-type QueryQuerymarketInvoicesParams struct {
+// QueryMarketInvoicsParams for market invoices
+type QueryMarketInvoicesParams struct {
 	MarketID string `json:"market_id"`
 }
 
@@ -61,8 +61,8 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryInvoice(ctx, req, keeper)
 		case QueryInvoices:
 			return queryInvoices(ctx, req, keeper)
-		case QuerymarketInvoices:
-			return querymarketInvoices(ctx, req, keeper)
+		case QueryMarketInvoices:
+			return queryMarketInvoices(ctx, req, keeper)
 		case QueryMarketsInvoices:
 			return queryMarketsInvoices(ctx, req, keeper)
 		case QueryMerchantInvoices:

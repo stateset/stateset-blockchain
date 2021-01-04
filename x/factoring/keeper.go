@@ -105,7 +105,7 @@ func (k Keeper) UserStakes(ctx sdk.Context, address sdk.AccAddress) []Stake {
 
 func (k Keeper) UserMarketStakes(ctx sdk.Context, address sdk.AccAddress, MarketID string) []Stake {
 	stakes := make([]Stake, 0)
-	k.IterateUsermarketStakes(ctx, address, MarketID, func(stake Stake) bool {
+	k.IterateUserMarketStakes(ctx, address, MarketID, func(stake Stake) bool {
 		stakes = append(stakes, stake)
 		return false
 	})

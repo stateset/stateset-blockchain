@@ -4,7 +4,7 @@ import "github.com/cosmos/cosmos-sdk/codec"
 
 // RegisterCodec registers messages into the codec
 func RegisterCodec(c *codec.Codec) {
-	c.RegisterConcrete(MsgNewmarket{}, "market/MsgNewmarket", nil)
+	c.RegisterConcrete(MsgNewMarket{}, "market/MsgNewMarket", nil)
 	c.RegisterConcrete(MsgAddItem{}, "market/MsgAddItem", nil)
 	c.RegisterConcrete(MsgCancelItem{}, "market/MsgCancelItem", nil)
 	c.RegisterConcrete(MsgAddAdmin{}, "market/MsgAddAdmin", nil)

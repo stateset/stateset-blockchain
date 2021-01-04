@@ -27,7 +27,7 @@ func DefaultGenesisState() GenesisState { return NewGenesisState() }
 func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) {
 	for _, c := range data.Agreements {
 		k.setAgreement(ctx, c)
-		k.setmarketAgreement(ctx, c.MarketID, c.AgreementID)
+		k.setMarketAgreement(ctx, c.MarketID, c.AgreementID)
 		k.setCounterpartyAgreement(ctx, c.Counterparty, c.AgreementID)
 		k.setCreatedTimeAgreement(ctx, c.CreatedTime, c.AgreementID)
 	}

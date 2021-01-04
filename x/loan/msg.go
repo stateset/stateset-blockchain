@@ -42,9 +42,9 @@ type MsgCreateLoan struct {
 }
 
 // NewMsgCreateloan creates a new message to create a oan
-func NewMsgCreateLoan(MarketID, invoiceID, body string, lender sdk.AccAddress, source string) MsgCreateLoan {
+func NewMsgCreateLoan(marketID, invoiceID, body string, lender sdk.AccAddress, source string) MsgCreateLoan {
 	return MsgCreateLoan {
-		MarketID: MarketID,
+		MarketID: marketID,
 		InvoiceID:    invoiceID,
 		Body:        body,
 		Lender:     lender,

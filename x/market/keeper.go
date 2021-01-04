@@ -66,7 +66,7 @@ func (k Keeper) Markets(ctx sdk.Context) (markets []Market) {
 
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
-		var market Marktplace
+		var market Market
 		k.codec.MustUnmarshalBinaryLengthPrefixed(iterator.Value(), &market)
 		markets = append(markets, market)
 	}
