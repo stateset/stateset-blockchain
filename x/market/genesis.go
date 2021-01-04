@@ -9,22 +9,22 @@ import (
 
 // GenesisState defines genesis data for the module
 type GenesisState struct {
-	markets []market `json:"markets"`
+	markets []Market `json:"markets"`
 	Params      Params      `json:"params"`
 }
 
 // NewGenesisState creates a new genesis state.
-func NewGenesisState(markets []market, params Params) GenesisState {
+func NewGenesisState(markets []Market, params Params) GenesisState {
 	return GenesisState{
-		markets: markets,
+		markets: Markets,
 		Params:      params,
 	}
 }
 
 // DefaultGenesisState returns a default genesis state
 func DefaultGenesisState() GenesisState {
-	market1 := Newmarket("crypto", "Cryptocurrency", "description string", time.Now())
-	market2 := Newmarket("meme", "Memes", "description string", time.Now())
+	market1 := NewMarket("crypto", "Cryptocurrency", "description string", time.Now())
+	market2 := NewMarket("meme", "Memes", "description string", time.Now())
 
 	return NewGenesisState(markets{market1, market2}, DefaultParams())
 }
@@ -32,7 +32,7 @@ func DefaultGenesisState() GenesisState {
 // InitGenesis initializes market state from genesis file
 func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
 	for _, market := range data.markets {
-		keeper.setmarket(ctx, market)
+		keeper.setMarket(ctx, market)
 	}
 	keeper.SetParams(ctx, data.Params)
 }
@@ -40,7 +40,7 @@ func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
 // ExportGenesis exports the genesis state
 func ExportGenesis(ctx sdk.Context, keeper Keeper) GenesisState {
 	return GenesisState{
-		markets: keeper.markets(ctx),
+		markets: keeper.Markets(ctx),
 		Params:      keeper.GetParams(ctx),
 	}
 }

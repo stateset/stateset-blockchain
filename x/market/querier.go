@@ -10,13 +10,13 @@ import (
 
 // query endpoints supported by the stateset Querier
 const (
-	Querymarket   = "market"
-	Querymarkets = "markets"
+	QueryMarket   = "market"
+	QueryMarkets = "markets"
 	QueryParams      = "params"
 )
 
-// QuerymarketParams are params for querying markets by id queries
-type QuerymarketParams struct {
+// QueryMarketParams are params for querying markets by id queries
+type QueryMarketParams struct {
 	ID string
 }
 
@@ -24,10 +24,10 @@ type QuerymarketParams struct {
 func NewQuerier(k Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, request abci.RequestQuery) (result []byte, err sdk.Error) {
 		switch path[0] {
-		case Querymarket:
-			return querymarket(ctx, request, k)
-		case Querymarkets:
-			return querymarkets(ctx, k)
+		case QueryMarket:
+			return queryMarket(ctx, request, k)
+		case QueryMarkets:
+			return queryMarkets(ctx, k)
 		case QueryParams:
 			return queryParams(ctx, k)
 		default:
@@ -36,14 +36,14 @@ func NewQuerier(k Keeper) sdk.Querier {
 	}
 }
 
-func querymarket(ctx sdk.Context, req abci.RequestQuery, k Keeper) (result []byte, err sdk.Error) {
-	var params QuerymarketParams
+func queryMarket(ctx sdk.Context, req abci.RequestQuery, k Keeper) (result []byte, err sdk.Error) {
+	var params QueryMarketParams
 	codecErr := ModuleCodec.UnmarshalJSON(req.Data, &params)
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
 
-	market, err := k.market(ctx, params.ID)
+	market, err := k.Market(ctx, params.ID)
 	if err != nil {
 		return
 	}
@@ -51,8 +51,8 @@ func querymarket(ctx sdk.Context, req abci.RequestQuery, k Keeper) (result []byt
 	return mustMarshal(market)
 }
 
-func querymarkets(ctx sdk.Context, k Keeper) (result []byte, err sdk.Error) {
-	markets := k.markets(ctx)
+func queryMarkets(ctx sdk.Context, k Keeper) (result []byte, err sdk.Error) {
+	markets := k.Markets(ctx)
 	return mustMarshal(markets)
 }
 

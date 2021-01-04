@@ -13,20 +13,20 @@ const (
 	StoreKey     = ModuleName
 )
 
-// market represents the state of a market on Stateset
-type market struct {
+// Market represents the state of a marketplace on Stateset
+type Market struct {
 	ID          string    `json:"id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description,omitempty"`
 	CreatedTime time.Time `json:"created_time,omitempty"`
 }
 
-// market is a slice of markets
-type markets []market
+// Market is a slice of markets
+type Markets []Market
 
-// Newmarket creates a new Marktplace
-func Newmarket(id, name, description string, createdTime time.Time) market {
-	return market{
+// NewMarket creates a new Markets
+func NewMarket(id, name, description string, createdTime time.Time) Market {
+	return Market{
 		ID:          id,
 		Name:        name,
 		Description: description,
@@ -34,8 +34,8 @@ func Newmarket(id, name, description string, createdTime time.Time) market {
 	}
 }
 
-func (c market) String() string {
-	return fmt.Sprintf(`market:
+func (c Market) String() string {
+	return fmt.Sprintf(`Market:
    ID: 			    %s
    Name: 			%s
    Description:  	%s

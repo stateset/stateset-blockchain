@@ -49,8 +49,8 @@ func ErrUnknownLoan(id uint64) sdk.Error {
 		fmt.Sprintf("Unknown loan id: %d", id))
 }
 
-// ErrInvalidmarketID throws an error on invalid market id
-func ErrInvalidmarketID(id string) sdk.Error {
+// ErrInvalidMarketID throws an error on invalid market id
+func ErrInvalidMarketID(id string) sdk.Error {
 	return sdk.NewError(
 		DefaultCodespace,
 		ErrorCodeLoansWithmarketNotFound,

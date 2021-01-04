@@ -27,42 +27,42 @@ func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.C
 	}
 }
 
-// Newmarket creates a new market
-func (k Keeper) Newmarket(ctx sdk.Context, id string, name string, description string, creator sdk.AccAddress) (market market, err sdk.Error) {
+// NewMarket creates a new Market
+func (k Keeper) NewMarket(ctx sdk.Context, id string, name string, description string, creator sdk.AccAddress) (market Market, err sdk.Error) {
 	err = k.validateParams(ctx, id, name, description, creator)
 	if err != nil {
 		return
 	}
 
-	market = market{
+	market = Market{
 		ID:          id,
 		Name:        name,
 		Description: description,
 		CreatedTime: ctx.BlockHeader().Time,
 	}
 
-	k.setmarket(ctx, market)
+	k.setMarket(ctx, market)
 	logger(ctx).Info(fmt.Sprintf("Created %s", market))
 
 	return
 }
 
-// market returns a market by its ID
-func (k Keeper) market(ctx sdk.Context, id string) (market market, err sdk.Error) {
+// Market returns a market by its ID
+func (k Keeper) Market(ctx sdk.Context, id string) (market Market, err sdk.Error) {
 	store := k.store(ctx)
 	marketBytes := store.Get(key(id))
 	if marketBytes == nil {
-		return market, ErrmarketNotFound(market.ID)
+		return market, ErrMarketNotFound(market.ID)
 	}
 	k.codec.MustUnmarshalBinaryLengthPrefixed(marketBytes, &market)
 
 	return market, nil
 }
 
-// markets gets all markets from the KVStore
-func (k Keeper) markets(ctx sdk.Context) (markets []market) {
+// Markets gets all markets from the KVStore
+func (k Keeper) Markets(ctx sdk.Context) (markets []Market) {
 	store := k.store(ctx)
-	iterator := sdk.KVStorePrefixIterator(store, marketKeyPrefix)
+	iterator := sdk.KVStorePrefixIterator(store, MarketKeyPrefix)
 
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
@@ -79,18 +79,18 @@ func (k Keeper) AddAdmin(ctx sdk.Context, admin, creator sdk.AccAddress) (err sd
 	params := k.GetParams(ctx)
 
 	// first admin can be added without any authorisation
-	if len(params.marketAdmins) > 0 && !k.isAdmin(ctx, creator) {
+	if len(params.MarketAdmins) > 0 && !k.isAdmin(ctx, creator) {
 		err = ErrAddressNotAuthorised()
 	}
 
 	// if already present, don't add again
-	for _, currentAdmin := range params.marketAdmins {
+	for _, currentAdmin := range params.MarketAdmins {
 		if currentAdmin.Equals(admin) {
 			return
 		}
 	}
 
-	params.marketAdmins = append(params.marketAdmins, admin)
+	params.MarketAdmins = append(params.MarketAdmins, admin)
 
 	k.SetParams(ctx, params)
 
@@ -104,9 +104,9 @@ func (k Keeper) RemoveAdmin(ctx sdk.Context, admin, remover sdk.AccAddress) (err
 	}
 
 	params := k.GetParams(ctx)
-	for i, currentAdmin := range params.marketAdmins {
+	for i, currentAdmin := range params.MarketAdmins {
 		if currentAdmin.Equals(admin) {
-			params.marketAdmins = append(params.marketAdmins[:i], params.marketAdmins[i+1:]...)
+			params.MarketAdmins = append(params.MarketAdmins[:i], params.MarketAdmins[i+1:]...)
 		}
 	}
 
@@ -118,17 +118,17 @@ func (k Keeper) RemoveAdmin(ctx sdk.Context, admin, remover sdk.AccAddress) (err
 func (k Keeper) validateParams(ctx sdk.Context, id, name, description string, creator sdk.AccAddress) (err sdk.Error) {
 	params := k.GetParams(ctx)
 	if len(id) < params.MinIDLength || len(id) > params.MaxIDLength {
-		err = ErrInvalidmarketMsg(
+		err = ErrInvalidMarketMsg(
 			fmt.Sprintf("ID must be between %d-%d chars in length", params.MinIDLength, params.MaxIDLength),
 		)
 	}
 	if len(name) < params.MinNameLength || len(name) > params.MaxNameLength {
-		err = ErrInvalidmarketMsg(
+		err = ErrInvalidMarketMsg(
 			fmt.Sprintf("Name must be between %d-%d chars in length", params.MinNameLength, params.MaxNameLength),
 		)
 	}
 	if len(description) > params.MaxDescriptionLength {
-		err = ErrInvalidmarketyMsg(
+		err = ErrInvalidMarketyMsg(
 			fmt.Sprintf("Description must be less than %d chars in length", params.MaxDescriptionLength),
 		)
 	}
@@ -140,14 +140,14 @@ func (k Keeper) validateParams(ctx sdk.Context, id, name, description string, cr
 	return
 }
 
-func (k Keeper) setmarket(ctx sdk.Context, market market) {
+func (k Keeper) setMarket(ctx sdk.Context, market Market) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(market)
 	store.Set(key(market.ID), bz)
 }
 
 func (k Keeper) isAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
-	for _, admin := range k.GetParams(ctx).marketAdmins {
+	for _, admin := range k.GetParams(ctx).MarketAdmins {
 		if address.Equals(admin) {
 			return true
 		}

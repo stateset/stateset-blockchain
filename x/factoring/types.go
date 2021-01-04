@@ -80,7 +80,7 @@ type Factor struct {
 	ID          uint64         `json:"id"`
 	InvoiceID   uint64         `json:"invoice_id"`
 	LoanID      uint64         `json:"loan_id"`
-	marketID string       `json:"market_id"`
+	MarketID string       `json:"market_id"`
 	Type        FactorType      `json:"type"`
 	Amount      sdk.Coin       `json:"amount"`
 	Factor      sdk.AccAddress `json:"factor"`
@@ -103,7 +103,7 @@ type Loans struct {
 	ID                uint64         `json:"id"`
 	Lender            sdk.AccAddress `json:"lender"`
 	InvoiceID         uint64         `json:"invoice_id"`
-	marketID     string         `json:"market_id"`
+	MarketID     string         `json:"market_id"`
 	FactorType        FactorType     `json:"factor_type"`
 	TotalFactor       sdk.Coin       `json:"total_factor"`
 	LoanNumber        string         `json:"loanNumber`

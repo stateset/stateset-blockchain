@@ -62,8 +62,8 @@ func (msg MsgCreateContact) ValidateBasic() sdk.Error {
 	if len(msg.Body) == 0 {
 		return ErrInvalidBodyTooShort(msg.Body)
 	}
-	if len(msg.marketID) == 0 {
-		return ErrInvalidmarketID(msg.marketID)
+	if len(msg.MarketID) == 0 {
+		return ErrInvalidMarketID(msg.MarketID)
 	}
 	if len(msg.Creator) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Creator.String())

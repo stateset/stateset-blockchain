@@ -34,7 +34,7 @@ var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreateLoan defines a message to submit an loan
 type MsgCreateLoan struct {
-	marketID string             `json:"market_id"`
+	MarketID string             `json:"market_id"`
 	InvoiceID 	  string 			 `json:"invoice_id"`
 	Body          string         	 `json:"body"`
 	Lender        sdk.AccAddress     `json:"lender"`
@@ -42,9 +42,9 @@ type MsgCreateLoan struct {
 }
 
 // NewMsgCreateloan creates a new message to create a oan
-func NewMsgCreateLoan(marketID, invoiceID, body string, lender sdk.AccAddress, source string) MsgCreateLoan {
+func NewMsgCreateLoan(MarketID, invoiceID, body string, lender sdk.AccAddress, source string) MsgCreateLoan {
 	return MsgCreateLoan {
-		marketID: marketID,
+		MarketID: MarketID,
 		InvoiceID:    invoiceID,
 		Body:        body,
 		Lender:     lender,
@@ -67,8 +67,8 @@ func (msg MsgCreateLoan) ValidateBasic() sdk.Error {
 	if len(msg.Body) == 0 {
 		return ErrInvalidBodyTooShort(msg.Body)
 	}
-	if len(msg.marketID) == 0 {
-		return ErrInvalidmarketID(msg.marketID)
+	if len(msg.MarketID) == 0 {
+		return ErrInvalidMarketID(msg.MarketID)
 	}
 	if len(msg.InvoiceID) == 0 {
 		return ErrINvalidInvoiceID(msg.InvoiceID)

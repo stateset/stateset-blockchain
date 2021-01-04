@@ -13,8 +13,8 @@ const (
 	QueryInvoice              = "invoice"
 	QueryInvoices             = "invoices"
 	QueryInvoiceByIDs         = "invoices_ids"
-	QuerymarketInvoices  = "market_invoices"
-	QuerymarketsInvoices = "markets_invoices"
+	QueryMarketInvoices  = "market_invoices"
+	QueryMarketsInvoices = "markets_invoices"
 	QueryMerchantInvoices     = "merchant_invoices"
 	QueryInvoicesIDRange      = "invoices_id_range"
 	QueryInvoiceBeforeTime    = "invoices_before_time"
@@ -34,7 +34,7 @@ type QueryInvoicesParams struct {
 
 // QuerymarketInvoicsParams for market invoices
 type QueryQuerymarketInvoicesParams struct {
-	marketID string `json:"market_id"`
+	MarketID string `json:"market_id"`
 }
 
 // QueryInvoiceIDRangeParams for invoices by an id range
@@ -63,8 +63,8 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryInvoices(ctx, req, keeper)
 		case QuerymarketInvoices:
 			return querymarketInvoices(ctx, req, keeper)
-		case QuerymarketsInvoices:
-			return querymarketsInvoices(ctx, req, keeper)
+		case QueryMarketsInvoices:
+			return queryMarketsInvoices(ctx, req, keeper)
 		case QueryMerchantInvoices:
 			return queryMerchantInvoices(ctx, req, keeper)
 		case QueryInvoicesByIDs:

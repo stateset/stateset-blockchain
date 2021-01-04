@@ -35,7 +35,7 @@ func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.C
 }
 
 // SubmitAccount creates a new account in the account key-value store
-func (k Keeper) SubmitAccount(ctx sdk.Context, body, marketID string,
+func (k Keeper) SubmitAccount(ctx sdk.Context, body, MarketID string,
 	creator sdk.AccAddress, source url.URL) (account Account, err sdk.Error) {
 
 	err = k.validateLength(ctx, body)
@@ -49,16 +49,16 @@ func (k Keeper) SubmitAccount(ctx sdk.Context, body, marketID string,
 	if jailed {
 		return claim, ErrCreatorJailed(creator)
 	}
-	market, err := k.marketKeeper.market(ctx, marketID)
+	market, err := k.marketKeeper.market(ctx, MarketID)
 	if err != nil {
-		return claim, ErrInvalidmarketID(market.ID)
+		return claim, ErrInvalidMarketID(market.ID)
 	}
 
 	accountID, err := k.accountID(ctx)
 	if err != nil {
 		return
 	}
-	account = NewAccount(accountID, marketID, body, creator, source,
+	account = NewAccount(accountID, MarketID, body, creator, source,
 		ctx.BlockHeader().Time,
 	)
 

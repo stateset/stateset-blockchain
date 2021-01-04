@@ -39,7 +39,7 @@ func handleMsgCreateContact(ctx sdk.Context, keeper Keeper, msg MsgCreateContact
 		return ErrInvalidSourceURL(msg.Source).Result()
 	}
 
-	contact, err := keeper.SubmitContact(ctx, msg.Body, msg.marketID, msg.Creator, *sourceURL)
+	contact, err := keeper.SubmitContact(ctx, msg.Body, msg.MarketID, msg.Creator, *sourceURL)
 	if err != nil {
 		return err.Result()
 	}

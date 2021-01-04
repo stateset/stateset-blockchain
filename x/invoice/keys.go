@@ -12,7 +12,7 @@ import (
 // - 0x00<invoiceID_Bytes>: Invoice_Bytes
 // - 0x01: nextInvoiceID_Bytes
 //
-// - 0x10<marketID_Bytes><invoiceID_Bytes>: invoiceID_Bytes
+// - 0x10<MarketID_Bytes><invoiceID_Bytes>: invoiceID_Bytes
 // - 0x11<merchant_Bytes><invoiceID_Bytes>: invoiceID_Bytes
 // - 0x12<createdTime_Bytes><invoiceID_Bytes>: invoiceID_Bytes
 var (
@@ -30,15 +30,15 @@ func key(invoiceID uint64) []byte {
 	return append(InvoicesKeyPrefix, bz...)
 }
 
-// marketInvoicesKey gets the first part of the market invoices key based on the marketID
-func marketInvoicesKey(marketID string) []byte {
-	return append(marketInvoicesPrefix, []byte(marketID)...)
+// marketInvoicesKey gets the first part of the market invoices key based on the MarketID
+func marketInvoicesKey(MarketID string) []byte {
+	return append(marketInvoicesPrefix, []byte(MarketID)...)
 }
 
 // marketplceInvoiceKey key of a specific market <-> invoice association from the store
-func marketInvoiceKey(marketID string, invoiceID uint64) []byte {
+func marketInvoiceKey(MarketID string, invoiceID uint64) []byte {
 	bz := sdk.Uint64ToBigEndian(invoiceID)
-	return append(marketInvoicesKey(marketID), bz...)
+	return append(marketInvoicesKey(MarketID), bz...)
 }
 
 func merchantInvoicesKey(merchant sdk.AccAddress) []byte {

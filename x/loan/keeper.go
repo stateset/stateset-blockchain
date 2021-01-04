@@ -49,9 +49,9 @@ func (k Keeper) SubmitLoan(ctx sdk.Context, body, loanID string,
 	if jailed {
 		return loan, ErrCreatorJailed(lender)
 	}
-	market, err := k.marketKeeper.market(ctx, marketID)
+	market, err := k.marketKeeper.market(ctx, MarketID)
 	if err != nil {
-		return loan, ErrInvalidmarketID(marketID.ID)
+		return loan, ErrInvalidMarketID(MarketID.ID)
 	}
 
 	loanID, err := k.loanID(ctx)

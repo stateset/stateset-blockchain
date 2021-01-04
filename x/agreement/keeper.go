@@ -49,16 +49,16 @@ func (k Keeper) CreateAgreement(ctx sdk.Context, body, agreementID string,
 	if jailed {
 		return agreement, ErrMerchantJailed(merchant)
 	}
-	market, err := k.marketKeeper.market(ctx, marketID)
+	market, err := k.marketKeeper.market(ctx, MarketID)
 	if err != nil {
-		return invoice, ErrInvalidmarketID(market.ID)
+		return invoice, ErrInvalidMarketID(market.ID)
 	}
 
 	agreementID, err := k.agreementID(ctx)
 	if err != nil {
 		return
 	}
-	agreement = NewAgreement(agreementID, marketID, body, merchant, source,
+	agreement = NewAgreement(agreementID, MarketID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
 
@@ -151,8 +151,8 @@ func (k Keeper) AgreementsAfterTime(ctx sdk.Context, createdTime time.Time) (agr
 }
 
 // marketAgreements gets all the agreements for a given market
-func (k Keeper) marketAgreements(ctx sdk.Context, marketID string) (agreements Agreements) {
-	return k.associatedAgreements(ctx, marketAgreementsKey(marketID))
+func (k Keeper) marketAgreements(ctx sdk.Context, MarketID string) (agreements Agreements) {
+	return k.associatedAgreements(ctx, marketAgreementsKey(MarketID))
 }
 
 // MerchantAgreements gets all the agreements for a given merchant
@@ -187,10 +187,10 @@ func (k Keeper) setAgreement(ctx sdk.Context, agreement Agreement) {
 }
 
 // setmarketAgreement sets a market <-> agreement association in store
-func (k Keeper) setmarketAgreement(ctx sdk.Context, marketID uint64, agreementID uint64) {
+func (k Keeper) setmarketAgreement(ctx sdk.Context, MarketID uint64, agreementID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(agreementID)
-	store.Set(merchantAgreementKey(marketID, agreementID), bz)
+	store.Set(merchantAgreementKey(MarketID, agreementID), bz)
 }
 
 // setMerchantAgreement sets a merchant <-> agreement association in store

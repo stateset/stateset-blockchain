@@ -49,16 +49,16 @@ func (k Keeper) CreatePurchaseOrder(ctx sdk.Context, body, purchaseorderID strin
 	if jailed {
 		return purchaseorder, ErrMerchantJailed(merchant)
 	}
-	market, err := k.marketKeeper.market(ctx, marketID)
+	market, err := k.marketKeeper.market(ctx, MarketID)
 	if err != nil {
-		return purchaseorder, ErrInvalidmarketID(market.ID)
+		return purchaseorder, ErrInvalidMarketID(market.ID)
 	}
 
 	purchaseorderID, err := k.purchaseorderID(ctx)
 	if err != nil {
 		return
 	}
-	purchaseorder = NewPurchaseOrder(purchaseorderID, marketID, body, merchant, source,
+	purchaseorder = NewPurchaseOrder(purchaseorderID, MarketID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
 
@@ -151,8 +151,8 @@ func (k Keeper) PurchaseOrderssAfterTime(ctx sdk.Context, createdTime time.Time)
 }
 
 // marketPurchaseOrders gets all the purchaseorders for a given market
-func (k Keeper) marketPurchaseOrders(ctx sdk.Context, marketID string) (purchaseorders PurchaseOrders) {
-	return k.associatedPurchaseOrders(ctx, marketPurchaseOrdersKey(marketID))
+func (k Keeper) marketPurchaseOrders(ctx sdk.Context, MarketID string) (purchaseorders PurchaseOrders) {
+	return k.associatedPurchaseOrders(ctx, marketPurchaseOrdersKey(MarketID))
 }
 
 // MerchantPurchaseOrders gets all the purchaseorders for a given merchant
@@ -304,7 +304,7 @@ func (k Keeper) setPurchaseOrder(ctx sdk.Context, purchaseorder PurchaseOrder) {
 }
 
 // setmarketPurchaseOrder sets a market <-> purchaseorder association in store
-func (k Keeper) setmarketPurchaseOrder(ctx sdk.Context, marketID string, purchaseorderID uint64) {
+func (k Keeper) setmarketPurchaseOrder(ctx sdk.Context, MarketID string, purchaseorderID uint64) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(purchaseorderID)
 	store.Set(merchantPurchaseOrderKey(merchantID, purchaseorderID), bz)

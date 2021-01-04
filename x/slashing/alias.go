@@ -4,7 +4,7 @@ import "github.com/stateset/stateset-blockchain/x/bank/exported"
 
 // Transaction setters
 var (
-	WithmarketID   = exported.WithmarketID
+	WithMarketID   = exported.WithMarketID
 	ToModuleAccount   = exported.ToModuleAccount
 	FromModuleAccount = exported.FromModuleAccount
 )

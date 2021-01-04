@@ -27,7 +27,7 @@ func DefaultGenesisState() GenesisState { return NewGenesisState() }
 func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) {
 	for _, c := range data.Loans {
 		k.setLoan(ctx, c)
-		k.setmarketLoan(ctx, c.marketID, c.ID)
+		k.setmarketLoan(ctx, c.MarketID, c.ID)
 		k.setLenderLoan(ctx, c.Lender, c.ID)
 		k.setCreatedTimeLoan(ctx, c.CreatedTime, c.ID)
 	}

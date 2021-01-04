@@ -26,16 +26,16 @@ var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreateAccount defines a message to submit an account
 type MsgCreateAccount struct {
-	marketID string         `json:"market_id"`
+	MarketID string         `json:"market_id"`
 	Body        string         `json:"body"`
 	Creator     sdk.AccAddress `json:"creator"`
 	Source      string         `json:"source,omitempty"`
 }
 
 // NewMsgCreateAccount creates a new message to create an account
-func NewMsgCreateAccount(marketID, body string, creator sdk.AccAddress, source string) MsgCreateAccount {
+func NewMsgCreateAccount(MarketID, body string, creator sdk.AccAddress, source string) MsgCreateAccount {
 	return MsgCreateAccount{
-		marketID: marketID,
+		MarketID: MarketID,
 		Body:        body,
 		Creator:     creator,
 		Source:      source,
@@ -57,8 +57,8 @@ func (msg MsgCreateAccount) ValidateBasic() sdk.Error {
 	if len(msg.Body) == 0 {
 		return ErrInvalidBodyTooShort(msg.Body)
 	}
-	if len(msg.marketID) == 0 {
-		return ErrInvalidmarketID(msg.marketID)
+	if len(msg.MarketID) == 0 {
+		return ErrInvalidMarketID(msg.MarketID)
 	}
 	if len(msg.Creator) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Creator.String())
