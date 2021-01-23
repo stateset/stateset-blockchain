@@ -2,10 +2,8 @@ package loan
 
 import (
 	"fmt"
-	"net/url"
 	"time"
 
-	app "github.com/stateset/stateset-blockchain/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -28,7 +26,6 @@ type Loan struct {
 	amountRemaining   sdk.Coin       `json:"amountRemaining"`
 	subtotal	      sdk.Coin		 `json:"subtotal"`
 	total			  sdk.Coin 	     `json:"total"`
-	invoice           app.Invoice    `json:"invoice"`
 	party			  sdk.AccAddress `json:"party"`
 	counterparty      sdk.AccAddress `json:"counterparty"`
 	dueDate			  time.Time 	 `json:"dueDate"`
@@ -49,7 +46,7 @@ func NewLoan(loanId uint64, loanNumber string, loanName string, description stri
 		Description:     description,
 		LoanAmount:      loanAmount,
 		AmountPaid:		 amountPaid,
-		AmountRemaining  amountRemaining,
+		AmountRemaining:  amountRemaining,
 		Subtotal:        subtotal,
 		Total: 			 total,
 		Party:		     party,

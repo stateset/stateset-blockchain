@@ -14,7 +14,7 @@ const (
 	// TypeMsgDeleteLoan represents the type of the message for creating new loan
 	TypeMsgDeleteLoan = "delete_loan"
 	// TypeMsgPaybackLoan represents the type of the message for creating new loan
-	TypeMsgCreateLoan = "payback_loan"
+	TypeMsgPayBackLoan = "payback_loan"
 	// TypeMsgAddAdmin represents the type of message for adding a new admin
 	TypeMsgAddAdmin = "add_admin"
 	// TypeMsgRemoveAdmin represents the type of message for removing an admin
@@ -34,7 +34,6 @@ var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreateLoan defines a message to submit an loan
 type MsgCreateLoan struct {
-	MarketID string             `json:"market_id"`
 	InvoiceID 	  string 			 `json:"invoice_id"`
 	Body          string         	 `json:"body"`
 	Lender        sdk.AccAddress     `json:"lender"`

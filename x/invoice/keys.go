@@ -30,17 +30,6 @@ func key(invoiceID uint64) []byte {
 	return append(InvoicesKeyPrefix, bz...)
 }
 
-// marketInvoicesKey gets the first part of the market invoices key based on the MarketID
-func marketInvoicesKey(MarketID string) []byte {
-	return append(marketInvoicesPrefix, []byte(MarketID)...)
-}
-
-// marketplceInvoiceKey key of a specific market <-> invoice association from the store
-func marketInvoiceKey(MarketID string, invoiceID uint64) []byte {
-	bz := sdk.Uint64ToBigEndian(invoiceID)
-	return append(marketInvoicesKey(MarketID), bz...)
-}
-
 func merchantInvoicesKey(merchant sdk.AccAddress) []byte {
 	return append(MerchantInvoicesPrefix, merchant.Bytes()...)
 }

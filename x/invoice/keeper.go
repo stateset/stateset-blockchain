@@ -5,7 +5,6 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -41,17 +40,6 @@ func (k Keeper) CreateInvoice(ctx sdk.Context, body, invoiceID string,
 	err = k.validateLength(ctx, body)
 	if err != nil {
 		return
-	}
-	jailed, err := k.invoiceKeeper.IsJailed(ctx, merchant)
-	if err != nil {
-		return
-	}
-	if jailed {
-		return invoice, ErrMerchantJailed(merchant)
-	}
-	market, err := k.marketKeeper.market(ctx, MarketID)
-	if err != nil {
-		return invoice, ErrInvalidMarketID(market.ID)
 	}
 
 	invoiceID, err := k.invoiceID(ctx)
@@ -313,13 +301,6 @@ func (k Keeper) setInvoice(ctx sdk.Context, invoice Invoice) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(invoice)
 	store.Set(key(invoice.ID), bz)
-}
-
-// setmarketInvoice sets a market <-> invoice association in store
-func (k Keeper) setMarketInvoice(ctx sdk.Context, MarketID string, invoiceID uint64) {
-	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(invoiceID)
-	store.Set(merchantInvoiceKey(merchantID, invoiceID), bz)
 }
 
 // setMerchantInvoice sets a merchant <-> invoice association in store

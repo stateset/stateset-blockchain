@@ -2,10 +2,8 @@ package loan
 
 import (
 	"net/url"
-	"time"
 
 	app "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -18,7 +16,6 @@ type Keeper struct {
 	storeKey   sdk.StoreKey
 	codec      *codec.Codec
 	paramStore params.Subspace
-
 	accountKeeper   AccountKeeper
 	marketKeeper market.Keeper
 }
@@ -42,22 +39,7 @@ func (k Keeper) SubmitLoan(ctx sdk.Context, body, loanID string,
 	if err != nil {
 		return
 	}
-	jailed, err := k.loanKeeper.IsJailed(ctx, lender)
-	if err != nil {
-		return
-	}
-	if jailed {
-		return loan, ErrCreatorJailed(lender)
-	}
-	market, err := k.marketKeeper.market(ctx, MarketID)
-	if err != nil {
-		return loan, ErrInvalidMarketID(MarketID.ID)
-	}
 
-	loanID, err := k.loanID(ctx)
-	if err != nil {
-		return
-	}
 	loan = NewLoan(loanID, invoiceID, accountId, body, creator, source,
 		ctx.BlockHeader().Time,
 	)

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -42,22 +41,7 @@ func (k Keeper) CreatePurchaseOrder(ctx sdk.Context, body, purchaseorderID strin
 	if err != nil {
 		return
 	}
-	jailed, err := k.purchaseorderKeeper.IsJailed(ctx, merchant)
-	if err != nil {
-		return
-	}
-	if jailed {
-		return purchaseorder, ErrMerchantJailed(merchant)
-	}
-	market, err := k.marketKeeper.market(ctx, MarketID)
-	if err != nil {
-		return purchaseorder, ErrInvalidMarketID(market.ID)
-	}
 
-	purchaseorderID, err := k.purchaseorderID(ctx)
-	if err != nil {
-		return
-	}
 	purchaseorder = NewPurchaseOrder(purchaseorderID, MarketID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
@@ -148,11 +132,6 @@ func (k Keeper) PurchaseOrderssAfterTime(ctx sdk.Context, createdTime time.Time)
 	iterator := k.afterCreatedTimePurchaseOrdersIterator(ctx, createdTime)
 
 	return k.iterateAssociated(ctx, iterator)
-}
-
-// MarketPurchaseOrders gets all the purchaseorders for a given market
-func (k Keeper) MarketPurchaseOrders(ctx sdk.Context, MarketID string) (purchaseorders PurchaseOrders) {
-	return k.associatedPurchaseOrders(ctx, marketPurchaseOrdersKey(MarketID))
 }
 
 // MerchantPurchaseOrders gets all the purchaseorders for a given merchant

@@ -42,7 +42,6 @@ var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreateAgreement defines a message to create an agreement
 type MsgCreateAgreement struct {
-	MarketID string             `json:"market_id"`
 	AgreementID 	  string 			 `json:"agreement_id"`
 	Body          string         	 `json:"body"`
 	Lender        sdk.AccAddress     `json:"counterparty"`
@@ -50,9 +49,8 @@ type MsgCreateAgreement struct {
 }
 
 // NewMsgCreateAgreement creates a new message to create an agreement
-func NewMsgCreateAgreement(marketID, agreementID, body string, lender sdk.AccAddress, source string) MsgCreateAgreement {
+func NewMsgCreateAgreement(agreementID, body string, lender sdk.AccAddress, source string) MsgCreateAgreement {
 	return MsgCreateAgreement {
-		MarketID: MarketID,
 		AgreementID:    agreementID,
 		Body:        body,
 		Lender:     lender,
@@ -92,11 +90,6 @@ func (msg MsgCreateAgreement) ValidateBasic() sdk.Error {
 func (msg MsgCreateAgreement) GetSignBytes() []byte {
 	msgBytes := ModuleCodec.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(msgBytes)
-}
-
-// GetSigners gets the signs of the Msg
-func (msg MsgCreateAgreement) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Counterparty}
 }
 
 
@@ -356,7 +349,7 @@ func NewMsgEditAgreement(agreementId uint64, agreementName string, agreementNumb
 		ID:     agreementid,
 		AgreementName: agreementName,
 		AgreementNumber: agreementNumber,
-		TotalAgreementValue totalAgreementValue,
+		TotalAgreementValue: totalAgreementValue,
 		AgreementStartDate: agreementStartDate,
 		AgreementEndDate: agreementEndDate,
 		Editor: editor,

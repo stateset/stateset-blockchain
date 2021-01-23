@@ -9,7 +9,6 @@ import (
 // GenesisState defines genesis data for the module
 type GenesisState struct {
 	Loans []Loan `json:"loans"`
-	Params Params  `json:"params"`
 }
 
 // NewGenesisState creates a new genesis state.
@@ -27,7 +26,6 @@ func DefaultGenesisState() GenesisState { return NewGenesisState() }
 func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) {
 	for _, c := range data.Loans {
 		k.setLoan(ctx, c)
-		k.setMarketLoan(ctx, c.MarketID, c.ID)
 		k.setLenderLoan(ctx, c.Lender, c.ID)
 		k.setCreatedTimeLoan(ctx, c.CreatedTime, c.ID)
 	}

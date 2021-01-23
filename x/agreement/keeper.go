@@ -5,7 +5,6 @@ import (
 	"time"
 
 	app "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/market"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -38,26 +37,6 @@ func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.C
 func (k Keeper) CreateAgreement(ctx sdk.Context, body, agreementID string,
 	merchant sdk.AccAddress, source url.URL) (agreement Agreement, err sdk.Error) {
 
-	err = k.validateLength(ctx, body)
-	if err != nil {
-		return
-	}
-	jailed, err := k.agreementKeeper.IsJailed(ctx, merchant)
-	if err != nil {
-		return
-	}
-	if jailed {
-		return agreement, ErrMerchantJailed(merchant)
-	}
-	market, err := k.marketKeeper.market(ctx, MarketID)
-	if err != nil {
-		return invoice, ErrInvalidMarketID(market.ID)
-	}
-
-	agreementID, err := k.agreementID(ctx)
-	if err != nil {
-		return
-	}
 	agreement = NewAgreement(agreementID, marketID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
@@ -148,11 +127,6 @@ func (k Keeper) AgreementsAfterTime(ctx sdk.Context, createdTime time.Time) (agr
 	iterator := k.afterCreatedTimeAgreementsIterator(ctx, createdTime)
 
 	return k.iterateAssociated(ctx, iterator)
-}
-
-// marketAgreements gets all the agreements for a given market
-func (k Keeper) marketAgreements(ctx sdk.Context, MarketID string) (agreements Agreements) {
-	return k.associatedAgreements(ctx, marketAgreementsKey(MarketID))
 }
 
 // MerchantAgreements gets all the agreements for a given merchant
