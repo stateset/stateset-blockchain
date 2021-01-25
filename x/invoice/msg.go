@@ -10,6 +10,8 @@ const (
 	// TypeMsgCreateInvoice represents the type of the message for creating new invoice
 	TypeMsgCreateInvoice = "create_invoice"
 	// TypeMsgEditInvoice represents the type of the message for editing an invoice
+	TypeMsgCancelInvoice = "cancel_invoice"
+	// TypeMsgEditInvoice represents the type of the message for editing an invoice
 	TypeMsgEditInvoice = "edit_invoice"
 	// TypeMsgFactorInvoice represents the type of the message for factoring an invoice
 	TypeMsgFactorInvoice = "factor_invoice"
@@ -25,6 +27,7 @@ const (
 
 // verify interface at compile time
 var _ sdk.Msg = &MsgCreateInvoice{}
+var _ sdk.Msg = &MsgCancelInvoice{}
 var _ sdk.Msg = &MsgEditInvoice{}
 var _ sdk.Msg = &MsgFactorInvoice{}
 var _ sdk.Msg = &MsgPayInvoice{}
@@ -111,6 +114,45 @@ func (msg MsgCreateInvoice) GetSignBytes() []byte {
 // GetSigners gets the signs of the Msg
 func (msg MsgCreateInvoice) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
+}
+
+// MsgCancelInvoice defines a message to submit a invoice
+type MsgCancelInvoice struct {
+	ID      uint64         `json:"id"`
+	Merchant sdk.AccAddress `json:"merchant"`
+}
+
+// Route is the name of the route for invoice
+func (msg MsgCancelInvoice) Route() string {
+	return RouterKey
+}
+
+// Type is the name for the Msg
+func (msg MsgCancelInvoice) Type() string {
+	return ModuleName
+}
+
+// ValidateBasic validates basic fields of the Msg
+func (msg MsgCancelInvoice) ValidateBasic() sdk.Error {
+	if msg.ID == 0 {
+		return ErrUnknownInvoice(msg.ID)
+	}
+	if len(msg.Merchant) == 0 {
+		return sdk.ErrInvalidAddress("Invalid address: " + msg.Merchant.String())
+	}
+
+	return nil
+}
+
+// GetSignBytes gets the bytes for Msg signer to sign on
+func (msg MsgCancelInvoice) GetSignBytes() []byte {
+	msgBytes := ModuleCodec.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(msgBytes)
+}
+
+// GetSigners gets the signs of the Msg
+func (msg MsgCancelInvoice) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{sdk.AccAddress(msg.Merhcant)}
 }
 
 // MsgDeleteInvoice defines a message to submit a invoice

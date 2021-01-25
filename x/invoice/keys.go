@@ -19,7 +19,7 @@ var (
 	InvoicesKeyPrefix = []byte{0x00}
 	InvoiceIDKey      = []byte{0x01}
 
-	MaretplaceInvoicesPrefix   = []byte{0x10}
+	MarketplaceInvoicesPrefix   = []byte{0x10}
 	MerchantInvoicesPrefix     = []byte{0x11}
 	CreatedTimeInvoicesPrefix = []byte{0x12}
 )

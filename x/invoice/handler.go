@@ -13,6 +13,8 @@ func NewHandler(keeper Keeper) sdk.Handler {
 		switch msg := msg.(type) {
 		case MsgCreateInvoice:
 			return handleMsgCreateInvoice(ctx, keeper, msg)
+		case MsgCancelInvoice:
+			return handleMsgCancelInvoice(ctx, keeper, msg)
 		case MsgEditInvoice:
 			return handleMsgEditInvoice(ctx, keeper, msg)
 		case MsgPayInvoice:
@@ -44,6 +46,28 @@ func handleMsgCreateInvoice(ctx sdk.Context, keeper Keeper, msg MsgCreateInvoice
 	}
 
 	invoice, err := keeper.SubmitInvoice(ctx, msg.Body, msg.MarketID, msg.Merchant, *sourceURL)
+	if err != nil {
+		return err.Result()
+	}
+
+	res, codecErr := ModuleCodec.MarshalJSON(invoice)
+	if codecErr != nil {
+		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
+	}
+
+	return sdk.Result{
+		Data: res,
+	}
+}
+
+// Cancel Invoice
+
+func handleMsgCancelInvoice(ctx sdk.Context, keeper Keeper, msg MsgCancelInvoice) sdk.Result {
+	if err := msg.ValidateBasic(); err != nil {
+		return err.Result()
+	}
+
+	invoice, err := keeper.CancelInvoice(ctx, msg.ID, msg.Body, msg.Editor)
 	if err != nil {
 		return err.Result()
 	}
