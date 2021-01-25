@@ -50,7 +50,7 @@ func GetCmdCreateAgreement(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create [name] [number] [start] [end] [amount] [timestamp] [from] [to]",
 		Short: "create a new agreement",
-		Example: fmt.Sprintf("%s tx %s create kava1xy7hrjy9r0algz9w3gzm8u6mrpq97kwta747gj bnb1urfermcg92dwq36572cx4xg84wpk3lfpksr5g7 bnb1uky3me9ggqypmrsvxk7ur6hqkzq7zmv4ed4ng7 now 100bnb 270 --from validator",
+		Example: fmt.Sprintf("%s tx %s create state1xy7hrjy9r0algz9w3gzm8u6mrpq97kwta747gj bnb1urfermcg92dwq36572cx4xg84wpk3lfpksr5g7 bnb1uky3me9ggqypmrsvxk7ur6hqkzq7zmv4ed4ng7 now 100bnb 270 --from validator",
 			version.ClientName, types.ModuleName),
 		Args: cobra.ExactArgs(6),
 		RunE: func(cmd *cobra.Command, args []string) error {
