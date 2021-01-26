@@ -3,6 +3,7 @@ module github.com/stateset/stateset-blockchain
 go 1.15
 
 require (
+	github.com/consensys/gnark v0.3.8
 	github.com/cosmos/cosmos-sdk v0.40.0
 	github.com/etcd-io/bbolt v1.3.3 // indirect
 	github.com/gogo/protobuf v1.3.2
