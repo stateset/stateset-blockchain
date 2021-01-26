@@ -1,0 +1,77 @@
+syntax = "proto3";
+package stateset.agreement;
+
+option go_package = "github.com/stateset/stateset-blockchain/x/agreements/types";
+
+import "gogoproto/gogo.proto";
+
+message Agreement {
+  string creator = 1;
+  string id = 2;
+  string agreementNumber = 3; 
+  string agreementName = 4; 
+  string agreementType = 5; 
+  string agreementStatus = 6; 
+  string totalAgreementValue = 7; 
+  string party = 8; 
+  string counterparty = 9; 
+  string agreementStartDate = 10; 
+  string agreementEndDate = 11; 
+}
+
+message MsgCreateAgreement {
+  string creator = 1;
+  string agreementNumber = 2; 
+  string agreementName = 3; 
+  string agreementType = 4; 
+  string agreementStatus = 5; 
+  string totalAgreementValue = 6; 
+  string party = 7; 
+  string counterparty = 8; 
+  string agreementStartDate = 9; 
+  string agreementEndDate = 10; 
+}
+
+message MsgUpdateAgreement {
+  string creator = 1;
+  string id = 2;
+  string agreementNumber = 3; 
+  string agreementName = 4; 
+  string agreementType = 5; 
+  string agreementStatus = 6; 
+  string totalAgreementValue = 7; 
+  string party = 8; 
+  string counterparty = 9; 
+  string agreementStartDate = 10; 
+  string agreementEndDate = 11; 
+}
+
+message MsgDeleteAgreement {
+  string creator = 1;
+  string id = 2;
+}
+
+message MsgActivateAgreement {
+  string creator = 1;
+  string id = 2;
+}
+
+message MsgAmendAgreement {
+  string creator = 1;
+  string id = 2;
+}
+
+message MsgRenewAgreement {
+  string creator = 1;
+  string id = 2;
+}
+
+message MsgTerminateAgreement {
+  string creator = 1;
+  string id = 2;
+}
+
+message MsgExpireAgreement {
+  string creator = 1;
+  string id = 2;
+}
