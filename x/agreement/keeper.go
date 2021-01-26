@@ -250,6 +250,49 @@ func (k Keeper) store(ctx sdk.Context) sdk.KVStore {
 	return gaskv.NewStore(ctx.MultiStore().GetKVStore(k.storeKey), ctx.GasMeter(), app.KVGasConfig())
 }
 
+func (k Keeper) UpdateAgreement(ctx sdk.Context, agreement types.Agreement) {
+	store :=  prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AgreementKey))
+	b := k.cdc.MustMarshalBinaryBare(&agreement)
+	store.Set(types.KeyPrefix(types.AgreementKey + agreement.Id), b)
+}
+
+func (k Keeper) GetAgreement(ctx sdk.Context, key string) types.Agreement {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AgreementKey))
+	var agreement types.Agreement
+	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.AgreementKey + key)), &agreement)
+	return agreement
+}
+
+func (k Keeper) HasAgreement(ctx sdk.Context, id string) bool {
+	store :=  prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AgreementKey))
+	return store.Has(types.KeyPrefix(types.AgreementKey + id))
+}
+
+func (k Keeper) GetAgreementOwner(ctx sdk.Context, key string) string {
+    return k.GetAgreement(ctx, key).Creator
+}
+
+// DeleteAgreement deletes a agreement
+func (k Keeper) DeleteAgreement(ctx sdk.Context, key string) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AgreementKey))
+	store.Delete(types.KeyPrefix(types.AgreementKey + key))
+}
+
+func (k Keeper) GetAllAgreement(ctx sdk.Context) (msgs []types.Agreement) {
+    store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AgreementKey))
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(types.AgreementKey))
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var msg types.Agreement
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &msg)
+        msgs = append(msgs, msg)
+	}
+
+    return
+}
+
 func logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", ModuleName)
 }

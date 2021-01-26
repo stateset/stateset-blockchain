@@ -366,6 +366,50 @@ func (k Keeper) iterateAssociated(ctx sdk.Context, iterator sdk.Iterator) (purch
 	return
 }
 
+func (k Keeper) UpdatePurchaseorder(ctx sdk.Context, purchaseorder types.Purchaseorder) {
+	store :=  prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PurchaseorderKey))
+	b := k.cdc.MustMarshalBinaryBare(&purchaseorder)
+	store.Set(types.KeyPrefix(types.PurchaseorderKey + purchaseorder.Id), b)
+}
+
+func (k Keeper) GetPurchaseorder(ctx sdk.Context, key string) types.Purchaseorder {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PurchaseorderKey))
+	var purchaseorder types.Purchaseorder
+	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.PurchaseorderKey + key)), &purchaseorder)
+	return purchaseorder
+}
+
+func (k Keeper) HasPurchaseorder(ctx sdk.Context, id string) bool {
+	store :=  prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PurchaseorderKey))
+	return store.Has(types.KeyPrefix(types.PurchaseorderKey + id))
+}
+
+func (k Keeper) GetPurchaseorderOwner(ctx sdk.Context, key string) string {
+    return k.GetPurchaseorder(ctx, key).Creator
+}
+
+// DeletePurchaseorder deletes a purchaseorder
+func (k Keeper) DeletePurchaseorder(ctx sdk.Context, key string) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PurchaseorderKey))
+	store.Delete(types.KeyPrefix(types.PurchaseorderKey + key))
+}
+
+func (k Keeper) GetAllPurchaseorder(ctx sdk.Context) (msgs []types.Purchaseorder) {
+    store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PurchaseorderKey))
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(types.PurchaseorderKey))
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var msg types.Purchaseorder
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &msg)
+        msgs = append(msgs, msg)
+	}
+
+    return
+}
+
+
 func (k Keeper) store(ctx sdk.Context) sdk.KVStore {
 	return gaskv.NewStore(ctx.MultiStore().GetKVStore(k.storeKey), ctx.GasMeter(), app.KVGasConfig())
 }

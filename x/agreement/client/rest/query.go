@@ -18,7 +18,7 @@ const restAgreementID = "agreement-id"
 const restDenom = "denom"
 
 func registerQueryRoutes(cliCtx context.CLIContext, r *mux.Router) {
-	r.HandleFunc(fmt.Sprintf("/%s/agreement/{%s}", types.ModuleName, restSwapID), queryAgreementHandlerFn(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/agreement/{%s}", types.ModuleName, restAgreementID), queryAgreementHandlerFn(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/agreements", types.ModuleName), queryAgreementsHandlerFn(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/agreementLineItem/{%s}", types.ModuleName, restDenom), queryAgreementLineItemHandlerFn(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/agreementLineItems", types.ModuleName), queryAgreementLineItemsHandlerFn(cliCtx)).Methods("GET")

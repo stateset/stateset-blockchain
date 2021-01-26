@@ -380,6 +380,50 @@ func (k Keeper) iterateAssociated(ctx sdk.Context, iterator sdk.Iterator) (invoi
 	return
 }
 
+func (k Keeper) UpdateInvoice(ctx sdk.Context, invoice types.Invoice) {
+	store :=  prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.InvoiceKey))
+	b := k.cdc.MustMarshalBinaryBare(&invoice)
+	store.Set(types.KeyPrefix(types.InvoiceKey + invoice.Id), b)
+}
+
+func (k Keeper) GetInvoice(ctx sdk.Context, key string) types.Invoice {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.InvoiceKey))
+	var invoice types.Invoice
+	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.InvoiceKey + key)), &invoice)
+	return invoice
+}
+
+func (k Keeper) HasInvoice(ctx sdk.Context, id string) bool {
+	store :=  prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.InvoiceKey))
+	return store.Has(types.KeyPrefix(types.InvoiceKey + id))
+}
+
+func (k Keeper) GetInvoiceOwner(ctx sdk.Context, key string) string {
+    return k.GetInvoice(ctx, key).Creator
+}
+
+// DeleteInvoice deletes a invoice
+func (k Keeper) DeleteInvoice(ctx sdk.Context, key string) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.InvoiceKey))
+	store.Delete(types.KeyPrefix(types.InvoiceKey + key))
+}
+
+func (k Keeper) GetAllInvoice(ctx sdk.Context) (msgs []types.Invoice) {
+    store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.InvoiceKey))
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(types.InvoiceKey))
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var msg types.Invoice
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &msg)
+        msgs = append(msgs, msg)
+	}
+
+    return
+}
+
+
 func (k Keeper) store(ctx sdk.Context) sdk.KVStore {
 	return gaskv.NewStore(ctx.MultiStore().GetKVStore(k.storeKey), ctx.GasMeter(), app.KVGasConfig())
 }

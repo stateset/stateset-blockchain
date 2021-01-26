@@ -93,6 +93,92 @@ func (msg MsgCreateAgreement) GetSignBytes() []byte {
 }
 
 
+// Update Agreement
+func NewMsgUpdateAgreement(creator string, id string, agreementNumber string, agreementName string, agreementType string, agreementStatus string, totalAgreementValue string, party string, counterparty string, agreementStartDate string, agreementEndDate string) *MsgUpdateAgreement {
+	return &MsgUpdateAgreement{
+		  Id: id,
+		  Creator: creator,
+	  AgreementNumber: agreementNumber,
+	  AgreementName: agreementName,
+	  AgreementType: agreementType,
+	  AgreementStatus: agreementStatus,
+	  TotalAgreementValue: totalAgreementValue,
+	  Party: party,
+	  Counterparty: counterparty,
+	  AgreementStartDate: agreementStartDate,
+	  AgreementEndDate: agreementEndDate,
+	  }
+  }
+  
+  func (msg *MsgUpdateAgreement) Route() string {
+	return RouterKey
+  }
+  
+  func (msg *MsgUpdateAgreement) Type() string {
+	return "UpdateAgreement"
+  }
+  
+  func (msg *MsgUpdateAgreement) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+	  panic(err)
+	}
+	return []sdk.AccAddress{creator}
+  }
+  
+  func (msg *MsgUpdateAgreement) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
+  }
+  
+  func (msg *MsgUpdateAgreement) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+	  return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+	 return nil
+  }
+  
+  var _ sdk.Msg = &MsgCreateAgreement{}
+  
+  // Delete Agreement
+  func NewMsgDeleteAgreement(creator string, id string) *MsgDeleteAgreement {
+	return &MsgDeleteAgreement{
+		  Id: id,
+		  Creator: creator,
+	  }
+  } 
+  func (msg *MsgDeleteAgreement) Route() string {
+	return RouterKey
+  }
+  
+  func (msg *MsgDeleteAgreement) Type() string {
+	return "DeleteAgreement"
+  }
+  
+  func (msg *MsgDeleteAgreement) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+	  panic(err)
+	}
+	return []sdk.AccAddress{creator}
+  }
+  
+  func (msg *MsgDeleteAgreement) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
+  }
+  
+  func (msg *MsgDeleteAgreement) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+	  return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+	return nil
+  }
+  
+
+
 // Amend Agreement
 
 // MsgAmendAgreement defines a message to amend an agreement

@@ -42,8 +42,31 @@ type PostCreateAgreementReq struct {
 	CreatedTime       	   time.Time      `json:"created_time"`
 }
 
-// PostAgreementSwapReq defines the properties of a activate agreement request's body
-type PostActivateAgreemenyReq struct {
+type PostActivateAgreementReq struct {
+	BaseReq      rest.BaseReq     `json:"base_req" yaml:"base_req"`
+	From         sdk.AccAddress   `json:"from" yaml:"from"`
+	AgreementID       tmbytes.HexBytes `json:"agreement_id" yaml:"agreement_id"`
+}
+
+type PostAmendAgreementReq struct {
+	BaseReq      rest.BaseReq     `json:"base_req" yaml:"base_req"`
+	From         sdk.AccAddress   `json:"from" yaml:"from"`
+	AgreementID       tmbytes.HexBytes `json:"agreement_id" yaml:"agreement_id"`
+}
+
+type PostRenewAgreementReq struct {
+	BaseReq      rest.BaseReq     `json:"base_req" yaml:"base_req"`
+	From         sdk.AccAddress   `json:"from" yaml:"from"`
+	AgreementID       tmbytes.HexBytes `json:"agreement_id" yaml:"agreement_id"`
+}
+
+type PostTerminateAgreementReq struct {
+	BaseReq      rest.BaseReq     `json:"base_req" yaml:"base_req"`
+	From         sdk.AccAddress   `json:"from" yaml:"from"`
+	AgreementID       tmbytes.HexBytes `json:"agreement_id" yaml:"agreement_id"`
+}
+
+type PostExpireAgreementReq struct {
 	BaseReq      rest.BaseReq     `json:"base_req" yaml:"base_req"`
 	From         sdk.AccAddress   `json:"from" yaml:"from"`
 	AgreementID       tmbytes.HexBytes `json:"agreement_id" yaml:"agreement_id"`

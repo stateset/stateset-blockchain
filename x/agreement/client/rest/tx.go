@@ -15,47 +15,178 @@ import (
 )
 
 func registerTxRoutes(cliCtx context.CLIContext, r *mux.Router) {
-	r.HandleFunc(fmt.Sprintf("/%s/agreement/create", types.ModuleName), postCreateHandlerFn(cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/agreement/activate", types.ModuleName), postClaimHandlerFn(cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/agreement/amend", types.ModuleName), postRefundHandlerFn(cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/agreement/renew", types.ModuleName), postRefundHandlerFn(cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/agreement/terminate", types.ModuleName), postRefundHandlerFn(cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/agreement/expire", types.ModuleName), postRefundHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/agreement/create", types.ModuleName), createHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/agreement/update", types.ModuleName), updateHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/agreement/delete", types.ModuleName), deleteHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/agreement/activate", types.ModuleName), activateHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/agreement/amend", types.ModuleName), amendHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/agreement/renew", types.ModuleName), renewHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/agreement/terminate", types.ModuleName), terminateHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/agreement/expire", types.ModuleName), expireHandlerFn(cliCtx)).Methods("POST")
 }
 
-func postCreateHandlerFn(cliCtx context.CLIContext) http.HandlerFunc {
+type createAgreementRequest struct {
+	BaseReq rest.BaseReq `json:"base_req"`
+	Creator string `json:"creator"`
+	AgreementNumber string `json:"agreementNumber"`
+	AgreementName string `json:"agreementName"`
+	AgreementType string `json:"agreementType"`
+	AgreementStatus string `json:"agreementStatus"`
+	TotalAgreementValue string `json:"totalAgreementValue"`
+	Party string `json:"party"`
+	Counterparty string `json:"counterparty"`
+	AgreementStartDate string `json:"agreementStartDate"`
+	AgreementEndDate string `json:"agreementEndDate"`
+	
+}
+
+func createAgreementHandlerFn(cliCtx context.CLIContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Decode PUT request body
-		var req PostCreateAgreementReq
-		if !rest.ReadRESTReq(w, r, cliCtx.Codec, &req) {
-			return
-		}
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
+		var req createAgreementRequest
+		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
 			return
 		}
 
-		// Create and return msg
-		msg := types.NewMsgCreateAgreementSwap(
-			req.agreementID,
-			req.agreementNumber,
-			req.agreementName,
-			req.agreementType,
-			req.agreementStatus,
-			req.totalAgreementValue,
-			req.party,
-			req.counterparty,
-			req.agreementStartDate,
-			req.agreementEndDate,
-			req.paid,
-			req.active,
-			req.createdTime,
-		)
-		if err := msg.ValidateBasic(); err != nil {
+		baseReq := req.BaseReq.Sanitize()
+		if !baseReq.ValidateBasic(w) {
+			return
+		}
+
+		_, err := sdk.AccAddressFromBech32(req.Creator)
+		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
-		utils.WriteGenerateStdTxResponse(w, cliCtx, req.BaseReq, []sdk.Msg{msg})
+
+		parsedAgreementNumber := req.AgreementNumber
+		
+		parsedAgreementName := req.AgreementName
+		
+		parsedAgreementType := req.AgreementType
+		
+		parsedAgreementStatus := req.AgreementStatus
+		
+		parsedTotalAgreementValue := req.TotalAgreementValue
+		
+		parsedParty := req.Party
+		
+		parsedCounterparty := req.Counterparty
+		
+		parsedAgreementStartDate := req.AgreementStartDate
+		
+		parsedAgreementEndDate := req.AgreementEndDate
+
+		msg := types.NewMsgCreateAgreement(
+			req.Creator,
+			parsedAgreementNumber,
+			parsedAgreementName,
+			parsedAgreementType,
+			parsedAgreementStatus,
+			parsedTotalAgreementValue,
+			parsedParty,
+			parsedCounterparty,
+			parsedAgreementStartDate,
+			parsedAgreementEndDate,
+			
+		)
+
+		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
+	}
+}
+
+func updateAgreementHandler(clientCtx client.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+        id := mux.Vars(r)["id"]
+
+		var req updateAgreementRequest
+		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			return
+		}
+
+		baseReq := req.BaseReq.Sanitize()
+		if !baseReq.ValidateBasic(w) {
+			return
+		}
+
+		_, err := sdk.AccAddressFromBech32(req.Creator)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		
+		parsedAgreementNumber := req.AgreementNumber
+		
+		parsedAgreementName := req.AgreementName
+		
+		parsedAgreementType := req.AgreementType
+		
+		parsedAgreementStatus := req.AgreementStatus
+		
+		parsedTotalAgreementValue := req.TotalAgreementValue
+		
+		parsedParty := req.Party
+		
+		parsedCounterparty := req.Counterparty
+		
+		parsedAgreementStartDate := req.AgreementStartDate
+		
+		parsedAgreementEndDate := req.AgreementEndDate
+		
+
+		msg := types.NewMsgUpdateAgreement(
+			req.Creator,
+            id,
+			parsedAgreementNumber,
+			parsedAgreementName,
+			parsedAgreementType,
+			parsedAgreementStatus,
+			parsedTotalAgreementValue,
+			parsedParty,
+			parsedCounterparty,
+			parsedAgreementStartDate,
+			parsedAgreementEndDate,
+			
+		)
+
+		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
+	}
+}
+
+type deleteAgreementRequest struct {
+	BaseReq rest.BaseReq `json:"base_req"`
+	Creator string `json:"creator"`
+}
+
+func deleteAgreementHandler(clientCtx client.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+        id := mux.Vars(r)["id"]
+
+		var req deleteAgreementRequest
+		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			return
+		}
+
+		baseReq := req.BaseReq.Sanitize()
+		if !baseReq.ValidateBasic(w) {
+			return
+		}
+
+		_, err := sdk.AccAddressFromBech32(req.Creator)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		msg := types.NewMsgDeleteAgreement(
+			req.Creator,
+            id,
+		)
+
+		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
 	}
 }
 

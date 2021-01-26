@@ -41,9 +41,9 @@ type PurchaseOrders []PurchaseOrder
 // NewPurchaseOrder creates a new purchase order object
 func NewPurchaseOrder(purchaseOrderId uint64, purchaseOrderNumber string, purchaseOrderName string, description string, subtotal sdk.Coin, total sdk.Coin, purchaser sdk.AccAddress, vendor sdk.AccAddress, financer sdk.AccAddress, purchaseDate time.Time, deliveryDate time.Time, periodEndDate time.Time, paid bool, active bool, createdTime time.Time) PurchaseOrder {
 	return PurchaseOrder{
-		PurchaseOrderID:       invoiceId,
-		PurchaseOrderNumber:   invoiceNumber,
-		PurchaseOrderName:     invoiceName,
+		PurchaseOrderID:       purchaseorderId,
+		PurchaseOrderNumber:   purchaseorderNumber,
+		PurchaseOrderName:     purchaseorderName,
 		Description:   description,
 		Subtotal:        subtotal,
 		Total: 			 total,
@@ -75,4 +75,9 @@ func (i PurchaseOrder) String() string {
 		Active: 		 %s,
 		CreatedTime:     %s`,
 		i.PurchaseOrderID, i.PurchaseOrderNumber, i.PurchaseOrderName, i.Description, i.Subtotal.String(), i.Total.String(), i.Purchaser.String(), i.Vendor.String(), i.Financer.String(), i.PurchaseDate.String(), i.DeliveryDate.String(), i.Paid.String(), i.Active.String(), a.CreatedTime.String())
+}
+
+type deletePurchaseorderRequest struct {
+	BaseReq rest.BaseReq `json:"base_req"`
+	Creator string `json:"creator"`
 }

@@ -116,6 +116,90 @@ func (msg MsgCreateInvoice) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
+// UpdateInvoice
+var _ sdk.Msg = &MsgUpdateInvoice{}
+
+func NewMsgUpdateInvoice(creator string, id string, number string, name string, status string, amountDue string, amountPaid string, amontRemaining string, dueDate string) *MsgUpdateInvoice {
+  return &MsgUpdateInvoice{
+        Id: id,
+		Creator: creator,
+    Number: number,
+    Name: name,
+    Status: status,
+    AmountDue: amountDue,
+    AmountPaid: amountPaid,
+    AmontRemaining: amontRemaining,
+    DueDate: dueDate,
+	}
+}
+
+func (msg *MsgUpdateInvoice) Route() string {
+  return RouterKey
+}
+
+func (msg *MsgUpdateInvoice) Type() string {
+  return "UpdateInvoice"
+}
+
+func (msg *MsgUpdateInvoice) GetSigners() []sdk.AccAddress {
+  creator, err := sdk.AccAddressFromBech32(msg.Creator)
+  if err != nil {
+    panic(err)
+  }
+  return []sdk.AccAddress{creator}
+}
+
+func (msg *MsgUpdateInvoice) GetSignBytes() []byte {
+  bz := ModuleCdc.MustMarshalJSON(msg)
+  return sdk.MustSortJSON(bz)
+}
+
+func (msg *MsgUpdateInvoice) ValidateBasic() error {
+  _, err := sdk.AccAddressFromBech32(msg.Creator)
+  if err != nil {
+    return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+  }
+   return nil
+}
+
+var _ sdk.Msg = &MsgCreateInvoice{}
+
+func NewMsgDeleteInvoice(creator string, id string) *MsgDeleteInvoice {
+  return &MsgDeleteInvoice{
+        Id: id,
+		Creator: creator,
+	}
+} 
+func (msg *MsgDeleteInvoice) Route() string {
+  return RouterKey
+}
+
+func (msg *MsgDeleteInvoice) Type() string {
+  return "DeleteInvoice"
+}
+
+func (msg *MsgDeleteInvoice) GetSigners() []sdk.AccAddress {
+  creator, err := sdk.AccAddressFromBech32(msg.Creator)
+  if err != nil {
+    panic(err)
+  }
+  return []sdk.AccAddress{creator}
+}
+
+func (msg *MsgDeleteInvoice) GetSignBytes() []byte {
+  bz := ModuleCdc.MustMarshalJSON(msg)
+  return sdk.MustSortJSON(bz)
+}
+
+func (msg *MsgDeleteInvoice) ValidateBasic() error {
+  _, err := sdk.AccAddressFromBech32(msg.Creator)
+  if err != nil {
+    return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+  }
+  return nil
+}
+
+
 // MsgCancelInvoice defines a message to submit a invoice
 type MsgCancelInvoice struct {
 	ID      uint64         `json:"id"`

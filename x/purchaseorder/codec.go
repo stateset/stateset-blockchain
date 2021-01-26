@@ -1,11 +1,16 @@
 package purchaseorder
 
-import "github.com/cosmos/cosmos-sdk/codec"
+import (
+	"github.com/cosmos/cosmos-sdk/codec"
+    cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
+    sdk "github.com/cosmos/cosmos-sdk/types"
+)
 
 // RegisterCodec registers all the necessary types and interfaces for the module
 func RegisterCodec(c *codec.Codec) {
 	c.RegisterConcrete(MsgCreatePurchaseOrder{}, "stateset/MsgCreatePurchaseOrder", nil)
 	c.RegisterConcrete(MsgEditPurchaseOrder{}, "stateset/MsgEditPurchaseOrder", nil)
+	c.RegisterConcrete(MsgDeltePurchaseOrder{}, "stateset/MsgDeletePurchaseOrder", nil)
 	c.RegisterConcrete(MsgCompletePurchaseOrder{}, "stateset/MsgCompletePurchaseOrder", nil)
 	c.RegisterConcrete(MsgCancelPurchaseOrder{}, "stateset/MsgCancelPurchaseOrder", nil)
 	c.RegisterConcrete(MsgFinancePurchaseOrder{}, "stateset/MsgFinancePurchaseOrder", nil)
