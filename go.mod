@@ -3,6 +3,7 @@ module github.com/stateset/stateset-blockchain
 go 1.15
 
 require (
+	github.com/CosmWasm/wasmd v0.14.0
 	github.com/consensys/gnark v0.3.8
 	github.com/cosmos/cosmos-sdk v0.40.0
 	github.com/etcd-io/bbolt v1.3.3 // indirect
@@ -19,8 +20,9 @@ require (
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.6.1
 	github.com/tendermint/go-amino v0.16.0
+	github.com/tendermint/liquidity v0.1.0-rc0
 	github.com/tendermint/tendermint v0.34.1
 	github.com/tendermint/tm-db v0.6.3
-	google.golang.org/grpc v1.33.2
+	google.golang.org/grpc v1.34.0
 	gopkg.in/yaml.v2 v2.4.0
 )
