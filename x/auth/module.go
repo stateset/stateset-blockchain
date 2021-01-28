@@ -14,7 +14,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	sim "github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/terra-project/core/x/auth/simulation"
+	"github.com/stateset/stateset-blockchain/x/auth/simulation"
 )
 
 var (

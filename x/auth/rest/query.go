@@ -14,7 +14,7 @@ import (
 
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/types"
-	"github.com/terra-project/core/client/lcd"
+	"github.com/stateset/stateset-blockchain/client/lcd"
 )
 
 // QueryTxsHandlerFn implements a REST handler that searches for transactions.

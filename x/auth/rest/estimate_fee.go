@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 
-	"github.com/terra-project/core/x/auth/client/utils"
+	"github.com/stateset/stateset-blockchain/x/auth/client/utils"
 )
 
 // EstimateTxFeeRequestHandlerFn returns estimated tx fee. In particular,
