@@ -6,12 +6,13 @@ require (
 	github.com/CosmWasm/wasmd v0.14.0
 	github.com/consensys/gnark v0.3.8
 	github.com/cosmos/cosmos-sdk v0.40.0
-	github.com/etcd-io/bbolt v1.3.3 // indirect
+	github.com/etcd-io/bbolt v1.3.3
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.4.3
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/json-iterator/go v1.1.10
+	github.com/kava-labs/kava v0.12.1
 	github.com/pkg/errors v0.9.1
 	github.com/regen-network/cosmos-proto v0.3.1
 	github.com/spf13/cast v1.3.1

@@ -1,6 +1,6 @@
 PACKAGES=$(shell GO111MODULE=on go list -mod=readonly ./...)
 
-MODULES = account agreement bank contact factoring invoice purchaseorder loan market slashing
+MODULES = auth agreement bank crisis factoring gov invoice purchaseorder loan market slashing staking
 
 VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
 COMMIT := $(shell git log -1 --format='%H')
@@ -65,7 +65,7 @@ reset:
 restart: build_daemon reset start
 
 start:
-	bin/statesetd start --inv-check-period 10 --log_level "main:info,state:info,*:error,app:info,account:info,statebank:info,agreement:info,purchaseoerder:info,invoice:info,loan:info,market:info,stateslashing:info,statefactoring:info"
+	bin/statesetd start --inv-check-period 10 --log_level "main:info,state:info,*:error,app:info,statebank:info,agreement:info,purchaseoerder:info,invoice:info,loan:info,market:info,stateslashing:info,statefactoring:info"
 
 check:
 	@echo "--> Running golangci"

@@ -69,7 +69,7 @@ var (
 
 	)
 
-	// module account permissions
+
 	maccPerms = map[string][]string{
 		auth.FeeCollectorName:     nil,
 		distr.ModuleName:          nil,

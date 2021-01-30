@@ -21,12 +21,12 @@ const (
 	QueryParams                   = "params"
 )
 
-// QueryAgreementParams for a single account
+// QueryAgreementParams for a single agreement
 type QueryAgreementParams struct {
 	AgreementID uint64 `json:"agreementId"`
 }
 
-// QueryAgreementsParams for many account
+// QueryAgreementsParams for many agreement
 type QueryAgreementsParams struct {
 	IDs []uint64 `json:"ids"`
 }
@@ -37,7 +37,7 @@ type QueryAgreementsIDRangeParams struct {
 	EndID   uint64 `json:"end_id"`
 }
 
-// QueryLoansTimeParams for accounts by time
+// QueryLoansTimeParams for agreements by time
 type QueryAgreementsTimeParams struct {
 	CreatedTime time.Time `json:"created_time"`
 }
