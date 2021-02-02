@@ -33,6 +33,8 @@ import (
 	"github.com/stateset/stateset-blockchain/x/liquidity"
 	"github.com/stateset/stateset-blockchain/x/staking"
 	"github.com/stateset/stateset-blockchain/x/supply"
+	"github.com/stateset/stateset-blockchain/x/wasm"
+
 )
 
 const appName = "StatesetApp"
@@ -115,16 +117,18 @@ type StatesetApp struct {
 	slashingKeeper slashing.Keeper
 	distrKeeper    distr.Keeper
 	paramsKeeper   params.Keeper
+	govKeeper      gov.Keeper
+	crisisKeeper   crisis.
 	liquidityKeeper liquidity.Keeper
-
-	// stateset keepers
 	appAccountKeeper   account.Keeper
 	marketKeeper  		market.Keeper
+	mintKeeper     mint.Keeper
 	agreementKeeper    agreement.Keeper
 	purchaseorderKeeper purchaseorder.Keeper
 	invoiceKeeper      invoice.Keeper
 	loanKeeper         loan.Keeper
 	factoringKeeper    factoring.Keeper
+	wasmKeeper     wasm.Keeper
 
 
 	// the module manager
@@ -169,6 +173,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 	govSubspace := app.paramsKeeper.Subspace(gov.DefaultParamspace).WithKeyTable(gov.ParamKeyTable())
 	crisisSubspace := app.paramsKeeper.Subspace(crisis.DefaultParamspace)
 	evidenceSubspace := app.paramsKeeper.Subspace(evidence.DefaultParamspace)
+	wasmSubspace = app.paramsKeeper.Subspace(wasm.DefaultParamspace)
 
 
 	// stateset subspaces
@@ -309,14 +314,16 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		liquidity.NewAppModule(app.liquidityKeeper, app)
 		upgrade.NewAppModule(app.upgradeKeeper),
 		evidence.NewAppModule(app.evidenceKeeper),
-		// stateset modules
 		market.NewAppModule(app.marketKeeper),
 		agreement.NewAppModule(app.agreementKeeper),
 		purchaseorder.NewAppModule(app.purchaseorderKeeper),
 		invoice.NewAppModule(app.invoiceKeeper),
 		loan.NewAppModule(app.loanKeeper),
+		wasm.NewAppModule(app.wasmKeeper),
 		
 	)
+
+
 	// During begin block slashing happens after distr.BeginBlocker so that
 	// there is nothing left over in the validator fee pool, so as to keep the
 	// CanWithdrawInvariant invariant.
@@ -348,6 +355,7 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		distr.NewAppModule(app.distrKeeper, app.accountKeeper, app.supplyKeeper, app.stakingKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.accountKeeper, app.supplyKeeper),
 		slashing.NewAppModule(app.slashingKeeper, app.accountKeeper, app.stakingKeeper),
+		wasm.NewAppModule(app.wasmKeeper, app.accountKeeper, app.bankKeeper)
 	)
 
 	app.sm.RegisterStoreDecoders()
