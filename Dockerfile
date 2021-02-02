@@ -1,33 +1,35 @@
-# Simple usage with a mounted data directory:
-# > docker build -t stateset .
-# > docker run -it -p 46657:46657 -p 46656:46656 -v ~/.statesetd:/root/.statesetd -v ~/.statesetcli:/root/.statesetcli stateset statesetd init
-# > docker run -it -p 46657:46657 -p 46656:46656 -v ~/.statesetd:/root/.statesetd -v ~/.statesetcli:/root/.statesetcli stateset statesetd start
-FROM golang:alpine AS build-env
+FROM cosmwasm/go-ext-builder:0001-alpine AS rust-builder
 
-# Set up dependencies
 ENV PACKAGES curl make git libc-dev bash gcc linux-headers eudev-dev python
 
-# Set working directory for the build
 WORKDIR /go/src/github.com/stateset/stateset-blockchain
 
-# Add source files
+COPY go.* /go/src/github.com/stateset/stateset-blockchain/
+
+RUN apk add --no-cache git \
+    && go mod download github.com/CosmWasm/go-cosmwasm \
+    && export GO_WASM_DIR=$(go list -f "{{ .Dir }}" -m github.com/CosmWasm/go-cosmwasm) \
+    && cd ${GO_WASM_DIR} \
+    && cargo build --release --features backtraces --example muslc \
+    && mv ${GO_WASM_DIR}/target/release/examples/libmuslc.a /lib/libgo_cosmwasm_muslc.a
+
+
+FROM cosmwasm/go-ext-builder:0001-alpine AS go-builder
+
+WORKDIR /go/src/github.com/stateset/stateset-blockchain
+
+RUN apk add --no-cache git libusb-dev linux-headers
+
 COPY . .
+COPY --from=rust-builder /lib/libgo_cosmwasm_muslc.a /lib/libgo_cosmwasm_muslc.a
 
-# Install minimum necessary dependencies, build Cosmos SDK, remove packages
-RUN apk add --no-cache $PACKAGES && \
-    make tools && \
-    make install
+RUN BUILD_TAGS=muslc make update-swagger-docs build
 
-# Final image
-FROM alpine:edge
+FROM alpine:3
 
-# Install ca-certificates
-RUN apk add --update ca-certificates
 WORKDIR /root
 
-# Copy over binaries from the build-env
-COPY --from=build-env /go/bin/statesetd /usr/bin/statesetd
-COPY --from=build-env /go/bin/statesetcli /usr/bin/statesetcli
+COPY --from=go-builder /go/src/github.com/stateset/stateset-blockchain/build/statesetd /usr/local/bin/statesetd
+COPY --from=go-builder /go/src/github.com/stateset/stateset-blockchain/build/statesetcli /usr/local/bin/statesetcli
 
-# Run statesetd by default, omit entrypoint to ease using container with statesetcli
-CMD ["statesetd"]
+CMD [ "statesetd", "--help" ]

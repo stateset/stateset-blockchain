@@ -18,3 +18,4 @@ These are the modules that make Stateset:
 - `x/gov`: Governance logic.
 - `x/ibc`: Inter-blockchain transfers.
 - `x/params`: Handles app-level parameters.
+- `x/wasm`: Smart Contracts.
