@@ -68,6 +68,11 @@ var (
 		purchasorder.AppModuleBasic{},
 		invoice.AppModuleBasic{},
 		loan.AppModuleBasic{},
+		// ...
+		capability.AppModuleBasic{},
+		ibc.AppModuleBasic{},
+		evidence.AppModuleBasic{},
+		transfer.AppModuleBasic{}, /
 
 	)
 
@@ -81,6 +86,7 @@ var (
 		slashing.ModuleName:          {supply.Minter},
 		slashing.PenaltyAccount:      nil,
 		gov.ModuleName:            {supply.Burner},
+		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 	}
 )
 
@@ -130,6 +136,15 @@ type StatesetApp struct {
 	factoringKeeper    factoring.Keeper
 	wasmKeeper     wasm.Keeper
 
+	// other keepers
+	IBCKeeper        *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
+    EvidenceKeeper   evidencekeeper.Keeper // required to set up the client misbehaviour route
+	TransferKeeper   ibctransferkeeper.Keeper // for cross-chain fungible token transfers
+	
+	 // make scoped keepers public for test purposes
+	 ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
+	 ScopedTransferKeeper capabilitykeeper.ScopedKeeper
+
 
 	// the module manager
 	mm *module.Manager
@@ -160,7 +175,15 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		invCheckPeriod: invCheckPeriod,
 		keys:           keys,
 		tKeys:          tKeys,
+		
 	}
+
+	// add capability keeper and ScopeToModule for ibc module
+  	app.CapabilityKeeper = capabilitykeeper.NewKeeper(appCodec, keys[capabilitytypes.StoreKey], memKeys[capabilitytypes.MemStoreKey])
+
+  	// grant capabilities for the ibc and ibc-transfer modules
+  	scopedIBCKeeper := app.CapabilityKeeper.ScopeToModule(ibchost.ModuleName)
+  	scopedTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
 
 	// init params keeper and subspaces
 	app.paramsKeeper = params.NewKeeper(app.cdc, keys[params.StoreKey], tKeys[params.TStoreKey], params.DefaultCodespace)
@@ -182,6 +205,10 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 	purchaseorderSubspace := app.paramsKeeper.Subspace(purchaseorder.DefaultParamspace)
 	invoiceSubspace := app.paramsKeeper.Subspace(invoice.DefaultParamspace)
 	loanSubspace := app.paramsKeeper.Subspace(loan.DefaultParamspace)
+
+	  // Create IBC Keeper
+	  app.IBCKeeper = ibckeeper.NewKeeper(
+		appCodec, keys[ibchost.StoreKey], app.StakingKeeper, scopedIBCKeeper,
 
 	// add cosmos keepers
 
@@ -256,6 +283,19 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		app.supplyKeeper,
 		auth.FeeCollectorName,
 	)
+
+	// Create Transfer Keepers
+    app.TransferKeeper = ibctransferkeeper.NewKeeper(
+    appCodec, keys[ibctransfertypes.StoreKey],
+    app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
+	app.AccountKeeper, app.BankKeeper, scopedTransferKeeper,
+	)
+	transferModule := transfer.NewAppModule(app.TransferKeeper)
+
+	// Create evidence Keeper for to register the IBC light client misbehaviour evidence route
+  	evidenceKeeper := evidencekeeper.NewKeeper(
+    appCodec, keys[evidencetypes.StoreKey], &app.StakingKeeper, app.SlashingKeeper,
+  	)
 	
 	app.upgradeKeeper = upgrade.NewKeeper(
 		keys[upgrade.StoreKey],
@@ -290,6 +330,25 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		app.supplyKeeper, &stakingKeeper, gov.DefaultCodespace, govRouter,
 	)
 
+	ibcRouter := port.NewRouter()
+	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
+	// Setting Router will finalize all routes by sealing router
+	// No more routes can be added
+	app.IBCKeeper.SetRouter(ibcRouter)
+  
+	// create static Evidence routers
+  
+	evidenceRouter := evidencetypes.NewRouter().
+	  // add IBC ClientMisbehaviour evidence handler
+	  AddRoute(ibcclient.RouterKey, ibcclient.HandlerClientMisbehaviour(app.IBCKeeper.ClientKeeper))
+  
+	// Setting Router will finalize all routes by sealing router
+	// No more routes can be added
+	evidenceKeeper.SetRouter(evidenceRouter)
+  
+	// set the evidence keeper from the section above
+	app.EvidenceKeeper = *evidenceKeeper
+
 	// register the staking hooks
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	app.stakingKeeper = *stakingKeeper.SetHooks(
@@ -320,6 +379,10 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		invoice.NewAppModule(app.invoiceKeeper),
 		loan.NewAppModule(app.loanKeeper),
 		wasm.NewAppModule(app.wasmKeeper),
+		capability.NewAppModule(appCodec, *app.CapabilityKeeper),
+		evidence.NewAppModule(app.EvidenceKeeper),
+		ibc.NewAppModule(app.IBCKeeper),
+		transferModule,
 		
 	)
 
@@ -328,7 +391,9 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 	// there is nothing left over in the validator fee pool, so as to keep the
 	// CanWithdrawInvariant invariant.
 
-	app.mm.SetOrderBeginBlockers(upgrade.ModuleName, mint.ModuleName, distr.ModuleName, slashing.ModuleName)
+	app.mm.SetOrderBeginBlockers(upgrade.ModuleName, mint.ModuleName, distr.ModuleName, slashing.ModuleName, evidencetypes.ModuleName, stakingtypes.ModuleName, ibchost.ModuleName,
+	)
+
 	app.mm.SetOrderEndBlockers(crisis.ModuleName, gov.ModuleName, staking.ModuleName)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -336,7 +401,8 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 	app.mm.SetOrderInitGenesis(
 		distr.ModuleName, staking.ModuleName, auth.ModuleName, bank.ModuleName,
 		slashing.ModuleName, gov.ModuleName, mint.ModuleName, supply.ModuleName,
-		crisis.ModuleName, genutil.ModuleName, evidence.ModuleName,
+		crisis.ModuleName, genutil.ModuleName, evidence.ModuleName, ibchost.ModuleName,
+		evidencetypes.ModuleName, ibctransfertypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.crisisKeeper)
@@ -355,7 +421,11 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 		distr.NewAppModule(app.distrKeeper, app.accountKeeper, app.supplyKeeper, app.stakingKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.accountKeeper, app.supplyKeeper),
 		slashing.NewAppModule(app.slashingKeeper, app.accountKeeper, app.stakingKeeper),
-		wasm.NewAppModule(app.wasmKeeper, app.accountKeeper, app.bankKeeper)
+		wasm.NewAppModule(app.wasmKeeper, app.accountKeeper, app.bankKeeper),
+		capability.NewAppModule(appCodec, *app.CapabilityKeeper),
+		evidence.NewAppModule(app.EvidenceKeeper),
+		ibc.NewAppModule(app.IBCKeeper),
+		transferModule
 	)
 
 	app.sm.RegisterStoreDecoders()
