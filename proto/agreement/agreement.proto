@@ -1,9 +1,11 @@
 syntax = "proto3";
 package stateset.agreement;
 
-option go_package = "github.com/stateset/stateset-blockchain/x/agreements/types";
-
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/stateset/stateset-blockchain/x/agreements/types";
 
 message Agreement {
   string creator = 1;

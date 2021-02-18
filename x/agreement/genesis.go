@@ -21,7 +21,7 @@ func NewGenesisState() GenesisState {
 }
 
 // DefaultGenesisState returns a default genesis state
-func DefaultGenesisState() GenesisState { return NewGenesisState() }
+func DefaultGenesisState(cdc codec.JSONMarshaler) GenesisState { return NewGenesisState() }
 
 // InitGenesis initializes stateset from genesis file
 func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) {
@@ -44,7 +44,7 @@ func ExportGenesis(ctx sdk.Context, k Keeper) GenesisState {
 }
 
 // ValidateGenesis validates the genesis state data
-func ValidateGenesis(data GenesisState) error {
+func ValidateGenesis(cdc codec.JSONMarshaler, config client.TxEncodingConfig, bz json.RawMessage) error {
 	if data.Params.MinAgreementLength < 1 {
 		return fmt.Errorf("Param: MinAgreementLength must have a positive value")
 	}

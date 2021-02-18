@@ -116,25 +116,25 @@ type StatesetApp struct {
 	tKeys map[string]*sdk.TransientStoreKey
 
 	// cosmos keepers
-	accountKeeper  auth.AccountKeeper
-	bankKeeper     bank.Keeper
-	supplyKeeper   supply.Keeper
-	stakingKeeper  staking.Keeper
-	slashingKeeper slashing.Keeper
-	distrKeeper    distr.Keeper
-	paramsKeeper   params.Keeper
-	govKeeper      gov.Keeper
-	crisisKeeper   crisis.
-	liquidityKeeper liquidity.Keeper
-	appAccountKeeper   account.Keeper
-	marketKeeper  		market.Keeper
-	mintKeeper     mint.Keeper
-	agreementKeeper    agreement.Keeper
-	purchaseorderKeeper purchaseorder.Keeper
-	invoiceKeeper      invoice.Keeper
-	loanKeeper         loan.Keeper
-	factoringKeeper    factoring.Keeper
-	wasmKeeper     wasm.Keeper
+	AccountKeeper  auth.AccountKeeper
+	BankKeeper     bank.Keeper
+	SupplyKeeper   supply.Keeper
+	StakingKeeper  staking.Keeper
+	SlashingKeeper slashing.Keeper
+	DistrKeeper    distr.Keeper
+	ParamsKeeper   params.Keeper
+	GovKeeper      gov.Keeper
+	CrisisKeeper   crisis.
+	LiquidityKeeper liquidity.Keeper
+	AppAccountKeeper   account.Keeper
+	MarketKeeper  		market.Keeper
+	MintKeeper     mint.Keeper
+	AgreementKeeper    agreement.Keeper
+	PurchaseorderKeeper purchaseorder.Keeper
+	InvoiceKeeper      invoice.Keeper
+	LoanKeeper         loan.Keeper
+	FactoringKeeper    factoring.Keeper
+	WasmKeeper     wasm.Keeper
 
 	// other keepers
 	IBCKeeper        *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
