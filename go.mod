@@ -5,6 +5,7 @@ go 1.15
 require (
 	github.com/CosmWasm/go-cosmwasm v0.10.0
 	github.com/CosmWasm/wasmd v0.14.0
+	github.com/armon/go-metrics v0.3.5
 	github.com/consensys/gnark v0.3.8
 	github.com/cosmos/cosmos-sdk v0.40.0
 	github.com/etcd-io/bbolt v1.3.3

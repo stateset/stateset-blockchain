@@ -1,6 +1,6 @@
 PACKAGES=$(shell GO111MODULE=on go list -mod=readonly ./...)
 
-MODULES = auth agreement bank crisis factoring gov invoice purchaseorder loan market slashing staking
+MODULES = agreement auth bank bep3 common crisis distribution factoring gov invoice liquidity loan mint params purchaseorder slashing staking wasm
 
 VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
 COMMIT := $(shell git log -1 --format='%H')
@@ -49,8 +49,8 @@ create-wallet:
 init:
 	rm -rf ~/.statesetd
 	bin/statesetd init statenode $(shell bin/statesetcli keys show validator -a --home ~/.octopus)
-	bin/statesetd add-genesis-account $(shell bin/statesetcli keys show validator -a --home ~/.octopus) 10000000000ustates
-	bin/statesetd gentx --name=validator --amount 10000000000ustates --home-client ~/.octopus
+	bin/statesetd add-genesis-account $(shell bin/statesetcli keys show validator -a --home ~/.octopus) 10000000000ustate
+	bin/statesetd gentx --name=validator --amount 10000000000ustate --home-client ~/.octopus
 	bin/statesetd collect-gentxs
 
 install:

@@ -10,7 +10,7 @@ const (
 	// AppName is the name of the Cosmos app
 	AppName = "Stateset"
 	// StakeDenom is the name of the main staking currency
-	StakeDenom = "ustates"
+	StakeDenom = "ustate"
 	// Hostname is the address the app's HTTP server will bind to
 	Hostname = "0.0.0.0"
 	// Portname is the port the app's HTTP server will bind to
@@ -24,21 +24,21 @@ const (
 
 const (
 	// Bech32PrefixAccAddr defines the Bech32 prefix of an account's address
-	Bech32PrefixAccAddr = "states"
+	Bech32PrefixAccAddr = "state"
 	// Bech32PrefixAccPub defines the Bech32 prefix of an account's public key
-	Bech32PrefixAccPub = "statespub"
+	Bech32PrefixAccPub = "statepub"
 	// Bech32PrefixValAddr defines the Bech32 prefix of a validator's operator address
-	Bech32PrefixValAddr = "statesvaloper"
+	Bech32PrefixValAddr = "statevaloper"
 	// Bech32PrefixValPub defines the Bech32 prefix of a validator's operator public key
-	Bech32PrefixValPub = "statesvaloperpub"
+	Bech32PrefixValPub = "statevaloperpub"
 	// Bech32PrefixConsAddr defines the Bech32 prefix of a consensus node address
-	Bech32PrefixConsAddr = "statesvalcons"
+	Bech32PrefixConsAddr = "statevalcons"
 	// Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key
-	Bech32PrefixConsPub = "statesvalconspub"
+	Bech32PrefixConsPub = "statevalconspub"
 )
 
 // InitialStake is an `sdk.Coins` representing the balance a new user is granted upon registration
-var InitialStake = sdk.Coin{Amount: sdk.NewInt(300 * STATE), Denom: StakeDenom}
+var InitialStake = sdk.Coin{Amount: sdk.NewInt(330 * STATE), Denom: StakeDenom}
 
 // RegistrationFee is an `auth.StdFee` representing the coin and gas cost of registering a new account
 // TODO: Use more accurate gas estimate [notduncansmith]
@@ -47,7 +47,7 @@ var RegistrationFee = auth.StdFee{
 	Gas:    20000,
 }
 
-// NewStatesetCoin returns the desired amount in sets
+// NewStatesetCoin returns the desired amount
 func NewStatesetCoin(amount int64) sdk.Coin {
 	return sdk.NewInt64Coin(StakeDenom, amount*STATE)
 }
