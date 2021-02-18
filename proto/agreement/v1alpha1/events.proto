@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package stateset.agreement.v1alpha1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/stateset/stateset-blockchain/x/agreement";
+
+// EventCreateAgreement is an event emitted when an agreement is created.
+message EventCreateAgreement {
+
+    // agreement_id is the unique ID of agreement
+    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+
+    // creator is the creator of the agreement
+    string creator = 2
+}
+
+
+// EventActivated is an event emitted when an agreement is activated.
+message EventActivated {
+
+    // agreement_id is the unique ID of agreement
+    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+
+    // creator is the creator of the agreement
+    string creator = 2
+}
+
+// EventRenewed is an event emitted when an agreement is renewed.
+message EventRenewed {
+
+    // agreement_id is the unique ID of agreement
+    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+
+    // creator is the creator of the agreement
+    string creator = 2
+}
+
+// EventTerminated is an event emitted when an agreement is terminated.
+message EventTerminated {
+
+    // agreement_id is the unique ID of agreement
+    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+
+    // creator is the creator of the agreement
+    string creator = 2
+}
+
+// EventAmended is an event emitted when an agreement is amended.
+message EventAmended {
+
+    // agreement_id is the unique ID of agreement
+    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+
+    // creator is the creator of the agreement
+    string creator = 2
+}
+
+// EventExpired is an event emitted when an agreement is expired.
+message EventExpired {
+
+    // agreement_id is the unique ID of agreement
+    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+
+    // creator is the creator of the agreement
+    string creator = 2
+}

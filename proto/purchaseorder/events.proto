@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package stateset.purchaseorder.v1alpha1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/stateset/stateset-blockchain/x/purchaseorder";
+
+// EventCreatePurchaseOrder is an event emitted when an purchaseorder is created.
+message EventCreatePurchaseOrder {
+
+    // purchaseorder_id is the unique ID of purchaseorder
+    string purchasorder_id = 1 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
+
+    // creator is the creator of the purchaseorder
+    string creator = 2
+}
+
+
+// EventCompleted is an event emitted when an purchaseorder is completed.
+message EventCompleted {
+
+    // agreement_id is the unique ID of purchaseorder
+    string purchaseorder_id = 1 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
+
+    // creator is the creator of the purchaseorder
+    string creator = 2
+}
+
+// EventCancelled is an event emitted when an purchaseorder is cancelled.
+message EventCancelled {
+
+    // agreement_id is the unique ID of purchaseorder
+    string purchaseorder_id = 1 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
+
+    // creator is the creator of the purchaseorder
+    string creator = 2
+}
+
+// EventFinanced is an event emitted when an purchaseorder is financed.
+message EventFinanced {
+
+    // purchaseorder_id is the unique ID of purchaseorder
+    string purchaseorder_id = 1 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
+
+    // creator is the creator of the purchaseorder
+    string creator = 2
+}
