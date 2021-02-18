@@ -72,7 +72,7 @@ var (
 		capability.AppModuleBasic{},
 		ibc.AppModuleBasic{},
 		evidence.AppModuleBasic{},
-		transfer.AppModuleBasic{}, /
+		transfer.AppModuleBasic{},
 
 	)
 
@@ -206,9 +206,10 @@ func NewStatesetApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLate
 	invoiceSubspace := app.paramsKeeper.Subspace(invoice.DefaultParamspace)
 	loanSubspace := app.paramsKeeper.Subspace(loan.DefaultParamspace)
 
-	  // Create IBC Keeper
-	  app.IBCKeeper = ibckeeper.NewKeeper(
-		appCodec, keys[ibchost.StoreKey], app.StakingKeeper, scopedIBCKeeper,
+	// Create IBC Keeper
+	app.IBCKeeper = ibckeeper.NewKeeper(
+	appCodec, keys[ibchost.StoreKey], app.StakingKeeper, scopedIBCKeeper,
+	)
 
 	// add cosmos keepers
 
