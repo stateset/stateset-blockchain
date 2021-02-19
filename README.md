@@ -251,6 +251,7 @@ Censorship: If the protocol detects that a proposer included invalid transaction
 All metrics mentioned can be adjusted by parameter-change proposals.
 
 
+
 ## Export State
 
 Stateset can dump the entire application state to a JSON file, which could be useful for manual analysis and can also be used as the genesis file of a new network.

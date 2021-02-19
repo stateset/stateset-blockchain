@@ -1,0 +1,53 @@
+syntax = "proto3";
+package stateset.purchaseorder.v1alpha1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/stateset/stateset-blockchain/x/purchaseorder/types";
+
+// Query defines the gRPC querier service.
+service Query {
+
+  // PurchaseOrders returns purchase order details based on purchase order.
+  rpc PurchaseOrders(QueryPurchaseOrdersRequest) returns (QueryPurchaseOrdersResponse) {
+    option (google.api.http).get = "/stateset/purchaseorder/v1alpha1/purchaseorders/list";
+  }
+
+  // Purchase Order returns purchase order details based on purchase order.
+  rpc PurchaseOrder(QueryPurchaseOrderRequest) returns (QueryPurchaseOrderResponse) {
+    option (google.api.http).get = "/stateset/purchaseorder/v1alpha1/purchaseorders/info";
+  }
+
+}
+
+// QueryPurchaseOrderRequest is the Query/PurchaseOrder request type.
+message QueryPurchaseOrderRequest {
+
+  string purchaseorder_id = 1;
+}
+
+message QueryPurchaseOrderResponse {
+    repeated QueryPurchaseOrderResponse purchaseorders = 1;
+    
+}
+
+message QueryPurchaseOrderResponse {
+
+  string creator = 1;
+  string purchasorder_id = 2;
+  string purchaseordernumber = 3;
+  string purchaseorderhash = 4;
+  string purchaseorderstatus = 5;
+  string description = 6;
+  string purchasedate = 7;
+  string deliveryDate = 8;
+  string subtotal = 9;
+  string total = 10;
+  string purchaser = 11;
+  string vendor = 12;
+  string fulfiller = 13;
+  string financer = 14;
+
+}

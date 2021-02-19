@@ -9,21 +9,32 @@ option go_package = "github.com/stateset/stateset-blockchain/x/agreements/types"
 
 // Query defines the gRPC querier service.
 service Query {
+
+  // Agreements returns agreeement details based on agreement.
+  rpc Agreements(QueryAgreementsRequest) returns (QueryAgreementsResponse) {
+    option (google.api.http).get = "/stateset/agreement/v1alpha1/agreements/list";
+  }
+
   // Agreement returns agreeement details based on agreement.
   rpc Agreement(QueryAgreementRequest) returns (QueryAgreementResponse) {
-    option (google.api.http).get = "/stateset/agreement/v1alpha1/agreement/{agreement_id}";
+    option (google.api.http).get = "/stateset/agreement/v1alpha1/agreements/info";
   }
 
 }
 
 // QueryAgreementRequest is the Query/Agreement request type.
-message QueryAgreementRequest {
+message QueryAgreementsRequest {
 
   string agreement_id = 1;
 }
 
 message QueryAgreementResponse {
-  // entry is the ContentEntry
+    repeated QueryAgreementResponse agreements = 1;
+    
+}
+
+message QueryAgreementResponse {
+
   string creator = 1;
   string agreement_id = 2;
   string agreementNumber = 3; 
