@@ -1,4 +1,4 @@
-package agreement
+package types
 
 import (
 	"fmt"
@@ -8,6 +8,49 @@ import (
 	app "github.com/stateset/stateset-blockchain/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
+
+// ID method returns AgreementID details of specific agreement
+func (a Agreement) ID() AgreementID {
+	return a.AgreementID
+}
+
+// String implements the Stringer interface for a Order object.
+func (a Agreeement) String() string {
+	out, _ := yaml.Marshal(a)
+	return string(out)
+}
+
+// Agreements is an array of agreements
+type Agreements []Agreement
+
+// String implements the Stringer interface for a Orders object.
+func (a Agreements) String() string {
+	var out string
+	for _, order := range a {
+		out += order.String() + "\n"
+	}
+
+	return strings.TrimSpace(out)
+}
+
+// ValidateInactive method validates whether agreement is open or not and
+// returns error if not
+func (a Agreement) ValidateInactive() error {
+	switch a.State {
+	case AgreementInactive:
+		return nil
+	case AgreementActive:
+		return ErrAgreementActive
+	default:
+		return ErrAgreementInactive
+	}
+}
+
+
+// Total method returns total agreement value of specific agreement
+func (a Agreement) Total() sdk.Coin {
+	return a.Spec.Total()
+}
 
 // Defines module constants
 const (
@@ -33,9 +76,6 @@ type Agreement struct {
 	active 	          	   bool           `json:"active"`
 	CreatedTime       	   time.Time      `json:"created_time"`
 }
-
-// Agreements is an array of agreements
-type Agreements []Agreement
 
 // NewAgreement creates a new agreement object
 func NewAgreement(agreementId uint64, agreementNumber string, agreementName string, description string, loanAmount sdk.Coin, amountPaid sdk.Coin, amountRemaining sdk.Coin, subtotal sdk.Coin, total sdk.Coin, party sdk.AccAddress, counterparty sdk.AccAddress, dueDate time.Time, periodStartDate time.Time, periodEndDate time.Time, paid bool, active bool, createdTime time.Time) Loan {

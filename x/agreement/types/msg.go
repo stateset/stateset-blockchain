@@ -1,9 +1,8 @@
-package agreement
+package types
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -21,12 +20,6 @@ const (
 	TypeMsgTerminateAgreement = "terminate_agreement"
 	// TypeMsgPaybackLoan represents the type of the message for creating new loan
 	TypeMsgExpireAgreement = "expire_agreement"
-	// TypeMsgAddAdmin represents the type of message for adding a new admin
-	TypeMsgAddAdmin = "add_admin"
-	// TypeMsgRemoveAdmin represents the type of message for removing an admin
-	TypeMsgRemoveAdmin = "remove_admin"
-	// TypeMsgUpdateParams represents the type of
-	TypeMsgUpdateParams = "update_params"
 )
 
 // verify interface at compile time
@@ -37,8 +30,6 @@ var _ sdk.Msg = &MsgAmendAgreement{}
 var _ sdk.Msg = &MsgRenewAgreement{}
 var _ sdk.Msg = &MsgTerminateAgreement{}
 var _ sdk.Msg = &MsgExpireAgreement{}
-var _ sdk.Msg = &MsgRemoveAdmin{}
-var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreateAgreement defines a message to create an agreement
 type MsgCreateAgreement struct {
