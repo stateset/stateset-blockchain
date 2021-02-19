@@ -7,57 +7,79 @@ import "gogoproto/gogo.proto";
 
 message Invoice {
   string creator = 1;
-  string id = 2;
-  string number = 3; 
-  string name = 4; 
-  string status = 5; 
-  string amountDue = 6; 
-  string amountPaid = 7; 
-  string amontRemaining = 8; 
-  string dueDate = 9; 
+  string invoice_id = 2;
+  string invoicenumber = 3; 
+  string invoicename = 4;
+  string billingreason = 5;
+  string amountdue = 6;
+  string amountpaid = 7;
+  string amountremaining = 8;
+  string subtotal = 9;
+  string total = 10;
+  string party = 11;
+  string counterparty = 12;
+  string factor = 13;
+  string duedate = 14;
+  string periodstartdate = 15;
+  string periodenddate = 16;
 }
 
 message MsgCreateInvoice {
   string creator = 1;
-  string number = 2; 
-  string name = 3; 
-  string status = 4; 
-  string amountDue = 5; 
-  string amountPaid = 6; 
-  string amontRemaining = 7; 
-  string dueDate = 8; 
+  string invoice_id = 2;
+  string invoicenumber = 3; 
+  string invoicename = 4;
+  string billingreason = 5;
+  string amountdue = 6;
+  string amountpaid = 7;
+  string amountremaining = 8;
+  string subtotal = 9;
+  string total = 10;
+  string party = 11;
+  string counterparty = 12;
+  string factor = 13;
+  string duedate = 14;
+  string periodstartdate = 15;
+  string periodenddate = 16;
 }
 
 message MsgUpdateInvoice {
   string creator = 1;
-  string id = 2;
-  string number = 3; 
-  string name = 4; 
-  string status = 5; 
-  string amountDue = 6; 
-  string amountPaid = 7; 
-  string amontRemaining = 8; 
-  string dueDate = 9; 
+  string invoice_id = 2;
+  string invoicenumber = 3; 
+  string invoicename = 4;
+  string billingreason = 5;
+  string amountdue = 6;
+  string amountpaid = 7;
+  string amountremaining = 8;
+  string subtotal = 9;
+  string total = 10;
+  string party = 11;
+  string counterparty = 12;
+  string factor = 13;
+  string duedate = 14;
+  string periodstartdate = 15;
+  string periodenddate = 16;
 }
 
 
 message MsgCancelInvoice {
   string creator = 1;
-  string id = 2;
+  string invoice_id = 2;
 }
 
 
 message MsgPayInvoice {
   string creator = 1;
-  string id = 2;
+  string invoice_id = 2;
 }
 
 message MsgFactorInvoice {
   string creator = 1;
-  string id = 2;
+  string invoice_id = 2;
 }
 
 message MsgDeleteInvoice {
   string creator = 1;
-  string id = 2;
+  string invoice_id = 2;
 }
