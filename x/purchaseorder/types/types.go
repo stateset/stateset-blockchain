@@ -1,4 +1,4 @@
-package purchaseorder
+package types
 
 import (
 	"fmt"
