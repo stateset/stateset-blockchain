@@ -7,39 +7,71 @@ import "gogoproto/gogo.proto";
 
 message Purchaseorder {
   string creator = 1;
-  string id = 2;
-  string number = 3; 
-  string name = 4; 
-  string status = 5; 
-  string deliveryDate = 6; 
-  string arrivalDate = 7; 
+  string purchasorder_id = 2;
+  string purchaseordernumber = 3;
+  string purchaseorderhash = 4;
+  string purchaseorderstatus = 5;
+  string description = 6;
+  string purchasedate = 7;
+  string deliveryDate = 8;
+  string subtotal = 9;
+  string total = 10;
+  string purchaser = 11;
+  string vendor = 12;
+  string fulfiller = 13;
+  string financer = 14;
 }
 
 message MsgCreatePurchaseorder {
   string creator = 1;
-  string number = 2; 
-  string name = 3; 
-  string status = 4; 
-  string deliveryDate = 5; 
-  string arrivalDate = 6; 
+  string purchasorder_id = 2;
+  string purchaseordernumber = 3;
+  string purchaseorderhash = 4;
+  string purchaseorderstatus = 5;
+  string description = 6;
+  string purchasedate = 7;
+  string deliveryDate = 8;
+  string subtotal = 9;
+  string total = 10;
+  string purchaser = 11;
+  string vendor = 12;
+  string fulfiller = 13;
+  string financer = 14;
 }
 
 message MsgUpdatePurchaseorder {
   string creator = 1;
-  string id = 2;
-  string number = 3; 
-  string name = 4; 
-  string status = 5; 
-  string deliveryDate = 6; 
-  string arrivalDate = 7; 
+  string purchasorder_id = 2;
+  string purchaseordernumber = 3;
+  string purchaseorderhash = 4;
+  string purchaseorderstatus = 5;
+  string description = 6;
+  string purchasedate = 7;
+  string deliveryDate = 8;
+  string subtotal = 9;
+  string total = 10;
+  string purchaser = 11;
+  string vendor = 12;
+  string fulfiller = 13;
+  string financer = 14;
+}
+
+message MsgCompletePurchaseorder {
+  string creator = 1;
+  string purchaseorder_id = 2;
+}
+
+message MsgCancelPurchaseorder {
+  string creator = 1;
+  string purchaseorder_id = 2;
 }
 
 message MsgDeletePurchaseorder {
   string creator = 1;
-  string id = 2;
+  string purchaseorder_id = 2;
 }
 
 message MsgFinancePurchaseorder {
   string creator = 1;
-  string id = 2;
+  string purchaseorder_id = 2;
 }
