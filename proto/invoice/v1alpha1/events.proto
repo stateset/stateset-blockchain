@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package stateset.invoice.v1alpha1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/stateset/stateset-blockchain/x/invoice";
+
+// EventCreateInvoice is an event emitted when an invoice is created.
+message EventCreateInvoice {
+
+    // invoice_id is the unique ID of invoice
+    string invoice_id = 1 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
+
+    // creator is the creator of the invoice
+    string creator = 2
+}
+
+
+// EventCompleted is an event emitted when an invoice is completed.
+message EventCompleted {
+
+    // agreement_id is the unique ID of invoice
+    string invoice_id = 1 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
+
+    // creator is the creator of the invoice
+    string creator = 2
+}
+
+// EventCancelled is an event emitted when an invoice is cancelled.
+message EventCancelled {
+
+    // agreement_id is the unique ID of invoice
+    string invoice_id = 1 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
+
+    // creator is the creator of the invoice
+    string creator = 2
+}
+
+// EventFactored is an event emitted when an invoice is factored.
+message EventFactored {
+
+    // invoice_id is the unique ID of invoice
+    string invoice_id = 1 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
+
+    // creator is the creator of the invoice
+    string creator = 2
+}

@@ -52,8 +52,11 @@ func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 
 // RegisterRESTRoutes registers the REST routes for the supply module.
 func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
-	// no REST routes, use GraphQL API endpoint
-	// i.e: rest.RegisterRoutes(ctx, rtr)
+
+}
+
+func (AppModuleBasic) RegisterGRPCRoutes(ctx client.Context, *runtime.ServeMux) {
+
 }
 
 // GetTxCmd returns the root tx command for the supply module.
@@ -103,6 +106,9 @@ func (am AppModule) NewQuerierHandler() sdk.Querier {
 	return NewQuerier(am.keeper)
 }
 
+// RegisterServices allows a module to register services
+func (am AppModule) RegisterServices(Configurator)
+
 // InitGenesis enforces the creation of the genesis state for this module
 func (am AppModule) InitGenesis(ctx sdk.Context, data json.RawMessage) []abci.ValidatorUpdate {
 	var genesisState GenesisState
@@ -117,10 +123,10 @@ func (am AppModule) ExportGenesis(ctx sdk.Context) json.RawMessage {
 	return ModuleCodec.MustMarshalJSON(gs)
 }
 
-// BeginBlock returns the begin blocker for the supply module.
+// BeginBlock returns the begin blocker for the purchaseorder module.
 func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 
-// EndBlock returns the end blocker for the supply module. It returns no validator
+// EndBlock returns the end blocker for the purchaseorder module. It returns no validator
 // updates.
 func (AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}

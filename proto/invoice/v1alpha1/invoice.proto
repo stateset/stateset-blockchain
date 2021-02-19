@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stateset.invoice;
+package stateset.invoice.v1alpha1;
 
 option go_package = "github.com/stateset/stateset-blockchain/x/invoice/types";
 
@@ -52,6 +52,10 @@ message MsgPayInvoice {
   string id = 2;
 }
 
+message MsgFactorInvoice {
+  string creator = 1;
+  string id = 2;
+}
 
 message MsgDeleteInvoice {
   string creator = 1;

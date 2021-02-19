@@ -56,6 +56,10 @@ func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router
 	// i.e: rest.RegisterRoutes(ctx, rtr)
 }
 
+func (AppModuleBasic) RegisterGRPCRoutes(ctx client.Context, *runtime.ServeMux) {
+
+}
+
 // GetTxCmd returns the root tx command for the supply module.
 func (AppModuleBasic) GetTxCmd(_ *codec.Codec) *cobra.Command { return nil }
 

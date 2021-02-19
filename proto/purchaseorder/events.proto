@@ -10,7 +10,7 @@ option go_package = "github.com/stateset/stateset-blockchain/x/purchaseorder";
 message EventCreatePurchaseOrder {
 
     // purchaseorder_id is the unique ID of purchaseorder
-    string purchasorder_id = 1 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
+    string purchaseorder_id = 1 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
 
     // creator is the creator of the purchaseorder
     string creator = 2

@@ -17,9 +17,9 @@ type Keeper struct {
 	storeKey   sdk.StoreKey
 	codec      *codec.Codec
 	paramStore params.Subspace
-
 	accountKeeper   AccountKeeper
-	marketKeeper market.Keeper
+	invoiceKeeper InvoiceKeeper
+	liquidityKeeper LiquidityKeeper
 }
 
 // NewKeeper creates a new account keeper

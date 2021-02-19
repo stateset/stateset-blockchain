@@ -1,0 +1,22 @@
+syntax = "proto3";
+package stateset.agreement.v1alpha1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/stateset/stateset-blockchain/x/agreements/types";
+
+
+// Query defines the gRPC querier service.
+service Query {
+  // Agreement returns agreeement details based on agreement.
+  rpc Agreement(QueryAgreementRequest) returns (QueryAgreementResponse) {
+    option (google.api.http).get = "/stateset/agreement/v1alpha1/agreement/{agreement_id}";
+  }
+
+  // Params queries all parameters.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/cosmos/auth/v1beta1/params";
+  }
+}
