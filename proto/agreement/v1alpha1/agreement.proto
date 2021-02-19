@@ -79,22 +79,6 @@ message MsgExpireAgreement {
   string agreement_id = 2;
 }
 
-service Msg {
-
-  rpc Create(MsgCreateAgreement) returns (MsgCreateAgreementResponse);
-
-  rpc Activate(MsgActivateAgreement) returns (MsgActivateAgreementResponse);
-
-  rpc Renew(MsgRenewAgreement) returns (MsgRenewAgreementResponse);
-
-  rpc Amend(MsgAmendAgreement) returns (MsgAmendAgreementResponse);
-
-  rpc Terminate(MsgTerminateAgreement) returns (MsgTerminateAgreementResponse);
-
-  rpc Expire(MsgExpireAgreement) returns (MsgExpireAgreement);
-
-}
-
 
 service Query {
 

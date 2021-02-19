@@ -7,7 +7,98 @@ import "google/protobuf/any.proto";
 
 option go_package = "github.com/stateset/stateset-blockchain/x/agreements/types";
 
-message MsgCreateAgreement {
-  string              create = 1;
-  google.protobuf.Any agreement  = 2 [(cosmos_proto.accepts_interface) = "Agreement"];
+// Msg is the stateset.agreement.v1alpha1 Msg service
+service Msg {
+
+  rpc Create(MsgCreateAgreementRequest) returns (MsgCreateAgreementResponse);
+
+  rpc Activate(MsgActivateAgreementRequest) returns (MsgActivateAgreementResponse);
+
+  rpc Renew(MsgRenewAgreementRequest) returns (MsgRenewAgreementResponse);
+
+  rpc Amend(MsgAmendAgreementRequest) returns (MsgAmendAgreementResponse);
+
+  rpc Terminate(MsgTerminateAgreementRequest) returns (MsgTerminateAgreementResponse);
+
+  rpc Expire(MsgExpireAgreementRequest) returns (MsgExpireAgreementResponse);
+
 }
+
+// MsgCreateAgreementRequest is the Msg/CreateAgreement request type.
+message MsgCreateAgreementRequest {
+  // sender is the address of the sender of the transaction.
+  string sender = 1;
+  string agreement_id = 2;
+  string agreementNumber = 3; 
+  string agreementName = 4; 
+  string agreementType = 5; 
+  string agreementStatus = 6; 
+  string totalAgreementValue = 7; 
+  string party = 8; 
+  string counterparty = 9; 
+  string agreementStartDate = 10; 
+  string agreementEndDate = 11; 
+}
+
+// MsgSignDataResponse is the Msg/SignData response type.
+message MsgCreateAgreementResponse { }
+
+// MsgActivateAgreementRequest is the Msg/ActivateAgreement request type.
+message MsgActivateAgreementRequest {
+  // sender is the address of the sender of the transaction.
+  string sender = 1;
+  string agreement_id = 2;
+}
+
+// MsgSignDataResponse is the Msg/SignData response type.
+message MsgActivateAgreementResponse { }
+
+// MsgActivateAgreementRequest is the Msg/ActivateAgreement request type.
+message MsgActivateAgreementRequest {
+  // sender is the address of the sender of the transaction.
+  string sender = 1;
+  string agreement_id = 2;
+}
+
+// MsgSignDataResponse is the Msg/SignData response type.
+message MsgActivateAgreementResponse { }
+
+// MsgRenewRenewRequest is the Msg/RenewAgreement request type.
+message MsgRenewAgreementRequest {
+  // sender is the address of the sender of the transaction.
+  string sender = 1;
+  string agreement_id = 2;
+}
+
+// MsgRenewAgreementResponse is the Msg/SignData response type.
+message MsgRenewAgreementResponse { }
+
+// MsgAmendAgreementRequest is the Msg/AmendAgreement request type.
+message MsgAmendAgreementRequest {
+  // sender is the address of the sender of the transaction.
+  string sender = 1;
+  string agreement_id = 2;
+}
+
+// MsgAmendResponse is the Msg/AmendAgreement response type.
+message MsgAmendAgreementResponse { }
+
+// MsgTerminateAgreementRequest is the Msg/TerminateAgreement request type.
+message MsgTerminateAgreementRequest {
+  // sender is the address of the sender of the transaction.
+  string sender = 1;
+  string agreement_id = 2;
+}
+
+// MsgTerminateResponse is the Msg/TerminateAgreement response type.
+message MsgTerminateAgreementResponse { }
+
+// MsgExpireAgreementRequest is the Msg/ExpireAgreement request type.
+message MsgExpireAgreementRequest {
+  // sender is the address of the sender of the transaction.
+  string sender = 1;
+  string agreement_id = 2;
+}
+
+// MsgExpireResponse is the Msg/ExpireAgreement response type.
+message MsgExpireAgreementResponse { }
