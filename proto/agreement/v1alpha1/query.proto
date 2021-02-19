@@ -7,7 +7,6 @@ import "google/protobuf/any.proto";
 
 option go_package = "github.com/stateset/stateset-blockchain/x/agreements/types";
 
-
 // Query defines the gRPC querier service.
 service Query {
   // Agreement returns agreeement details based on agreement.
@@ -15,8 +14,25 @@ service Query {
     option (google.api.http).get = "/stateset/agreement/v1alpha1/agreement/{agreement_id}";
   }
 
-  // Params queries all parameters.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/cosmos/auth/v1beta1/params";
-  }
+}
+
+// QueryAgreementRequest is the Query/Agreement request type.
+message QueryAgreementRequest {
+
+  string agreement_id = 1;
+}
+
+message QueryAgreementResponse {
+  // entry is the ContentEntry
+  string creator = 1;
+  string agreement_id = 2;
+  string agreementNumber = 3; 
+  string agreementName = 4; 
+  string agreementType = 5; 
+  string agreementStatus = 6; 
+  string totalAgreementValue = 7; 
+  string party = 8; 
+  string counterparty = 9; 
+  string agreementStartDate = 10; 
+  string agreementEndDate = 11;
 }
