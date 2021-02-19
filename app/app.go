@@ -62,13 +62,13 @@ var (
 		supply.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
-		//stateset modules
+		// stateset modules
 		market.AppModuleBasic{},
 		agreement.AppModuleBasic{},
 		purchasorder.AppModuleBasic{},
 		invoice.AppModuleBasic{},
 		loan.AppModuleBasic{},
-		// ...
+		// ibc modules
 		capability.AppModuleBasic{},
 		ibc.AppModuleBasic{},
 		evidence.AppModuleBasic{},
