@@ -47,7 +47,7 @@ message MsgCreateAgreementRequest {
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
-message MsgCreateAgreementResponse { }
+message MsgCreateAgreementResponse {}
 
 // MsgActivateAgreementRequest is the Msg/ActivateAgreement request type.
 message MsgActivateAgreementRequest {
@@ -57,7 +57,7 @@ message MsgActivateAgreementRequest {
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
-message MsgActivateAgreementResponse { }
+message MsgActivateAgreementResponse {}
 
 // MsgActivateAgreementRequest is the Msg/ActivateAgreement request type.
 message MsgActivateAgreementRequest {
@@ -67,7 +67,7 @@ message MsgActivateAgreementRequest {
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
-message MsgActivateAgreementResponse { }
+message MsgActivateAgreementResponse {}
 
 // MsgRenewRenewRequest is the Msg/RenewAgreement request type.
 message MsgRenewAgreementRequest {
@@ -77,7 +77,7 @@ message MsgRenewAgreementRequest {
 }
 
 // MsgRenewAgreementResponse is the Msg/SignData response type.
-message MsgRenewAgreementResponse { }
+message MsgRenewAgreementResponse {}
 
 // MsgAmendAgreementRequest is the Msg/AmendAgreement request type.
 message MsgAmendAgreementRequest {
@@ -87,7 +87,7 @@ message MsgAmendAgreementRequest {
 }
 
 // MsgAmendResponse is the Msg/AmendAgreement response type.
-message MsgAmendAgreementResponse { }
+message MsgAmendAgreementResponse {}
 
 // MsgTerminateAgreementRequest is the Msg/TerminateAgreement request type.
 message MsgTerminateAgreementRequest {
@@ -97,7 +97,7 @@ message MsgTerminateAgreementRequest {
 }
 
 // MsgTerminateResponse is the Msg/TerminateAgreement response type.
-message MsgTerminateAgreementResponse { }
+message MsgTerminateAgreementResponse {}
 
 // MsgExpireAgreementRequest is the Msg/ExpireAgreement request type.
 message MsgExpireAgreementRequest {
@@ -107,4 +107,4 @@ message MsgExpireAgreementRequest {
 }
 
 // MsgExpireResponse is the Msg/ExpireAgreement response type.
-message MsgExpireAgreementResponse { }
+message MsgExpireAgreementResponse {}

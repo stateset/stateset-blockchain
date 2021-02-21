@@ -3,15 +3,15 @@ package keeper
 import (
 	"context"
 
-	"github.com/cosmos/cosmos-sdk/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/stateset/stateset-blockchain/x/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/stateset/stateset-blockchain/x/stateset/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k Keeper) AgreementAll(c context.Context, req *types.QueryAllAgreementRequest) (*types.QueryAllAgreementResponse, error) {
+
+func (k Keeper) Agreements(c context.Context, req *types.QueryAgreementsRequest) (*types.QueryAgreementsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -39,7 +39,7 @@ func (k Keeper) AgreementAll(c context.Context, req *types.QueryAllAgreementRequ
 	return &types.QueryAllAgreementResponse{Agreement: agreements, Pagination: pageRes}, nil
 }
 
-func (k Keeper) Agreement(c context.Context, req *types.QueryGetAgreementRequest) (*types.QueryGetAgreementResponse, error) {
+func (k Keeper) Agreement(ctx context.Context, req *types.QueryAgreementRequest) (*types.QueryAgreementResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -50,5 +50,23 @@ func (k Keeper) Agreement(c context.Context, req *types.QueryGetAgreementRequest
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AgreementKey))
 	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.AgreementKey + req.Id)), &agreement)
 
-	return &types.QueryGetAgreementResponse{Agreement: &agreement}, nil
+	return &types.QueryAgreementResponse{Agreement: &agreement}, nil
 }
+
+
+func (k Keeper) AgreementParams(ctx context.Context, req *types.QueryAgreementParamsRequest) (*types.QueryAgreementParamsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	agreement, err := k.GetAgreement(sdkCtx, req.AgreementId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &types.QueryAgreementParamsResponse{
+		Params: agreement.GetAgreementParams(),
+	}, nil
+}
+

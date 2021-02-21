@@ -12,7 +12,7 @@ service Query {
 
   // Agreements returns agreeement details based on agreement.
   rpc Agreements(QueryAgreementsRequest) returns (QueryAgreementsResponse) {
-    option (google.api.http).get = "/stateset/agreement/v1alpha1/agreements/list";
+    option (google.api.http).get = "/stateset/agreement/v1alpha1/agreements/all";
   }
 
   // Agreement returns agreeement details based on agreement.
@@ -20,18 +20,47 @@ service Query {
     option (google.api.http).get = "/stateset/agreement/v1alpha1/agreements/info";
   }
 
+  rpc AgreementParams(QueryAgreementParamsRequest) returns (QueryAgreementParamsResponse) {
+    option (google.api.http).get = "/stateset/agreement/v1alpha1/{agreementId}/params";
+  }
+
 }
 
-// QueryAgreementRequest is the Query/Agreement request type.
-message QueryAgreementsRequest {
 
-  string agreement_id = 1;
+//=============================== Agreement
+// QueryAgreementRequest is the Query/Agreement request type.
+
+message QueryAgreementRequest {
+
+  string agreement_id = 1;[ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
 }
 
 message QueryAgreementResponse {
-    repeated QueryAgreementResponse agreements = 1;
+    Agreement agreement = 1 [ (gogoproto.nullable) = false ];
     
 }
+
+
+//=============================== Agreements
+// QueryAgreementRequest is the Query/Agreement request type.
+message QueryAgreementsRequest {
+
+  string agreementId = 1;[ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+}
+
+message QueryAgreementsResponse {
+    repeated Agreement agreements = 1 [ (gogoproto.nullable) = false ];
+    
+}
+
+//=============================== AgreementParams
+message QueryAgreementParamsRequest {
+  uint64 agreementId = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+}
+message QueryAgreementParamsResponse {
+  AgreementParams params = 1 [ (gogoproto.nullable) = false ];
+}
+
 
 message QueryAgreementResponse {
 

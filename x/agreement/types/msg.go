@@ -64,12 +64,6 @@ func (msg MsgCreateAgreement) ValidateBasic() sdk.Error {
 	if len(msg.Body) == 0 {
 		return ErrInvalidBodyTooShort(msg.Body)
 	}
-	if len(msg.MarketID) == 0 {
-		return ErrInvalidMarketID(msg.MarketID)
-	}
-	if len(msg.InvoiceID) == 0 {
-		return ErrINvalidInvoiceID(msg.AgreementID)
-	}
 	if len(msg.Counterparty) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Counterparty.String())
 	}
