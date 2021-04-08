@@ -6,21 +6,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp/params"
 	"github.com/cosmos/cosmos-sdk/std"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
+	"github.com/stateset/stateset-blockchain/app/params"
 )
 
-// MakeEncodingConfig creates an EncodingConfig
+// MakeEncodingConfig creates an EncodingConfig for testing
 func MakeEncodingConfig() params.EncodingConfig {
-	amino := codec.NewLegacyAmino()
-	interfaceRegistry := types.NewInterfaceRegistry()
-	marshaler := codec.NewProtoCodec(interfaceRegistry)
-	txCfg := tx.NewTxConfig(marshaler, tx.DefaultSignModes)
-
-	encodingConfig := params.EncodingConfig{
-		InterfaceRegistry: interfaceRegistry,
-		Marshaler:         marshaler,
-		TxConfig:          txCfg,
-		Amino:             amino,
-	}
+	encodingConfig := params.MakeEncodingConfig()
 	std.RegisterLegacyAminoCodec(encodingConfig.Amino)
 	std.RegisterInterfaces(encodingConfig.InterfaceRegistry)
 	ModuleBasics.RegisterLegacyAminoCodec(encodingConfig.Amino)
