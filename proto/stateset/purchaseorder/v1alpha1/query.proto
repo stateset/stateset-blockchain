@@ -33,7 +33,7 @@ message QueryPurchaseOrderResponse {
     
 }
 
-message QueryPurchaseOrderResponse {
+message QueryPurchaseOrderResponse {s
 
   string creator = 1;
   string purchasorder_id = 2;

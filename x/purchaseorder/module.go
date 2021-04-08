@@ -107,6 +107,9 @@ func (am AppModule) NewQuerierHandler() sdk.Querier {
 	return NewQuerier(am.keeper)
 }
 
+// RegisterServices allows a module to register services
+func (am AppModule) RegisterServices(Configurator)
+
 // InitGenesis enforces the creation of the genesis state for this module
 func (am AppModule) InitGenesis(ctx sdk.Context, data json.RawMessage) []abci.ValidatorUpdate {
 	var genesisState GenesisState

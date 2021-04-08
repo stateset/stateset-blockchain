@@ -36,7 +36,9 @@ github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d h1:nalkkPQ
 github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d/go.mod h1:URdX5+vg25ts3aCh8H5IFZybJYKWhJHYMTnf+ULtoC4=
 github.com/CosmWasm/go-cosmwasm v0.10.0 h1:3DBOiGtLllevLgf8PQO5+hRCKKqYEQJIw6cgaZzr1Ag=
 github.com/CosmWasm/go-cosmwasm v0.10.0/go.mod h1:gAFCwllx97ejI+m9SqJQrmd2SBW7HA0fOjvWWJjM2uc=
+github.com/CosmWasm/wasmd v0.14.0 h1:DpBKVMQO5sDWwYk8PaAeVY3eIzoh9BhJAT1XImdf61A=
 github.com/CosmWasm/wasmd v0.14.0/go.mod h1:tyz6WoWjyTqUsiWLWpiNKYVL20Qyqwi3gX7HTooZW5I=
+github.com/CosmWasm/wasmvm v0.12.0 h1:L9ez6fCg2Co1SgCm0YHjbnewZ8myemu2cm/QL0qR1OE=
 github.com/CosmWasm/wasmvm v0.12.0/go.mod h1:tbXGE9Jz6sYpiJroGr71OQ5TFOufq/P5LWsruA2u6JE=
 github.com/DataDog/datadog-go v3.2.0+incompatible/go.mod h1:LButxg5PwREeZtORoXG3tL4fMGNddJ+vMq1mwgfaqoQ=
 github.com/DataDog/zstd v1.4.1/go.mod h1:1jcaCB/ufaK+sKp1NBhlGmpz41jOoPQ35bpF36t7BBo=
@@ -154,6 +156,7 @@ github.com/cosmos/cosmos-sdk v0.40.1 h1:gjrtV3MQj/CMeyXN4+sosHMG6Xwa2uH6HITSjSNL
 github.com/cosmos/cosmos-sdk v0.41.0 h1:U614TXkI/+T8HY6V9krC0/mKaDm6qSs9EMFSIKuomCo=
 github.com/cosmos/cosmos-sdk v0.41.2 h1:tDJIBJ4dCsqg24kC4UPFHecatfw16SIa05mRml/7ju8=
 github.com/cosmos/cosmos-sdk v0.41.3 h1:FQusz1vO0iyri5RBke2aMdx7aqj5Ma2/5c/4W9+u7ko=
+github.com/cosmos/cosmos-sdk v0.42.2 h1:t2jIxV5DGN1ynOwuSIvQUUHr7tAePN1AG5ArM7o8qos=
 github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d h1:49RLWk1j44Xu4fjHb6JFYmeUnDORVwHNkDxaQ0ctCVU=
 github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d/go.mod h1:tSxLoYXyBmiFeKpvmq4dzayMdCjCnu8uqmCysIGBT2Y=
 github.com/cosmos/go-bip39 v1.0.0 h1:pcomnQdrdH22njcAatO0yWojsUnCO3y2tNoV1cb6hHY=
@@ -298,6 +301,7 @@ github.com/google/go-cmp v0.4.0/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/google/go-cmp v0.5.0/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/gofuzz v0.0.0-20170612174753-24818f796faf/go.mod h1:HP5RmnzzSNb993RKQDq4+1A4ia9nllfqcQFTQJedwGI=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
+github.com/google/gofuzz v1.1.1-0.20200604201612-c04b05f3adfa h1:Q75Upo5UN4JbPFURXZ8nLKYUvF85dyFRop/vQ0Rv+64=
 github.com/google/gofuzz v1.1.1-0.20200604201612-c04b05f3adfa/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/google/martian v2.1.0+incompatible/go.mod h1:9I4somxYTbIHy5NJKHRl3wXiIaQGbYVAs8BPL6v8lEs=
 github.com/google/pprof v0.0.0-20181206194817-3ea8567a2e57/go.mod h1:zfwlbNMJ+OItoe0UupaVj+oy1omPYYDuagoSzA8v9mc=
@@ -728,6 +732,7 @@ github.com/tendermint/tendermint v0.34.1 h1:TsJXY8+1NThc/XIENMv1ENzazriHBJJjeP6h
 github.com/tendermint/tendermint v0.34.1/go.mod h1:Aj3PIipBFSNO21r+Lq3TtzQ+uKESxkbA3yo/INM4QwQ=
 github.com/tendermint/tendermint v0.34.3 h1:9yEsf3WO5VAwPVwrmM+RffDMiijmNfWaBwNttHm0q5w=
 github.com/tendermint/tendermint v0.34.7 h1:lvBJFNqpDuEzKfLZKtUXOL5dMOpqHonHlO6LCujyl6E=
+github.com/tendermint/tendermint v0.34.8 h1:PMWgUx47FrNTsfhxCWzoiIlVAC1SE9+WBlnsF9oQW0I=
 github.com/tendermint/tm-db v0.4.0 h1:iPbCcLbf4nwDFhS39Zo1lpdS1X/cT9CkTlUx17FHQgA=
 github.com/tendermint/tm-db v0.4.0/go.mod h1:+Cwhgowrf7NBGXmsqFMbwEtbo80XmyrlY5Jsk95JubQ=
 github.com/tendermint/tm-db v0.4.1/go.mod h1:JsJ6qzYkCGiGwm5GHl/H5GLI9XLb6qZX7PRe425dHAY=
