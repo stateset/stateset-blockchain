@@ -10,19 +10,20 @@ import (
 
 // RegisterLegacyAminoCodec registers concrete types on the codec.
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgCreateLiquidityPool{}, "liquidity/MsgCreateLiquidityPool", nil)
-	cdc.RegisterConcrete(&MsgDepositToLiquidityPool{}, "liquidity/MsgDepositToLiquidityPool", nil)
-	cdc.RegisterConcrete(&MsgWithdrawFromLiquidityPool{}, "liquidity/MsgWithdrawFromLiquidityPool", nil)
-	cdc.RegisterConcrete(&MsgSwap{}, "liquidity/MsgSwap", nil)
+	cdc.RegisterConcrete(&MsgCreatePool{}, "liquidity/MsgCreatePool", nil)
+	cdc.RegisterConcrete(&MsgDepositWithinBatch{}, "liquidity/MsgDepositWithinBatch", nil)
+	cdc.RegisterConcrete(&MsgWithdrawWithinBatch{}, "liquidity/MsgWithdrawWithinBatch", nil)
+	cdc.RegisterConcrete(&MsgSwapWithinBatch{}, "liquidity/MsgSwapWithinBatch", nil)
 }
 
-// RegisterInterfaces registers the sdk.Tx interface.
+// RegisterInterfaces registers the x/liquidity interface types with the
+// interface registry
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgCreateLiquidityPool{},
-		&MsgDepositToLiquidityPool{},
-		&MsgWithdrawFromLiquidityPool{},
-		&MsgSwap{},
+		&MsgCreatePool{},
+		&MsgDepositWithinBatch{},
+		&MsgWithdrawWithinBatch{},
+		&MsgSwapWithinBatch{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }
@@ -31,12 +32,12 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 var (
 	amino = codec.NewLegacyAmino()
 
-	// ModuleCdc references the global x/staking module codec. Note, the codec should
-	// ONLY be used in certain instances of tests and for JSON encoding as Amino is
-	// still used for that purpose.
+	// ModuleCdc references the global x/liquidity module codec. Note, the
+	// codec should ONLY be used in certain instances of tests and for JSON
+	// encoding as Amino is still used for that purpose.
 	//
-	// The actual codec used for serialization should be provided to x/staking and
-	// defined at the application level.
+	// The actual codec used for serialization should be provided to x/liquidity
+	// and defined at the application level.
 	ModuleCdc = codec.NewAminoCodec(amino)
 )
 

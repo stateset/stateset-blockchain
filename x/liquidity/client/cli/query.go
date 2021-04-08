@@ -14,7 +14,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/version"
-	"github.com/tendermint/liquidity/x/liquidity/types"
+	"github.com/stateset/stateset-blockchain/x/liquidity/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module
@@ -32,10 +32,12 @@ func GetQueryCmd() *cobra.Command {
 		GetCmdQueryLiquidityPool(),
 		GetCmdQueryLiquidityPools(),
 		GetCmdQueryLiquidityPoolBatch(),
-		GetCmdQueryLiquidityPoolsBatch(),
-		GetCmdQueryPoolBatchDeposit(),
-		GetCmdQueryPoolBatchWithdraw(),
-		GetCmdQueryPoolBatchSwap(),
+		GetCmdQueryPoolBatchDepositMsgs(),
+		GetCmdQueryPoolBatchDepositMsg(),
+		GetCmdQueryPoolBatchWithdrawMsgs(),
+		GetCmdQueryPoolBatchWithdrawMsg(),
+		GetCmdQueryPoolBatchSwapMsgs(),
+		GetCmdQueryPoolBatchSwapMsg(),
 	)
 
 	return liquidityQueryCmd
@@ -56,8 +58,7 @@ $ %s query liquidity params
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -69,7 +70,7 @@ $ %s query liquidity params
 				return err
 			}
 
-			return clientCtx.PrintOutput(&res.Params)
+			return clientCtx.PrintProto(&res.Params)
 		},
 	}
 
@@ -92,8 +93,7 @@ $ %s query liquidity pool 1
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -119,7 +119,7 @@ $ %s query liquidity pool 1
 				return err
 			}
 
-			return clientCtx.PrintOutput(res)
+			return clientCtx.PrintProto(res)
 		},
 	}
 
@@ -142,8 +142,7 @@ $ %s query liquidity pools
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -157,7 +156,7 @@ $ %s query liquidity pools
 			if err != nil {
 				return err
 			}
-			return clientCtx.PrintOutput(result)
+			return clientCtx.PrintProto(result)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)
@@ -179,8 +178,7 @@ $ %s query liquidity batch 1
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -192,7 +190,7 @@ $ %s query liquidity batch 1
 			}
 
 			// Query the pool
-			res, err := queryClient.LiquidityPoolBatch(
+			result, err := queryClient.LiquidityPoolBatch(
 				context.Background(),
 				&types.QueryLiquidityPoolBatchRequest{PoolId: poolId},
 			)
@@ -201,73 +199,36 @@ $ %s query liquidity batch 1
 			}
 
 			params := &types.QueryLiquidityPoolBatchRequest{PoolId: poolId}
-			res, err = queryClient.LiquidityPoolBatch(context.Background(), params)
+			result, err = queryClient.LiquidityPoolBatch(context.Background(), params)
 			if err != nil {
 				return err
 			}
 
-			return clientCtx.PrintOutput(res)
+			return clientCtx.PrintProto(result)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)
 	return cmd
 }
 
-func GetCmdQueryLiquidityPoolsBatch() *cobra.Command {
+func GetCmdQueryPoolBatchDepositMsgs() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "batches",
-		Args:  cobra.NoArgs,
-		Short: "Query for all liquidity pools batch",
+		Use:   "deposits [pool-id]",
+		Args:  cobra.ExactArgs(1),
+		Short: "Query for all deposit messages on the batch of the liquidity pool specified pool-id",
 		Long: strings.TrimSpace(
-			fmt.Sprintf(`Query details about all liquidity pools batch on a network.
-Example:
-$ %s query liquidity batches
-`,
-				version.AppName,
-			),
-		),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
-			if err != nil {
-				return err
-			}
-
-			queryClient := types.NewQueryClient(clientCtx)
-			pageReq, err := client.ReadPageRequest(cmd.Flags())
-			if err != nil {
-				return err
-			}
-			result, err := queryClient.LiquidityPoolsBatch(context.Background(), &types.QueryLiquidityPoolsBatchRequest{Pagination: pageReq})
-			if err != nil {
-				return err
-			}
-			return clientCtx.PrintOutput(result)
-		},
-	}
-	flags.AddQueryFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func GetCmdQueryPoolBatchDeposit() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "deposits",
-		Args:  cobra.NoArgs,
-		Short: "Query for all deposit messages on the batch of the liquidity pool",
-		Long: strings.TrimSpace(
-			fmt.Sprintf(`Query for all deposit messages on the batch of the liquidity pool
+			fmt.Sprintf(`Query for all deposit messages on the batch of the liquidity pool specified pool-id
 if batch messages are normally processed and from the endblock,  
 the resulting state is applied and removed the messages from the beginblock in the next block.
+to query for past blocks, you can obtain by specifying the block height through the REST/gRPC API of a node that is not pruned
 Example:
-$ %s query liquidity deposits
+$ %s query liquidity deposits 1
 `,
 				version.AppName,
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -277,11 +238,18 @@ $ %s query liquidity deposits
 			if err != nil {
 				return err
 			}
-			result, err := queryClient.PoolBatchDepositMsgs(context.Background(), &types.QueryPoolBatchDepositMsgsRequest{Pagination: pageReq})
+
+			poolId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return fmt.Errorf("pool-id %s not a valid uint, please input a valid pool-id", args[0])
+			}
+
+			result, err := queryClient.PoolBatchDepositMsgs(context.Background(), &types.QueryPoolBatchDepositMsgsRequest{
+				PoolId: poolId, Pagination: pageReq})
 			if err != nil {
 				return err
 			}
-			return clientCtx.PrintOutput(result)
+			return clientCtx.PrintProto(result)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)
@@ -289,38 +257,46 @@ $ %s query liquidity deposits
 	return cmd
 }
 
-func GetCmdQueryPoolBatchWithdraw() *cobra.Command {
+func GetCmdQueryPoolBatchDepositMsg() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "withdraws",
-		Args:  cobra.NoArgs,
-		Short: "Query for all withdraw messages on the batch of the liquidity pool",
+		Use:   "deposit [pool-id] [msg-index]",
+		Args:  cobra.ExactArgs(2),
+		Short: "Query for the deposit message on the batch of the liquidity pool specified pool-id and msg-index",
 		Long: strings.TrimSpace(
-			fmt.Sprintf(`Query for all withdraws messages on the batch of the liquidity pool
-if batch messages are normally processed and from the endblock,  
+			fmt.Sprintf(`Query for the deposit message on the batch of the liquidity pool specified pool-id and msg-index
+if the batch message are normally processed and from the endblock,  
 the resulting state is applied and removed the messages from the beginblock in the next block.
+to query for past blocks, you can obtain by specifying the block height through the REST/gRPC API of a node that is not pruned
 Example:
-$ %s query liquidity withdraws
+$ %s query liquidity deposit 1 20
 `,
 				version.AppName,
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-			pageReq, err := client.ReadPageRequest(cmd.Flags())
+
+			poolId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return fmt.Errorf("pool-id %s not a valid uint, please input a valid pool-id", args[0])
+			}
+
+			msgIndex, err := strconv.ParseUint(args[1], 10, 64)
+			if err != nil {
+				return fmt.Errorf("msg-index %s not a valid uint, please input a valid msg-index", args[1])
+			}
+
+			result, err := queryClient.PoolBatchDepositMsg(context.Background(), &types.QueryPoolBatchDepositMsgRequest{
+				PoolId: poolId, MsgIndex: msgIndex})
 			if err != nil {
 				return err
 			}
-			result, err := queryClient.PoolBatchWithdrawMsgs(context.Background(), &types.QueryPoolBatchWithdrawMsgsRequest{Pagination: pageReq})
-			if err != nil {
-				return err
-			}
-			return clientCtx.PrintOutput(result)
+			return clientCtx.PrintProto(result)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)
@@ -328,24 +304,24 @@ $ %s query liquidity withdraws
 	return cmd
 }
 
-func GetCmdQueryPoolBatchSwap() *cobra.Command {
+func GetCmdQueryPoolBatchWithdrawMsgs() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "swaps",
-		Args:  cobra.NoArgs,
-		Short: "Query for all swap messages on the batch of the liquidity pool",
+		Use:   "withdraws [pool-id]",
+		Args:  cobra.ExactArgs(1),
+		Short: "Query for all withdraw messages on the batch of the liquidity pool specified pool-id",
 		Long: strings.TrimSpace(
-			fmt.Sprintf(`Query for all swap messages on the batch of the liquidity pool
+			fmt.Sprintf(`Query for all withdraws messages on the batch of the liquidity pool specified pool-id
 if batch messages are normally processed and from the endblock,  
 the resulting state is applied and removed the messages from the beginblock in the next block.
+to query for past blocks, you can obtain by specifying the block height through the REST/gRPC API of a node that is not pruned
 Example:
-$ %s query liquidity swaps
+$ %s query liquidity withdraws 1
 `,
 				version.AppName,
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -355,11 +331,158 @@ $ %s query liquidity swaps
 			if err != nil {
 				return err
 			}
-			result, err := queryClient.PoolBatchSwapMsgs(context.Background(), &types.QueryPoolBatchSwapMsgsRequest{Pagination: pageReq})
+
+			poolId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return fmt.Errorf("pool-id %s not a valid uint, please input a valid pool-id", args[0])
+			}
+
+			result, err := queryClient.PoolBatchWithdrawMsgs(context.Background(), &types.QueryPoolBatchWithdrawMsgsRequest{
+				PoolId: poolId, Pagination: pageReq})
 			if err != nil {
 				return err
 			}
-			return clientCtx.PrintOutput(result)
+			return clientCtx.PrintProto(result)
+		},
+	}
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetCmdQueryPoolBatchWithdrawMsg() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "withdraw [pool-id] [msg-index]",
+		Args:  cobra.ExactArgs(2),
+		Short: "Query for the withdraw message on the batch of the liquidity pool specified pool-id and msg-index",
+		Long: strings.TrimSpace(
+			fmt.Sprintf(`Query for the withdraw message on the batch of the liquidity pool specified pool-id and msg-index
+if the batch message are normally processed and from the endblock,  
+the resulting state is applied and removed the messages from the beginblock in the next block.
+to query for past blocks, you can obtain by specifying the block height through the REST/gRPC API of a node that is not pruned
+Example:
+$ %s query liquidity withdraw 1 20
+`,
+				version.AppName,
+			),
+		),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			poolId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return fmt.Errorf("pool-id %s not a valid uint, please input a valid pool-id", args[0])
+			}
+
+			msgIndex, err := strconv.ParseUint(args[1], 10, 64)
+			if err != nil {
+				return fmt.Errorf("msg-index %s not a valid uint, please input a valid msg-index", args[1])
+			}
+
+			result, err := queryClient.PoolBatchWithdrawMsg(context.Background(), &types.QueryPoolBatchWithdrawMsgRequest{
+				PoolId: poolId, MsgIndex: msgIndex})
+			if err != nil {
+				return err
+			}
+			return clientCtx.PrintProto(result)
+		},
+	}
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetCmdQueryPoolBatchSwapMsgs() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "swaps [pool-id]",
+		Args:  cobra.ExactArgs(1),
+		Short: "Query for all swap messages on the batch of the liquidity pool specified pool-id",
+		Long: strings.TrimSpace(
+			fmt.Sprintf(`Query for all swap messages on the batch of the liquidity pool specified pool-id
+if batch messages are normally processed and from the endblock,  
+the resulting state is applied and removed the messages from the beginblock in the next block.
+to query for past blocks, you can obtain by specifying the block height through the REST/gRPC API of a node that is not pruned
+Example:
+$ %s query liquidity swaps 1
+`,
+				version.AppName,
+			),
+		),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			poolId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return fmt.Errorf("pool-id %s not a valid uint, please input a valid pool-id", args[0])
+			}
+
+			result, err := queryClient.PoolBatchSwapMsgs(context.Background(), &types.QueryPoolBatchSwapMsgsRequest{
+				PoolId: poolId, Pagination: pageReq})
+			if err != nil {
+				return err
+			}
+			return clientCtx.PrintProto(result)
+		},
+	}
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetCmdQueryPoolBatchSwapMsg() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "swap [pool-id] [msg-index]",
+		Args:  cobra.ExactArgs(2),
+		Short: "Query for the swap message on the batch of the liquidity pool specified pool-id and msg-index",
+		Long: strings.TrimSpace(
+			fmt.Sprintf(`Query for the swap message on the batch of the liquidity pool specified pool-id and msg-index
+if the batch message are normally processed and from the endblock,  
+the resulting state is applied and removed the messages from the beginblock in the next block.
+to query for past blocks, you can obtain by specifying the block height through the REST/gRPC API of a node that is not pruned
+Example:
+$ %s query liquidity swap 1 20
+`,
+				version.AppName,
+			),
+		),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			poolId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return fmt.Errorf("pool-id %s not a valid uint, please input a valid pool-id", args[0])
+			}
+
+			msgIndex, err := strconv.ParseUint(args[1], 10, 64)
+			if err != nil {
+				return fmt.Errorf("msg-index %s not a valid uint, please input a valid msg-index", args[1])
+			}
+
+			result, err := queryClient.PoolBatchSwapMsg(context.Background(), &types.QueryPoolBatchSwapMsgRequest{
+				PoolId: poolId, MsgIndex: msgIndex})
+			if err != nil {
+				return err
+			}
+			return clientCtx.PrintProto(result)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)

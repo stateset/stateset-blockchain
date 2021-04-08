@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stateset.agreement.v1alpha1;
+package stateset.agreement.v1beta1;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -12,16 +12,16 @@ service Query {
 
   // Agreements returns agreeement details based on agreement.
   rpc Agreements(QueryAgreementsRequest) returns (QueryAgreementsResponse) {
-    option (google.api.http).get = "/stateset/agreement/v1alpha1/agreements/all";
+    option (google.api.http).get = "/stateset/agreement/v1beta1/agreements/all";
   }
 
   // Agreement returns agreeement details based on agreement.
   rpc Agreement(QueryAgreementRequest) returns (QueryAgreementResponse) {
-    option (google.api.http).get = "/stateset/agreement/v1alpha1/agreements/info";
+    option (google.api.http).get = "/stateset/agreement/v1beta1/agreements/info";
   }
 
   rpc AgreementParams(QueryAgreementParamsRequest) returns (QueryAgreementParamsResponse) {
-    option (google.api.http).get = "/stateset/agreement/v1alpha1/{agreementId}/params";
+    option (google.api.http).get = "/stateset/agreement/v1beta1/{agreementId}/params";
   }
 
 }

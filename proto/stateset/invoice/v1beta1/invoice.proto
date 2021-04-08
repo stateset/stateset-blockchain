@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stateset.invoice.v1alpha1;
+package stateset.invoice.v1beta1;
 
 option go_package = "github.com/stateset/stateset-blockchain/x/invoice/types";
 

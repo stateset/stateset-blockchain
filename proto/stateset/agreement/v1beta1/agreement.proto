@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stateset.agreement.v1alpha1;
+package stateset.agreement.v1beta1;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";

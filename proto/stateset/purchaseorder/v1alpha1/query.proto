@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stateset.purchaseorder.v1alpha1;
+package stateset.purchaseorder.v1beta1;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -12,12 +12,12 @@ service Query {
 
   // PurchaseOrders returns purchase order details based on purchase order.
   rpc PurchaseOrders(QueryPurchaseOrdersRequest) returns (QueryPurchaseOrdersResponse) {
-    option (google.api.http).get = "/stateset/purchaseorder/v1alpha1/purchaseorders/list";
+    option (google.api.http).get = "/stateset/purchaseorder/v1beta1/purchaseorders/list";
   }
 
   // Purchase Order returns purchase order details based on purchase order.
   rpc PurchaseOrder(QueryPurchaseOrderRequest) returns (QueryPurchaseOrderResponse) {
-    option (google.api.http).get = "/stateset/purchaseorder/v1alpha1/purchaseorders/info";
+    option (google.api.http).get = "/stateset/purchaseorder/v1beta1/purchaseorders/info";
   }
 
 }

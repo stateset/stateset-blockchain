@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package stateset.purchaseorder.v1alpha1;
+package stateset.purchaseorder.v1beta1;
 
 import "gogoproto/gogo.proto";
 

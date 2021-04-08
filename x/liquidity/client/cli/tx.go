@@ -28,47 +28,48 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	liquidityTxCmd.AddCommand(
-		NewCreateLiquidityPoolCmd(),
-		NewDepositToLiquidityPoolCmd(),
-		NewWithdrawFromLiquidityPoolCmd(),
-		NewSwapCmd(),
+		NewCreatePoolCmd(),
+		NewDepositWithinBatchCmd(),
+		NewWithdrawWithinBatchCmd(),
+		NewSwapWithinBatchCmd(),
 	)
 
 	return liquidityTxCmd
 }
 
-func NewCreateLiquidityPoolCmd() *cobra.Command {
+// Create new liquidity pool with the specified pool type and deposit coins.
+func NewCreatePoolCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-pool [pool-type-index] [deposit-coins]",
+		Use:   "create-pool [pool-type-id] [deposit-coins]",
 		Args:  cobra.ExactArgs(2),
-		Short: "Create Liquidity pool with the specified pool-type, deposit coins",
+		Short: "Create new liquidity pool with the specified pool type and deposit coins",
 		Long: strings.TrimSpace(
-			fmt.Sprintf(`Create Liquidity pool with the specified pool-type-index, deposit coins for reserve
+			fmt.Sprintf(`Create new liquidity pool with the specified pool type and deposit coins.
 Example:
-$ %s tx liquidity create-pool 1 100000000acoin,100000000bcoin --from mykey
-Currently, only the default pool-type-index 1 is available on this version
-the number of deposit coins must be two in the pool-type-index 1
-{"pool_type_index":1,"name":"ConstantProductLiquidityPool","min_reserve_coin_num":2,"max_reserve_coin_num":2,"description":""}
+$ %s tx liquidity create-pool 1 1000000000uatom,50000000000uusd --from mykey
+In this example, user requests to create new liquidity pool with 100000000stake and 100000000token.
+User must create with a combination of coins that are not already exist in the network.
+In this version, pool-type-id 1 is only available, which requires two different coins.
+{"id":1,"name":"ConstantProductLiquidityPool","min_reserve_coin_num":2,"max_reserve_coin_num":2,"description":""}
 `,
 				version.AppName,
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 			poolCreator := clientCtx.GetFromAddress()
 
 			// Get pool type index
-			poolTypeIndex, err := strconv.ParseUint(args[0], 10, 32)
+			poolTypeId, err := strconv.ParseUint(args[0], 10, 32)
 			if err != nil {
-				return fmt.Errorf("pool-type-index %s not a valid uint, please input a valid pool-type-index", args[0])
+				return fmt.Errorf("pool-type-id %s not a valid uint, please input a valid pool-type-id", args[0])
 			}
 
 			// Get deposit coins
-			depositCoins, err := sdk.ParseCoins(args[1])
+			depositCoins, err := sdk.ParseCoinsNormalized(args[1])
 			if err != nil {
 				return err
 			}
@@ -78,16 +79,15 @@ the number of deposit coins must be two in the pool-type-index 1
 				return err
 			}
 
-			if poolTypeIndex != 1 {
+			if poolTypeId != 1 {
 				return types.ErrPoolTypeNotExists
 			}
 
 			if depositCoins.Len() != 2 {
-				return fmt.Errorf("the number of deposit coins must be two in the pool-type-index 1")
+				return fmt.Errorf("the number of deposit coins must be two in the pool-type-id 1")
 			}
 
-			reserveCoinDenoms := []string{depositCoins[0].Denom, depositCoins[1].Denom}
-			msg := types.NewMsgCreateLiquidityPool(poolCreator, uint32(poolTypeIndex), reserveCoinDenoms, depositCoins)
+			msg := types.NewMsgCreatePool(poolCreator, uint32(poolTypeId), depositCoins)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -100,26 +100,26 @@ the number of deposit coins must be two in the pool-type-index 1
 	return cmd
 }
 
-// Deposit submit to the batch of the Liquidity pool with the specified pool-id, deposit coins
-func NewDepositToLiquidityPoolCmd() *cobra.Command {
+// Deposit coins to the specified liquidity pool.
+func NewDepositWithinBatchCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "deposit [pool-id] [deposit-coins]",
 		Args:  cobra.ExactArgs(2),
-		Short: "Deposit submit to the batch of the Liquidity pool with the specified pool-id, deposit coins",
+		Short: "Deposit coins to the specified liquidity pool",
 		Long: strings.TrimSpace(
-			fmt.Sprintf(`Deposit submit to the batch of the Liquidity pool with the specified pool-id, deposit coins for reserve
-this requests are stacked in the batch of the liquidity pool, not immediately processed and 
-processed in the endblock at once with other requests.
+			fmt.Sprintf(`Deposit coins to the specified liquidity pool.
+This swap request may not be processed immediately since it will be accumulated in the batch of the liquidity pool.
+This will be processed with other requests at once in every end of batch.
 Example:
-$ %s tx liquidity deposit 1 100000000acoin,100000000bcoin --from mykey
-You should deposit the same coin as the reserve coin.
+$ %s tx liquidity deposit 1 100000000uatom,5000000000uusd --from mykey
+In this example, user requests to deposit 100000000uatom and 5000000000uusd to the specified liquidity pool.
+User must deposit the same coin denoms as the reserve coins.
 `,
 				version.AppName,
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -132,7 +132,7 @@ You should deposit the same coin as the reserve coin.
 			}
 
 			// Get deposit coins
-			depositCoins, err := sdk.ParseCoins(args[1])
+			depositCoins, err := sdk.ParseCoinsNormalized(args[1])
 			if err != nil {
 				return err
 			}
@@ -143,10 +143,10 @@ You should deposit the same coin as the reserve coin.
 			}
 
 			if depositCoins.Len() != 2 {
-				return fmt.Errorf("the number of deposit coins must be two in the pool-type-index 1")
+				return fmt.Errorf("the number of deposit coins must be two in the pool-type-id 1")
 			}
 
-			msg := types.NewMsgDepositToLiquidityPool(depositor, poolId, depositCoins)
+			msg := types.NewMsgDepositWithinBatch(depositor, poolId, depositCoins)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -159,26 +159,26 @@ You should deposit the same coin as the reserve coin.
 	return cmd
 }
 
-// Withdraw submit to the batch from the Liquidity pool with the specified pool-id, pool-coin of the pool
-func NewWithdrawFromLiquidityPoolCmd() *cobra.Command {
+// Withdraw pool coin from the specified liquidity pool.
+func NewWithdrawWithinBatchCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "withdraw [pool-id] [pool-coin]",
 		Args:  cobra.ExactArgs(2),
-		Short: "Withdraw submit to the batch from the Liquidity pool with the specified pool-id, pool-coin of the pool",
+		Short: "Withdraw pool coin from the specified liquidity pool",
 		Long: strings.TrimSpace(
-			fmt.Sprintf(`Withdraw submit to the batch from the Liquidity pool with the specified pool-id, pool-coin of the pool
-this requests are stacked in the batch of the liquidity pool, not immediately processed and 
-processed in the endblock at once with other requests.
+			fmt.Sprintf(`Withdraw pool coin from the specified liquidity pool.
+This swap request may not be processed immediately since it will be accumulated in the batch of the liquidity pool.
+This will be processed with other requests at once in every end of batch. 
 Example:
-$ %s tx liquidity withdraw 1 1000cosmos1d9w9j3rq5aunkrkdm86paduz4attl78thlj07f --from mykey
-You should request the matched pool-coin as the pool.
+$ %s tx liquidity withdraw 1 10000pool96EF6EA6E5AC828ED87E8D07E7AE2A8180570ADD212117B2DA6F0B75D17A6295 --from mykey
+In this example, user requests to withdraw 10000 pool coin from the specified liquidity pool. 
+User must request the appropriate pool coin from the specified pool.
 `,
 				version.AppName,
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -191,7 +191,7 @@ You should request the matched pool-coin as the pool.
 			}
 
 			// Get pool coin of the target pool
-			poolCoin, err := sdk.ParseCoin(args[1])
+			poolCoin, err := sdk.ParseCoinNormalized(args[1])
 			if err != nil {
 				return err
 			}
@@ -201,7 +201,7 @@ You should request the matched pool-coin as the pool.
 				return err
 			}
 
-			msg := types.NewMsgWithdrawFromLiquidityPool(withdrawer, poolId, poolCoin)
+			msg := types.NewMsgWithdrawWithinBatch(withdrawer, poolId, poolCoin)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -214,63 +214,56 @@ You should request the matched pool-coin as the pool.
 	return cmd
 }
 
-// Swap offer to the Liquidity pool with the specified the pool info with offer-coin, order-price
-func NewSwapCmd() *cobra.Command {
+// Swap offer coin with demand coin from the specified liquidity pool with the given order price.
+func NewSwapWithinBatchCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "swap [pool-id] [pool-type-index] [swap-type] [offer-coin] [demand-coin-denom] [order-price]",
+		Use:   "swap [pool-id] [swap-type-id] [offer-coin] [demand-coin-denom] [order-price] [swap-fee-rate]",
 		Args:  cobra.ExactArgs(6),
-		Short: "Swap offer to the Liquidity pool with the specified the pool info with offer-coin, order-price",
+		Short: "Swap offer coin with demand coin from the specified liquidity pool with the given order price",
 		Long: strings.TrimSpace(
-			fmt.Sprintf(`Swap offer to the Liquidity pool with the specified pool-id, pool-type-index, swap-type,
-demand-coin-denom with the coin and the price you're offering
-this requests are stacked in the batch of the liquidity pool, not immediately processed and 
-processed in the endblock at once with other requests.
+			fmt.Sprintf(`Swap offer coin with demand coin from the specified liquidity pool with the given order price.
+This swap request may not be processed immediately since it will be accumulated in the batch of the liquidity pool.
+This will be processed with other requests at once in every end of batch. 
+Note that the order of swap requests is ignored since the universal swap price is calculated within every batch to prevent front running.
+The requested swap is executed with a swap price calculated from given swap price function of the pool, the current other swap requests and the current liquidity pool coin reserve status.
+Swap orders are executed only when execution swap price is equal or better than submitted order price of the swap order.
 Example:
-$ %s tx liquidity swap 2 1 1 100000000acoin bcoin 1.15 --from mykey
-You should request the same each field as the pool.
-Currently, only the default swap-type 1 is available on this version
-The detailed swap algorithm can be found here.
-https://github.com/tendermint/liquidity
-`,
+$ %s liquidityd tx liquidity swap 1 1 50000000uusd uatom 0.019 0.003 --from mykey
+In this example, we assume there exists a liquidity pool with 1000000000uatom and 50000000000uusd.
+User requests to swap 50000000uusd for at least 950000uatom with the order price of 0.019 and swap fee rate of 0.003.
+User must have sufficient balance half of the swap-fee-rate of the offer coin to reserve offer coin fee.
+The order price is the exchange ratio of X/Y where X is the amount of the first coin and Y is the amount of the second coin when their denoms are sorted alphabetically. 
+Increasing order price means to decrease the possibility for your request to be processed and end up buying uatom at cheaper price than the pool price.  
+For explicit calculations, you must enter the swap-fee-rate value of the current parameter state.
+In this version, swap-type-id 1 is only available. The detailed swap algorithm can be found at https://github.com/tendermint/liquidity`,
 				version.AppName,
 			),
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 			swapRequester := clientCtx.GetFromAddress()
 
-			// Get pool type index
+			// Get pool id
 			poolId, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
 				return fmt.Errorf("pool-id %s not a valid uint, please input a valid pool-id", args[0])
 			}
 
-			// Get pool type index
-			poolTypeIndex, err := strconv.ParseUint(args[1], 10, 32)
+			// Get swap type
+			swapTypeId, err := strconv.ParseUint(args[1], 10, 32)
 			if err != nil {
-				return fmt.Errorf("pool-type-index %s not a valid uint, please input a valid pool-type-index", args[1])
+				return fmt.Errorf("swap-type-id %s not a valid uint, please input a valid swap-type-id", args[2])
 			}
 
-			// Get pool type index
-			swapType, err := strconv.ParseUint(args[2], 10, 32)
-			if err != nil {
-				return fmt.Errorf("swap-type %s not a valid uint, please input a valid swap-type", args[2])
-			}
-
-			if poolTypeIndex != 1 {
-				return types.ErrPoolTypeNotExists
-			}
-
-			if swapType != 1 {
-				return types.ErrEmptySwapRequesterAddr
+			if swapTypeId != 1 {
+				return types.ErrSwapTypeNotExists
 			}
 
 			// Get offer coin
-			offerCoin, err := sdk.ParseCoin(args[3])
+			offerCoin, err := sdk.ParseCoinNormalized(args[2])
 			if err != nil {
 				return err
 			}
@@ -280,21 +273,22 @@ https://github.com/tendermint/liquidity
 				return err
 			}
 
-			err = sdk.ValidateDenom(args[4])
+			err = sdk.ValidateDenom(args[3])
 			if err != nil {
 				return err
 			}
 
-			if err != nil {
-				return fmt.Errorf("pool-type-index %s not a valid uint, please input a valid pool-type-index", args[1])
-			}
-
-			orderPrice, err := sdk.NewDecFromStr(args[5])
+			orderPrice, err := sdk.NewDecFromStr(args[4])
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgSwap(swapRequester, poolId, uint32(poolTypeIndex), uint32(swapType), offerCoin, args[4], orderPrice)
+			swapFeeRate, err := sdk.NewDecFromStr(args[5])
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgSwapWithinBatch(swapRequester, poolId, uint32(swapTypeId), offerCoin, args[3], orderPrice, swapFeeRate)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

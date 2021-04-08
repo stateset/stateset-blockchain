@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stateset.agreement.v1alpha1;
+package stateset.agreement.v1beta1;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -7,7 +7,7 @@ import "google/protobuf/any.proto";
 
 option go_package = "github.com/stateset/stateset-blockchain/x/agreements/types";
 
-// Msg is the stateset.agreement.v1alpha1 Msg service
+// Msg is the stateset.agreement.v1beta1 Msg service
 service Msg {
 
   // Create defines a method to create a new agreement.
