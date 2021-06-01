@@ -44,33 +44,25 @@ type MsgCreatePurchaseOrder struct {
 }
 
 // NewMsgCreatePurchaseOrder creates a new message to create an purchaseorder
-func NewMsgCreatePurchaseOrder(agreementID, purchaseOrderID, body string, lender sdk.AccAddress, source string) MsgCreatePurchaseOrder {
+func NewMsgCreatePurchaseOrder(purchaseOrderID) MsgCreatePurchaseOrder {
 	return MsgCreatePurchaseOrder {
-		AgreementID: agreementID,
 		PurchaseOrderID:    purchaseorderID,
-		Body:        body,
-		Lender:     lender,
-		Source:      source,
 	}
 }
 
-// Route is the name of the route for loan
-func (msg MsgCreatePurchaseOrder) Route() string {
-	return RouterKey
-}
+// Route is the name of the route
+func (msg MsgCreatePurchaseOrder) Route() string { return RouterKey }
 
 // Type is the name for the Msg
-func (msg MsgCreatePurchaseOrder) Type() string {
-	return TypeMsgCreatePurchaseOrder
-}
+func (msg MsgCreatePurchaseOrder) Type() string { return TypeMsgCreatePurchaseOrder }
 
 // ValidateBasic validates basic fields of the Msg
 func (msg MsgCreatePurchaseOrder) ValidateBasic() sdk.Error {
-	if len(msg.Body) == 0 {
-		return ErrInvalidBodyTooShort(msg.Body)
+	if len(msg.Description) == 0 {
+		return ErrInvalidDescrtiptionTooShort(msg.Description)
 	}
-	if len(msg.AgreementID) == 0 {
-		return ErrInvalidAgreementID(msg.AgreementID)
+	if len(msg.PurchaseOrderID) == 0 {
+		return ErrInvalidPurchaseOrderID(msg.PurchaseOrderID)
 	}
 	if len(msg.Counterparty) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Counterparty.String())

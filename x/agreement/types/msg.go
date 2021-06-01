@@ -14,7 +14,7 @@ const (
 	TypeMsgActivateAgreement = "activate_agreement"
 	// TypeMsgRenewAgreement represents the type of the message for amending an agreement
 	TypeMsgAmendAgreement = "amend_agreement"
-	// TypeMsgRenewAgreement represents the type of the message for amending an agreement
+	// TypeMsgRenewAgreement represents the type of the message for renewing an agreement
 	TypeMsgRenewAgreement = "renew_agreement"
 	// TypeMsgTerminateAgreement represents the type of the message for renewing an agreement
 	TypeMsgTerminateAgreement = "terminate_agreement"
@@ -33,36 +33,44 @@ var _ sdk.Msg = &MsgExpireAgreement{}
 
 // MsgCreateAgreement defines a message to create an agreement
 type MsgCreateAgreement struct {
-	AgreementID 	  string 			 `json:"agreement_id"`
-	Body          string         	 `json:"body"`
-	Lender        sdk.AccAddress     `json:"counterparty"`
-	Source        string             `json:"source,omitempty"`
+	AgreementID     uint64         `json:"agreementid"`
+	AgreementName string `json:"agreementName"`
+	AgreementNumber string `json:"agreementNumber"`
+	AgreementType string `json:"agreementType"`
+	AgreementStatus string `json:"agreementStatus"`
+	AgreementNumber string `json:"agreementNumber"`
+	Party string `json:"party"`
+	Counterparty string `json:"counterparty"`
+	AgreementStartBlock string `json:"AgreementStartBlock"`
+	AgreementEndBlock string `json:"AgreementEndBlock"`
 }
 
 // NewMsgCreateAgreement creates a new message to create an agreement
-func NewMsgCreateAgreement(agreementID, body string, lender sdk.AccAddress, source string) MsgCreateAgreement {
+func NewMsgCreateAgreement(agreementID string, agreementNumber string, agreementName string, agreementType string, agreementStatus string, totalAgreementValue int, party sdk.AccAddress, counterparty sdk.AccAddress, agreementStartBlock string, agreementEndBlock string) MsgCreateAgreement {
 	return MsgCreateAgreement {
 		AgreementID:    agreementID,
-		Body:        body,
-		Lender:     lender,
-		Source:      source,
+		AgreementNumber: agreementNumber,
+		AgreementName: agreementName,
+		AgreementType: agreementType,
+		AgreementStatus: agreementStatus,
+		TotalAgreementValue: totalAgreementValue,
+		Party: party,
+		Counterparty: counterparty
+		AgreementStartBlock: agreementStartBlock,
+		AgreementEndBlock: agreementEndBlock
 	}
 }
 
 // Route is the name of the route for agreement
-func (msg MsgCreateAgreement) Route() string {
-	return RouterKey
-}
+func (msg MsgCreateAgreement) Route() string { return RouterKey }
 
 // Type is the name for the Msg
-func (msg MsgCreateAgreement) Type() string {
-	return TypeMsgCreateAgreement
-}
+func (msg MsgCreateAgreement) Type() string { return TypeMsgCreateAgreement }
 
 // ValidateBasic validates basic fields of the Msg
 func (msg MsgCreateAgreement) ValidateBasic() sdk.Error {
-	if len(msg.Body) == 0 {
-		return ErrInvalidBodyTooShort(msg.Body)
+	if len(msg.TotalAgreementValue) == 0 {
+		return ErrInvalidAgreementTooSmall(msg.TotalAgreementValue)
 	}
 	if len(msg.Counterparty) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Counterparty.String())
@@ -79,10 +87,9 @@ func (msg MsgCreateAgreement) GetSignBytes() []byte {
 
 
 // Update Agreement
-func NewMsgUpdateAgreement(creator string, id string, agreementNumber string, agreementName string, agreementType string, agreementStatus string, totalAgreementValue string, party string, counterparty string, agreementStartDate string, agreementEndDate string) *MsgUpdateAgreement {
+func NewMsgUpdateAgreement(creator string, agreementId string, agreementNumber string, agreementName string, agreementType string, agreementStatus string, totalAgreementValue string, party string, counterparty string, AgreementStartBlock string, AgreementEndBlock string) *MsgUpdateAgreement {
 	return &MsgUpdateAgreement{
-		  Id: id,
-		  Creator: creator,
+	  AgreeemntId: agreementId,
 	  AgreementNumber: agreementNumber,
 	  AgreementName: agreementName,
 	  AgreementType: agreementType,
@@ -90,18 +97,14 @@ func NewMsgUpdateAgreement(creator string, id string, agreementNumber string, ag
 	  TotalAgreementValue: totalAgreementValue,
 	  Party: party,
 	  Counterparty: counterparty,
-	  AgreementStartDate: agreementStartDate,
-	  AgreementEndDate: agreementEndDate,
+	  AgreementStartBlock: AgreementStartBlock,
+	  AgreementEndBlock: AgreementEndBlock,
 	  }
   }
   
-  func (msg *MsgUpdateAgreement) Route() string {
-	return RouterKey
-  }
+  func (msg *MsgUpdateAgreement) Route() string { return RouterKey }
   
-  func (msg *MsgUpdateAgreement) Type() string {
-	return "UpdateAgreement"
-  }
+  func (msg *MsgUpdateAgreement) Type() string { return "UpdateAgreement" }
   
   func (msg *MsgUpdateAgreement) GetSigners() []sdk.AccAddress {
 	creator, err := sdk.AccAddressFromBech32(msg.Creator)
@@ -409,20 +412,20 @@ type MsgEditAgreement struct {
 	AgreementName string `json:"agreementName"`
 	AgreementNumber string `json:"agreementNumber"`
 	TotalAgreementValue string `json:"totalAgreementValue"`
-	AgreementStartDate string `json:"agreementStartDate"`
-	AgreementEndDate string `json:"agreementEndDate"`
+	AgreementStartBlock string `json:"AgreementStartBlock"`
+	AgreementEndBlock string `json:"AgreementEndBlock"`
 	Editor sdk.AccAddress `json:"editor"`
 }
 
 // NewMsgEditAgreement creates a new message to edit a loan
-func NewMsgEditAgreement(agreementId uint64, agreementName string, agreementNumber, totalAgreementValue sdk.Coin, agreementStartDate time.Time, agreementEndDate time.Time, editor sdk.AccAddress) MsgEditLoan {
+func NewMsgEditAgreement(agreementId uint64, agreementName string, agreementNumber, totalAgreementValue sdk.Coin, AgreementStartBlock time.Time, AgreementEndBlock time.Time, editor sdk.AccAddress) MsgEditLoan {
 	return MsgEditLoan{
 		ID:     agreementid,
 		AgreementName: agreementName,
 		AgreementNumber: agreementNumber,
 		TotalAgreementValue: totalAgreementValue,
-		AgreementStartDate: agreementStartDate,
-		AgreementEndDate: agreementEndDate,
+		AgreementStartBlock: AgreementStartBlock,
+		AgreementEndBlock: AgreementEndBlock,
 		Editor: editor,
 	}
 }

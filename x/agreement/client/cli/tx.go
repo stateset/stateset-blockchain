@@ -23,8 +23,8 @@ import (
 	"github.com/stateset/stateset-blockchain/types"
 )
 
-// GetTxCmd returns the transaction commands for this module
-func GetTxCmd(cdc *codec.Codec) *cobra.Command {
+// TxCmd returns the transaction commands for this module
+func TxCmd(cdc *codec.Codec) *cobra.Command {
 	agreementTxCmd := &cobra.Command{
 		Use:                        "agreement",
 		Short:                      "agreement transactions subcommands",
@@ -49,8 +49,8 @@ func GetTxCmd(cdc *codec.Codec) *cobra.Command {
 // CmdCreateAgreeement cli command for creating atomic swaps
 func CmdCreateAgreement() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-agreement [agreementNumber] [agreementName] [agreementType] [agreementStatus] [totalAgreementValue] [party] [counterparty] [agreementStartDate] [agreementEndDate]",
-		Short: "create a new agreement",
+		Use:   "create-agreement [agreementNumber] [agreementName] [agreementType] [agreementStatus] [totalAgreementValue] [party] [counterparty] [AgreementStartBlock] [AgreementEndBlock]",
+		Short: "Creates a new agreement",
 		Args: cobra.ExactArgs(9),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsAgreementNumber := string(args[0])
@@ -60,15 +60,15 @@ func CmdCreateAgreement() *cobra.Command {
 			argsTotalAgreementValue := string(args[4])
 			argsParty := string(args[5])
 			argsCounterparty := string(args[6])
-			argsAgreementStartDate := string(args[7])
-			argsAgreementEndDate := string(args[8])
+			argsAgreementStartBlock := string(args[7])
+			argsAgreementEndBlock := string(args[8])
 			
 				  clientCtx, err := client.GetClientTxContext(cmd)
 				  if err != nil {
 					  return err
 				  }
 	  
-				  msg := types.NewMsgCreateAgreement(clientCtx.GetFromAddress().String(), string(argsAgreementNumber), string(argsAgreementName), string(argsAgreementType), string(argsAgreementStatus), string(argsTotalAgreementValue), string(argsParty), string(argsCounterparty), string(argsAgreementStartDate), string(argsAgreementEndDate))
+				  msg := types.NewMsgCreateAgreement(clientCtx.GetFromAddress().String(), string(argsAgreementNumber), string(argsAgreementName), string(argsAgreementType), string(argsAgreementStatus), string(argsTotalAgreementValue), string(argsParty), string(argsCounterparty), string(argsAgreementStartBlock), string(argsAgreementEndBlock))
 				  if err := msg.ValidateBasic(); err != nil {
 					  return err
 				  }
@@ -83,7 +83,7 @@ func CmdCreateAgreement() *cobra.Command {
 
 	  func CmdUpdateAgreement() *cobra.Command {
 		cmd := &cobra.Command{
-			Use:   "update-agreement [id] [agreementNumber] [agreementName] [agreementType] [agreementStatus] [totalAgreementValue] [party] [counterparty] [agreementStartDate] [agreementEndDate]",
+			Use:   "update-agreement [id] [agreementNumber] [agreementName] [agreementType] [agreementStatus] [totalAgreementValue] [party] [counterparty] [AgreementStartBlock] [AgreementEndBlock]",
 			Short: "Update a agreement",
 			Args:  cobra.ExactArgs(10),
 			RunE: func(cmd *cobra.Command, args []string) error {
@@ -95,15 +95,15 @@ func CmdCreateAgreement() *cobra.Command {
 		  argsTotalAgreementValue := string(args[5])
 		  argsParty := string(args[6])
 		  argsCounterparty := string(args[7])
-		  argsAgreementStartDate := string(args[8])
-		  argsAgreementEndDate := string(args[9])
+		  argsAgreementStartBlock := string(args[8])
+		  argsAgreementEndBlock := string(args[9])
 		  
 				clientCtx, err := client.GetClientTxContext(cmd)
 				if err != nil {
 					return err
 				}
 	
-				msg := types.NewMsgUpdateAgreement(clientCtx.GetFromAddress().String(), id, string(argsAgreementNumber), string(argsAgreementName), string(argsAgreementType), string(argsAgreementStatus), string(argsTotalAgreementValue), string(argsParty), string(argsCounterparty), string(argsAgreementStartDate), string(argsAgreementEndDate))
+				msg := types.NewMsgUpdateAgreement(clientCtx.GetFromAddress().String(), id, string(argsAgreementNumber), string(argsAgreementName), string(argsAgreementType), string(argsAgreementStatus), string(argsTotalAgreementValue), string(argsParty), string(argsCounterparty), string(argsAgreementStartBlock), string(argsAgreementEndBlock))
 				if err := msg.ValidateBasic(); err != nil {
 					return err
 				}

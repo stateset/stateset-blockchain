@@ -42,8 +42,8 @@ message MsgCreateAgreementRequest {
   string totalAgreementValue = 7; 
   string party = 8; 
   string counterparty = 9; 
-  string agreementStartDate = 10; 
-  string agreementEndDate = 11; 
+  string AgreementStartBlock = 10; 
+  string AgreementEndBlock = 11; 
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.

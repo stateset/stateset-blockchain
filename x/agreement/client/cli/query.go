@@ -17,8 +17,8 @@ import (
 
 )
 
-// GetQueryCmd returns the cli query commands for this module
-func GetQueryCmd() *cobra.Command {
+// QueryCmd returns the cli query commands for this module
+func QueryCmd() *cobra.Command {
 	agreementQueryCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      "Querying commands for the agreement module",

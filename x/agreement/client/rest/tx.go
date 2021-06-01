@@ -35,8 +35,8 @@ type createAgreementRequest struct {
 	TotalAgreementValue string `json:"totalAgreementValue"`
 	Party string `json:"party"`
 	Counterparty string `json:"counterparty"`
-	AgreementStartDate string `json:"agreementStartDate"`
-	AgreementEndDate string `json:"agreementEndDate"`
+	AgreementStartBlock string `json:"AgreementStartBlock"`
+	AgreementEndBlock string `json:"AgreementEndBlock"`
 	
 }
 
@@ -73,9 +73,9 @@ func createAgreementHandlerFn(cliCtx context.CLIContext) http.HandlerFunc {
 		
 		parsedCounterparty := req.Counterparty
 		
-		parsedAgreementStartDate := req.AgreementStartDate
+		parsedAgreementStartBlock := req.AgreementStartBlock
 		
-		parsedAgreementEndDate := req.AgreementEndDate
+		parsedAgreementEndBlock := req.AgreementEndBlock
 
 		msg := types.NewMsgCreateAgreement(
 			req.Creator,
@@ -86,8 +86,8 @@ func createAgreementHandlerFn(cliCtx context.CLIContext) http.HandlerFunc {
 			parsedTotalAgreementValue,
 			parsedParty,
 			parsedCounterparty,
-			parsedAgreementStartDate,
-			parsedAgreementEndDate,
+			parsedAgreementStartBlock,
+			parsedAgreementEndBlock,
 			
 		)
 
@@ -131,9 +131,9 @@ func updateAgreementHandler(clientCtx client.Context) http.HandlerFunc {
 		
 		parsedCounterparty := req.Counterparty
 		
-		parsedAgreementStartDate := req.AgreementStartDate
+		parsedAgreementStartBlock := req.AgreementStartBlock
 		
-		parsedAgreementEndDate := req.AgreementEndDate
+		parsedAgreementEndBlock := req.AgreementEndBlock
 		
 
 		msg := types.NewMsgUpdateAgreement(
@@ -146,8 +146,8 @@ func updateAgreementHandler(clientCtx client.Context) http.HandlerFunc {
 			parsedTotalAgreementValue,
 			parsedParty,
 			parsedCounterparty,
-			parsedAgreementStartDate,
-			parsedAgreementEndDate,
+			parsedAgreementStartBlock,
+			parsedAgreementEndBlock,
 			
 		)
 

@@ -36,10 +36,9 @@ func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.C
 }
 
 // CreateAgreement creates a new agreement in the agreement key-value store
-func (k Keeper) CreateAgreement(ctx sdk.Context, body, agreementID string,
-	merchant sdk.AccAddress, source url.URL) (agreement Agreement, err sdk.Error) {
+func (k Keeper) CreateAgreement(ctx sdk.Context, agreementID string) (agreement Agreement, err sdk.Error) {
 
-	agreement = NewAgreement(agreementID, marketID, body, merchant, source,
+	agreement = NewAgreement(agreementId)
 		ctx.BlockHeader().Time,
 	)
 

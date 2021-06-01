@@ -9,6 +9,33 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+type ID uint64
+
+func (g ID) Uint64() uint64 {
+	return uint64(g)
+}
+
+func (g ID) Empty() bool {
+	return g == 0
+}
+
+func (g ID) Bytes() []byte {
+	return orm.EncodeSequence(uint64(g))
+}
+
+type AgreementID uint64
+
+func (a AgreementID) Bytes() []byte {
+	return orm.EncodeSequence(uint64(a))
+}
+
+func (a AgreementID) Uint64() uint64 {
+	return uint64(a)
+}
+func (a AgreementID) Empty() bool {
+	return a == 0
+}
+
 // ID method returns AgreementID details of specific agreement
 func (a Agreement) ID() AgreementID {
 	return a.AgreementID
@@ -70,8 +97,8 @@ type Agreement struct {
 	totalAgreementValue    sdk.Coin       `json:"totalAgreementValue"`
 	party                  sdk.AccAddress `json:"party"`
 	counterparty           sdk.AccAddress `json:"counterparty"`
-	agreementStartDate	   time.Time 	  `json:"agreementStartDate"`
-	agreementEndDate       time.Time      `json:"agreementEndDate`
+	AgreementStartBlock	   time.Time 	  `json:"AgreementStartBlock"`
+	AgreementEndBlock       time.Time      `json:"AgreementEndBlock`
 	paid			  	   bool		      `json:"paid"`
 	active 	          	   bool           `json:"active"`
 	CreatedTime       	   time.Time      `json:"created_time"`
@@ -88,8 +115,8 @@ func NewAgreement(agreementId uint64, agreementNumber string, agreementName stri
 		TotalAgreementValue: totalAgreementValue,
 		Party:		     	 party,
 		Counterparty:	 	 counterparty,
-		AgreementStartDate:  agreementStartDate,
-		AgreementEndDate:  	 agreementEndDate,
+		AgreementStartBlock:  AgreementStartBlock,
+		AgreementEndBlock:  	 AgreementEndBlock,
 		Paid:			  	 paid,
 		Active: 		 	 active,
 		CreatedTime:     	 createdTime,
@@ -106,11 +133,11 @@ func (a Agreement) String() string {
 		TotalAgreementValue: %s,
 		Party:				 %s,
 		Counterparty:	 	 %s,
-		AgreementStartDate:	 %s,
-		AgreementEndDate:    %s,
+		AgreementStartBlock:	 %s,
+		AgreementEndBlock:    %s,
 		PeriodStartDate:     %s,
 		Paid:			     %s,
 		Active: 		     %s,
 		CreatedTime:         %s`,
-		a.AgreementId, a.AgreementNumber, a.AgreementName, a.AgreementType, a.AgreementStatus, a.TotalAgreementValue, a.Party, a.Counterparty, a.AgreementStartDate.String(), a.AgreementEndDate.toString(), a.Paid.String(), a.Active.String(), a.CreatedTime.String())
+		a.AgreementId, a.AgreementNumber, a.AgreementName, a.AgreementType, a.AgreementStatus, a.TotalAgreementValue, a.Party, a.Counterparty, a.AgreementStartBlock.String(), a.AgreementEndBlock.toString(), a.Paid.String(), a.Active.String(), a.CreatedTime.String())
 }

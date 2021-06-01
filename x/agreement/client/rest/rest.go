@@ -35,8 +35,8 @@ type PostCreateAgreementReq struct {
 	totalAgreementValue    sdk.Coin       `json:"totalAgreementValue"`
 	party                  sdk.AccAddress `json:"party"`
 	counterparty           sdk.AccAddress `json:"counterparty"`
-	agreementStartDate	   time.Time 	  `json:"agreementStartDate"`
-	agreementEndDate       time.Time      `json:"agreementEndDate`
+	AgreementStartBlock	   time.Time 	  `json:"AgreementStartBlock"`
+	AgreementEndBlock       time.Time      `json:"AgreementEndBlock`
 	paid			  	   bool		      `json:"paid"`
 	active 	          	   bool           `json:"active"`
 	CreatedTime       	   time.Time      `json:"created_time"`
