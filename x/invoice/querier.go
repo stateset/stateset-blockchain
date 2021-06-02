@@ -13,9 +13,6 @@ const (
 	QueryInvoice              = "invoice"
 	QueryInvoices             = "invoices"
 	QueryInvoiceByIDs         = "invoices_ids"
-	QueryMarketInvoices  = "market_invoices"
-	QueryMarketsInvoices = "markets_invoices"
-	QueryMerchantInvoices     = "merchant_invoices"
 	QueryInvoicesIDRange      = "invoices_id_range"
 	QueryInvoiceBeforeTime    = "invoices_before_time"
 	QueryInvoicesAfterTime    = "invoices_after_time"
@@ -61,12 +58,6 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryInvoice(ctx, req, keeper)
 		case QueryInvoices:
 			return queryInvoices(ctx, req, keeper)
-		case QueryMarketInvoices:
-			return queryMarketInvoices(ctx, req, keeper)
-		case QueryMarketsInvoices:
-			return queryMarketsInvoices(ctx, req, keeper)
-		case QueryMerchantInvoices:
-			return queryMerchantInvoices(ctx, req, keeper)
 		case QueryInvoicesByIDs:
 			return queryInvoicesByIDs(ctx, req, keeper)
 		case QueryInvoicesIDRange:

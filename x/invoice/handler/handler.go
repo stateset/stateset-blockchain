@@ -61,7 +61,6 @@ func handleMsgCreateInvoice(ctx sdk.Context, keeper Keeper, msg MsgCreateInvoice
 }
 
 // Cancel Invoice
-
 func handleMsgCancelInvoice(ctx sdk.Context, keeper Keeper, msg MsgCancelInvoice) sdk.Result {
 	if err := msg.ValidateBasic(); err != nil {
 		return err.Result()

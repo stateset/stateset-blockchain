@@ -18,9 +18,6 @@ import (
 var (
 	InvoicesKeyPrefix = []byte{0x00}
 	InvoiceIDKey      = []byte{0x01}
-
-	MarketplaceInvoicesPrefix   = []byte{0x10}
-	MerchantInvoicesPrefix     = []byte{0x11}
 	CreatedTimeInvoicesPrefix = []byte{0x12}
 )
 
@@ -28,15 +25,6 @@ var (
 func key(invoiceID uint64) []byte {
 	bz := sdk.Uint64ToBigEndian(invoiceID)
 	return append(InvoicesKeyPrefix, bz...)
-}
-
-func merchantInvoicesKey(merchant sdk.AccAddress) []byte {
-	return append(MerchantInvoicesPrefix, merchant.Bytes()...)
-}
-
-func merchantInvoiceKey(merchant sdk.AccAddress) []byte {}, invoiceID uint64) []byte {
-	bz := sdk.Uint64ToBigEndian(invoiceID)
-	return append(merchantInvoicesKey(merchant), bz...)
 }
 
 func createdTimeInvoicesKey(createdTime time.Time) []byte {

@@ -4,6 +4,7 @@ package stateset.purchaseorder.v1beta1;
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
+import "stateset/purchaseorder.proto";
 
 option go_package = "github.com/stateset/stateset-blockchain/x/purchaseorders/types";
 
@@ -12,6 +13,12 @@ service Msg {
 
   // Create defines a method to create a new purchase order.
   rpc Create(MsgCreatePurchaseOrderRequest) returns (MsgCreatePurchaseOrderResponse);
+
+  // Update defines a method to update a purchase order.
+  rpc Update(MsgUpdatePurchaseOrderRequest) returns (MsgUpdatePurchaseOrderResponse);
+
+  // Delete defines a method to delete a purchase order.
+  rpc Update(MsgDeletePurchaseOrderRequest) returns (MsgDeletePurchaseOrderResponse);
 
   // Complete defines a method to complete a purchase order
   rpc Complete(MsgCompletePurchaseOrderRequest) returns (MsgCompletePurchaseOrderResponse);
@@ -44,12 +51,41 @@ message MsgCreatePurchasOrderRequest {
 }
 
 // MsgCreatePurchaseOrderResponse is the Msg/CreatePurchaseOrder response type.
-message MsgCreatePurchaseOrderResponse { }
+message MsgCreatePurchaseOrderResponse { 
+  uint64 purchaseorder_id = 1;
+}
+
+message MsgUpdatePurchasOrderRequest {
+  // sender is the address of the sender of the transaction.
+  string creator = 1;
+  string purchasorder_id = 2;
+  string purchaseordernumber = 3;
+  string purchaseorderhash = 4;
+  string purchaseorderstatus = 5;
+  string description = 6;
+  string purchasedate = 7;
+  string deliveryDate = 8;
+  string subtotal = 9;
+  string total = 10;
+  string purchaser = 11;
+  string vendor = 12;
+  string fulfiller = 13;
+  string financer = 14;
+}
+
+message MsgUpdatePurchaseOrderResponse { }
+
+message MsgDeletePurchaseOrder {
+  string creator = 1;
+  uint64 purchaseorder_id = 2;
+}
+
+message MsgDeletePurchaseOrderResponse { }
 
 // MsgCompletePurchaseOrderRequest is the Msg/CompletePurchaseOrder request type.
 message MsgCompletePurchaseOrderRequest {
   // sender is the address of the sender of the transaction.
-  string sender = 1;
+  string creator = 1;
   string purchaseorder_id = 2;
 }
 
@@ -59,7 +95,7 @@ message MsgCompletePurchaseOrderResponse { }
 // MsgCancelPurchaseOrderRequest is the Msg/CancelPurchaseOrder request type.
 message MsgCancelPurchaseOrderRequest {
   // sender is the address of the sender of the transaction.
-  string sender = 1;
+  string creator = 1;
   string purchaseorder_id = 2;
 }
 
@@ -69,7 +105,7 @@ message MsgCancelPurchaseOrderResponse { }
 // MsgFinancePurchaseOrder is the Msg/FinancePurchaseOrder request type.
 message MsgFinancePurchaseOrderRequest {
   // sender is the address of the sender of the transaction.
-  string sender = 1;
+  string creator = 1;
   string purchaseorder_id = 2;
 }
 

@@ -1,3 +1,4 @@
+// IbcAgreementPacketData defines a struct for the packet payload
 message IbcAgreementPacketData {
   string creator = 1;
   string agreement_id = 2;
