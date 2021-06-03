@@ -1,0 +1,20 @@
+syntax = "proto3";
+package stateset.stateset.agreement;
+
+option go_package = "github.com/stateset/stateset-blockchain/x/agreement/types";
+
+import "gogoproto/gogo.proto";
+
+message SentAgreement {
+  string creator = 1;
+  string agreement_id = 2;
+  string agreementNumber = 3; 
+  string agreementName = 4; 
+  string agreementType = 5; 
+  string agreementStatus = 6; 
+  string totalAgreementValue = 7; 
+  string party = 8; 
+  string counterparty = 9; 
+  string AgreementStartBlock = 10; 
+  string AgreementEndBlock = 11;
+}

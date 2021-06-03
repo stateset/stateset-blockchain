@@ -1,9 +1,9 @@
 package agreement
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stateset/stateset-blockchain/x/agreement/keeper"
+	"github.com/stateset/stateset-blockchain/x/agreement/types"
 )
 
 // GenesisState defines genesis data for the module
@@ -25,23 +25,27 @@ func DefaultGenesisState(cdc codec.JSONMarshaler) GenesisState { return NewGenes
 
 // InitGenesis initializes stateset from genesis file
 func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) {
+
+	k.SetPort(ctx, genState.PortId)
+	
 	for _, c := range data.Agreements {
 		k.setAgreement(ctx, c)
-		k.setMarketAgreement(ctx, c.MarketID, c.AgreementID)
-		k.setCounterpartyAgreement(ctx, c.Counterparty, c.AgreementID)
-		k.setCreatedTimeAgreement(ctx, c.CreatedTime, c.AgreementID)
 	}
 	k.setAgreementID(ctx, uint64(len(data.Agreements)+1))
 	k.SetParams(ctx, data.Params)
 }
 
-// ExportGenesis exports the genesis state
-func ExportGenesis(ctx sdk.Context, k Keeper) GenesisState {
-	return GenesisState{
-		Agreements: k.Agreements(ctx),
-		Params: k.GetParams(ctx),
-	}
+// ExportGenesis returns the capability module's exported genesis.
+func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
+	genesis := types.DefaultGenesis()
+
+	// this line is used by starport scaffolding # genesis/module/export
+
+	genesis.PortId = k.GetPort(ctx)
+
+	return genesis
 }
+
 
 // ValidateGenesis validates the genesis state data
 func ValidateGenesis(cdc codec.JSONMarshaler, config client.TxEncodingConfig, bz json.RawMessage) error {

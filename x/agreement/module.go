@@ -2,20 +2,29 @@ package agreement
 
 import (
 	"encoding/json"
+	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/gorilla/mux"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
+
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/codec"
+	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
+	porttypes "github.com/cosmos/cosmos-sdk/x/ibc/core/05-port/types"
+	"github.com/domsteil/stateset/x/agreement/client/cli"
+	"github.com/domsteil/stateset/x/agreement/keeper"
+	"github.com/domsteil/stateset/x/agreement/types"
 )
 
 var (
 	_ module.AppModule      = AppModule{}
 	_ module.AppModuleBasic = AppModuleBasic{}
+	_ porttypes.IBCModule   = AppModule{}
 )
 
 // ModuleName is the name of this module
