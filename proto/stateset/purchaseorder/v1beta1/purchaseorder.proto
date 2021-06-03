@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stateset.purchaseorder;
+package stateset.purchaseorder.v1beta1;
 
 option go_package = "github.com/stateset/stateset-blockchain/x/purchaseorder/types";
 

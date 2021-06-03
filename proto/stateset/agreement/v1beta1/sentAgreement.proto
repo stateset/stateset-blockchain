@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stateset.stateset.agreement;
+package stateset.agreement.v1beta1;
 
 option go_package = "github.com/stateset/stateset-blockchain/x/agreement/types";
 
