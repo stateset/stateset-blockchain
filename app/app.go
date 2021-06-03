@@ -87,7 +87,6 @@ import (
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
-	chaintypes "github.com/domsteil/chain/x/chain/types"
 	"github.com/stateset/stateset-blockchain/x/agreement"
 	"github.com/stateset/stateset-blockchain/x/auth"
 	"github.com/stateset/stateset-blockchain/x/auth/ante"
@@ -662,7 +661,10 @@ func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyA
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
-	paramsKeeper.Subspace(chaintypes.ModuleName)
+	paramsKeeper.Subspace(purchaseordertypes.ModuleName)
+	paramsKeeper.Subspace(invoicetypes.ModuleName)
+	paramsKeeper.Subspace(agreementtypes.ModuleName)
+	paramsKeeper.Subspace(statesettypes.ModuleName)
 
 	return paramsKeeper
 }
