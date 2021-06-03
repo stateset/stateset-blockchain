@@ -1,6 +1,6 @@
 PACKAGES=$(shell GO111MODULE=on go list -mod=readonly ./...)
 
-MODULES = agreement auth bank bep3 common crisis distribution factoring gov invoice liquidity loan mint params purchaseorder slashing staking wasm
+MODULES = agreement auth bank bep3 common crisis distribution gov invoice liquidity mint params purchaseorder slashing staking wasm
 
 VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
 COMMIT := $(shell git log -1 --format='%H')
