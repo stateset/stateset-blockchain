@@ -22,6 +22,8 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCompletePurchaseOrder{}, "stateset/MsgCompletePurchaseOrder", nil)
 	cdc.RegisterConcrete(&MsgCancelPurchaseOrder{}, "stateset/MsgCancelPurchaseOrder", nil)
 	cdc.RegisterConcrete(&MsgFinancePurchaseOrder{}, "stateset/MsgFinancePurchaseOrder", nil)
+	cdc.RegisterConcrete(&MsgSendIbcPurchaseOrder{}, "purchaseorder/SendIbcPurchaseOrder", nil)
+
 }
 
 // RegisterInterfaces registers the x/purchaseorder interfaces types with the interface registry
@@ -33,6 +35,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgCompletePurchaseOrder{},
 		&MsgCancelPurchaseOrder{},
 		&MsgFinancePurchaseOrder{},
+		&MsgSendIbcPurchaseOrder{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)

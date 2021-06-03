@@ -18,6 +18,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(MsgRenewAgreement{}, "stateset/MsgRenewAgreement", nil)
 	cdc.RegisterConcrete(MsgTerminateAgreement{}, "stateset/MsgTerminateAgreement", nil)
 	cdc.RegisterConcrete(MsgExpireAgreement{}, "stateset/MsgExpireAgreement", nil)
+	cdc.RegisterConcrete(&MsgSendIbcAgreement{}, "agreement/SendIbcAgreement", nil)
 
 	c.RegisterConcrete(Agreement{}, "stateset/Agreement", nil)
 }
@@ -32,6 +33,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgRenewAgreement{},
 		&MsgTerminateAgreement{},
 		&MsgExpireAgreement{},
+		&MsgSendIbcAgreement{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
@@ -42,9 +44,8 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	)
 }
 
-
 var (
-	amino = codec.NewLegacyAmino()
+	amino     = codec.NewLegacyAmino()
 	ModuleCdc = codec.NewAminoCodec(amino)
 )
 

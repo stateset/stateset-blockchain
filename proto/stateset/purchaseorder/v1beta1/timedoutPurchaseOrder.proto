@@ -1,0 +1,23 @@
+syntax = "proto3";
+package stateset.stateset.purchaseorder;
+
+option go_package = "github.com/stateset/stateset-blockchain/x/purchaseorder/types";
+
+import "gogoproto/gogo.proto";
+
+message TimedOutPurchaseOrder {
+  string creator = 1;
+  string purchasorder_id = 2;
+  string purchaseordernumber = 3;
+  string purchaseorderhash = 4;
+  string purchaseorderstatus = 5;
+  string description = 6;
+  string purchasedate = 7;
+  string deliveryDate = 8;
+  string subtotal = 9;
+  string total = 10;
+  string purchaser = 11;
+  string vendor = 12;
+  string fulfiller = 13;
+  string financer = 14;
+}
