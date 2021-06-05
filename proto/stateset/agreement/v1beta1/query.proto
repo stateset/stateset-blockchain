@@ -70,7 +70,7 @@ message QueryAgreementResponse {
   string agreementName = 4; 
   string agreementType = 5; 
   string agreementStatus = 6; 
-  string totalAgreementValue = 7; 
+  int32 totalAgreementValue = 7; 
   string party = 8; 
   string counterparty = 9; 
   string AgreementStartBlock = 10; 

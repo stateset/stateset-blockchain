@@ -56,8 +56,8 @@ message QueryPurchaseOrderResponse {s
   string description = 6;
   string purchasedate = 7;
   string deliveryDate = 8;
-  string subtotal = 9;
-  string total = 10;
+  int32 subtotal = 9;
+  int32 total = 10;
   string purchaser = 11;
   string vendor = 12;
   string fulfiller = 13;

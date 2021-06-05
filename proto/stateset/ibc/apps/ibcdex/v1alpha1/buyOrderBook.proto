@@ -1,0 +1,13 @@
+syntax = "proto3";
+package stateset.ibcdex.v1alpha1
+
+option go_package = "github.com/stateset/stateset-blockchain/x/ibcdex/types";
+
+import "gogoproto/gogo.proto";
+
+message BuyOrderBook {
+  string index = 2;
+  int32 orderIDTrack = 3; 
+  string amountDenom = 4; 
+  string priceDenom = 5; 
+}
