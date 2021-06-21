@@ -90,40 +90,6 @@ type MsgEditPurchaseOrder struct {
 	Counterparty sdk.AccAddress `json:"counterparty"`
 }
 
-// Route is the name of the route for purchase order
-func (msg MsgAmendPurchaseOrder) Route() string {
-	return RouterKey
-}
-
-// Type is the name for the Msg
-func (msg MsgAmendPurchaseOrder) Type() string {
-	return ModuleName
-}
-
-// ValidateBasic validates basic fields of the Msg
-func (msg MsgAmendPurchaseOrder) ValidateBasic() sdk.Error {
-	if msg.ID == 0 {
-		return ErrUnknownPurchaseOrder(msg.ID)
-	}
-	if len(msg.Counterparty) == 0 {
-		return sdk.ErrInvalidAddress("Invalid address: " + msg.Counterparty.String())
-	}
-
-	return nil
-}
-
-// GetSignBytes gets the bytes for Msg signer to sign on
-func (msg MsgAmendPurchaseOrder) GetSignBytes() []byte {
-	msgBytes := ModuleCodec.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(msgBytes)
-}
-
-// GetSigners gets the signs of the Msg
-func (msg MsgAmendPurchaseOrder) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
-}
-
-
 
 // Complete Purchase Order
 
@@ -176,7 +142,7 @@ func (msg MsgCompletePurchaseOrder) GetSigners() []sdk.AccAddress {
 // Msg Purchase Order defines a message to cancel an Purchase Order
 type MsgCancelPurchaseOrder struct {
 	ID              uint64         `json:"id"`
-	PurchaseOrderStatus string         `json:"purcahseOrderStatus"`
+	PurchaseOrderStatus string         `json:"purchaseOrderStatus"`
 	Counterparty    sdk.AccAddress `json:"counterparty"`
 }
 
