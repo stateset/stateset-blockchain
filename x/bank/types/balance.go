@@ -3,7 +3,7 @@ package types
 import (
 	"bytes"
 	"encoding/json"
-	fmt "fmt"
+	"fmt"
 	"sort"
 
 	"github.com/cosmos/cosmos-sdk/codec"
