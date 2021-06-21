@@ -141,7 +141,7 @@ func computeTax(ctx sdk.Context, tk TreasuryKeeper, principal sdk.Coins) sdk.Coi
 
 	taxes := sdk.Coins{}
 	for _, coin := range principal {
-		if coin.Denom == core.MicroLunaDenom || coin.Denom == sdk.DefaultBondDenom {
+		if coin.Denom == core.MicroStateDenom || coin.Denom == sdk.DefaultBondDenom {
 			continue
 		}
 

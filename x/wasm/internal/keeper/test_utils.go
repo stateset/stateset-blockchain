@@ -121,7 +121,7 @@ func CreateTestInput(t *testing.T) TestInput {
 	}
 
 	supplyKeeper := supply.NewKeeper(cdc, keySupply, accountKeeper, bankKeeper, maccPerms)
-	totalSupply := sdk.NewCoins(sdk.NewCoin(core.MicroLunaDenom, sdk.NewInt(100000000)), sdk.NewCoin(core.MicroSDRDenom, sdk.NewInt(100000000)))
+	totalSupply := sdk.NewCoins(sdk.NewCoin(core.MicroStateDenom, sdk.NewInt(100000000)), sdk.NewCoin(core.MicroSDRDenom, sdk.NewInt(100000000)))
 	supplyKeeper.SetSupply(ctx, supply.NewSupply(totalSupply))
 
 	stakingKeeper := staking.NewKeeper(
@@ -163,7 +163,7 @@ func CreateTestInput(t *testing.T) TestInput {
 	distrAcc := supply.NewEmptyModuleAccount(distr.ModuleName)
 
 	// funds for huge withdraw
-	distrAcc.SetCoins(sdk.NewCoins(sdk.NewInt64Coin(core.MicroLunaDenom, 500000)))
+	distrAcc.SetCoins(sdk.NewCoins(sdk.NewInt64Coin(core.MicroStateDenom, 500000)))
 	notBondedPool.SetCoins(totalSupply)
 
 	supplyKeeper.SetModuleAccount(ctx, feeCollectorAcc)
@@ -174,7 +174,7 @@ func CreateTestInput(t *testing.T) TestInput {
 	stakingKeeper.SetHooks(staking.NewMultiStakingHooks(distrKeeper.Hooks()))
 
 	genesis := staking.DefaultGenesisState()
-	genesis.Params.BondDenom = core.MicroLunaDenom
+	genesis.Params.BondDenom = core.MicroStateDenom
 	_ = staking.InitGenesis(ctx, stakingKeeper, accountKeeper, supplyKeeper, genesis)
 
 	router := baseapp.NewRouter()
