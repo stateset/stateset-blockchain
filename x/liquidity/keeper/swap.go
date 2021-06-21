@@ -3,7 +3,7 @@ package keeper
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/liquidity/x/liquidity/types"
+	"github.com/stateset/stateset-blockchain/x/liquidity/types"
 	"sort"
 )
 

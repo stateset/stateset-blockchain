@@ -2,7 +2,7 @@ package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/liquidity/x/liquidity/types"
+	"github.com/stateset/stateset-blockchain/x/liquidity/types"
 )
 
 // TODO: write invariants, migrate to invariant logics from swap logic

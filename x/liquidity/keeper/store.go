@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gogotypes "github.com/gogo/protobuf/types"
-	"github.com/tendermint/liquidity/x/liquidity/types"
+	"github.com/stateset/stateset-blockchain/x/liquidity/types"
 )
 
 // read form kvstore and return a specific liquidityPool
