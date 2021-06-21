@@ -58,7 +58,7 @@ func NewMsgCreateAgreement(agreementID string, agreementNumber string, agreement
 		AgreementStatus: agreementStatus,
 		TotalAgreementValue: totalAgreementValue,
 		Party: party,
-		Counterparty: counterparty
+		Counterparty: counterparty,
 		AgreementStartBlock: agreementStartBlock,
 		AgreementEndBlock: agreementEndBlock
 	}

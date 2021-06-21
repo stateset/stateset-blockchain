@@ -9,14 +9,14 @@ import (
 // GenesisState defines genesis data for the module
 type GenesisState struct {
 	PurchaseOrders []PurchaseOrder `json:"purchaseOrders"`
-	Params Params  `json:"params"`
+	Params         Params          `json:"params"`
 }
 
 // NewGenesisState creates a new genesis state.
 func NewGenesisState() GenesisState {
 	return GenesisState{
 		PurchaseOrders: nil,
-		Params: DefaultParams(),
+		Params:         DefaultParams(),
 	}
 }
 
@@ -37,7 +37,7 @@ func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) {
 func ExportGenesis(ctx sdk.Context, k Keeper) GenesisState {
 	return GenesisState{
 		PurchaseOrderss: k.PurchaseOrders(ctx),
-		Params: k.GetParams(ctx),
+		Params:          k.GetParams(ctx),
 	}
 }
 
