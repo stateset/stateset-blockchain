@@ -11,11 +11,11 @@ func (k Keeper) InitGenesis(ctx sdk.Context, genState types.GenesisState) {
 		panic(err)
 	}
 	k.SetParams(ctx, genState.Params)
-	for _, record := range genState.LiquidityPoolRecords {
-		if err := k.ValidateLiquidityPoolRecord(ctx, &record); err != nil {
+	for _, record := range genState.PoolRecords {
+		if err := k.ValidatePoolRecord(ctx, &record); err != nil {
 			panic(err)
 		}
-		k.SetLiquidityPoolRecord(ctx, &record)
+		k.SetPoolRecord(ctx, &record)
 	}
 	// TODO: reset heights variables when init or export
 }
@@ -25,9 +25,9 @@ func (k Keeper) ValidateGenesis(ctx sdk.Context, genState types.GenesisState) er
 	if err := genState.Params.Validate(); err != nil {
 		return err
 	}
-	for _, record := range genState.LiquidityPoolRecords {
-		k.SetLiquidityPoolRecord(ctx, &record)
-		if err := k.ValidateLiquidityPoolRecord(ctx, &record); err != nil {
+	for _, record := range genState.PoolRecords {
+		k.SetPoolRecord(ctx, &record)
+		if err := k.ValidatePoolRecord(ctx, &record); err != nil {
 			return err
 		}
 	}
@@ -37,17 +37,17 @@ func (k Keeper) ValidateGenesis(ctx sdk.Context, genState types.GenesisState) er
 // ExportGenesis returns a GenesisState for a given context and keeper.
 func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	params := k.GetParams(ctx)
-	var poolRecords []types.LiquidityPoolRecord
+	var poolRecords []types.PoolRecord
 
-	pools := k.GetAllLiquidityPools(ctx)
+	pools := k.GetAllPools(ctx)
 	for _, pool := range pools {
-		record, found := k.GetLiquidityPoolRecord(ctx, pool)
+		record, found := k.GetPoolRecord(ctx, pool)
 		if found {
 			poolRecords = append(poolRecords, *record)
 		}
 	}
 	if len(poolRecords) == 0 {
-		poolRecords = []types.LiquidityPoolRecord{}
+		poolRecords = []types.PoolRecord{}
 	}
 	return types.NewGenesisState(params, poolRecords)
 }

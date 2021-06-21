@@ -8,34 +8,34 @@ import (
 
 // Reinitialize batch messages that were not executed in the previous batch and delete batch messages that were executed or ready to delete.
 func (k Keeper) DeleteAndInitPoolBatch(ctx sdk.Context) {
-	k.IterateAllLiquidityPoolBatches(ctx, func(liquidityPoolBatch types.LiquidityPoolBatch) bool {
+	k.IterateAllPoolBatches(ctx, func(poolBatch types.PoolBatch) bool {
 		// Delete and init next batch when not empty batch on before block
-		if liquidityPoolBatch.Executed {
+		if poolBatch.Executed {
 
 			// On the other hand, BatchDeposit, BatchWithdraw, is all handled by the endblock if there is no error.
 			// If there are BatchMsgs left, reset the Executed, Succeeded flag so that it can be executed in the next batch.
-			depositMsgs := k.GetAllRemainingLiquidityPoolBatchDepositMsgs(ctx, liquidityPoolBatch)
+			depositMsgs := k.GetAllRemainingPoolBatchDepositMsgs(ctx, poolBatch)
 			if len(depositMsgs) > 0 {
 				for _, msg := range depositMsgs {
 					msg.Executed = false
 					msg.Succeeded = false
 				}
-				k.SetLiquidityPoolBatchDepositMsgsByPointer(ctx, liquidityPoolBatch.PoolId, depositMsgs)
+				k.SetPoolBatchDepositMsgsByPointer(ctx, poolBatch.PoolId, depositMsgs)
 			}
 
-			withdrawMsgs := k.GetAllRemainingLiquidityPoolBatchWithdrawMsgs(ctx, liquidityPoolBatch)
+			withdrawMsgs := k.GetAllRemainingPoolBatchWithdrawMsgs(ctx, poolBatch)
 			if len(withdrawMsgs) > 0 {
 				for _, msg := range withdrawMsgs {
 					msg.Executed = false
 					msg.Succeeded = false
 				}
-				k.SetLiquidityPoolBatchWithdrawMsgsByPointer(ctx, liquidityPoolBatch.PoolId, withdrawMsgs)
+				k.SetPoolBatchWithdrawMsgsByPointer(ctx, poolBatch.PoolId, withdrawMsgs)
 			}
 
 			height := ctx.BlockHeight()
 			// reinitialize remaining batch msgs
 			// In the case of BatchSwapMsgs, it is often fractional matched or has not yet expired since it has not passed ExpiryHeight.
-			swapMsgs := k.GetAllRemainingLiquidityPoolBatchSwapMsgs(ctx, liquidityPoolBatch)
+			swapMsgs := k.GetAllRemainingPoolBatchSwapMsgs(ctx, poolBatch)
 			if len(swapMsgs) > 0 {
 				for _, msg := range swapMsgs {
 					if height > msg.OrderExpiryHeight {
@@ -45,63 +45,63 @@ func (k Keeper) DeleteAndInitPoolBatch(ctx sdk.Context) {
 						msg.Succeeded = false
 					}
 				}
-				k.SetLiquidityPoolBatchSwapMsgPointers(ctx, liquidityPoolBatch.PoolId, swapMsgs)
+				k.SetPoolBatchSwapMsgPointers(ctx, poolBatch.PoolId, swapMsgs)
 			}
 
 			// delete batch messages that were executed or ready to delete
-			k.DeleteAllReadyLiquidityPoolBatchDepositMsgs(ctx, liquidityPoolBatch)
-			k.DeleteAllReadyLiquidityPoolBatchWithdrawMsgs(ctx, liquidityPoolBatch)
-			k.DeleteAllReadyLiquidityPoolBatchSwapMsgs(ctx, liquidityPoolBatch)
+			k.DeleteAllReadyPoolBatchDepositMsgs(ctx, poolBatch)
+			k.DeleteAllReadyPoolBatchWithdrawMsgs(ctx, poolBatch)
+			k.DeleteAllReadyPoolBatchSwapMsgs(ctx, poolBatch)
 
 			// Increase the batch index and initialize the values.
-			k.InitNextBatch(ctx, liquidityPoolBatch)
+			k.InitNextBatch(ctx, poolBatch)
 		}
 		return false
 	})
 }
 
 // Increase the index of the already executed batch for processing as the next batch and reinitialize the values.
-func (k Keeper) InitNextBatch(ctx sdk.Context, liquidityPoolBatch types.LiquidityPoolBatch) error {
-	if !liquidityPoolBatch.Executed {
+func (k Keeper) InitNextBatch(ctx sdk.Context, poolBatch types.PoolBatch) error {
+	if !poolBatch.Executed {
 		return types.ErrBatchNotExecuted
 	}
-	liquidityPoolBatch.BatchIndex = k.GetNextBatchIndexWithUpdate(ctx, liquidityPoolBatch.PoolId)
-	liquidityPoolBatch.BeginHeight = ctx.BlockHeight()
-	liquidityPoolBatch.Executed = false
-	k.SetLiquidityPoolBatch(ctx, liquidityPoolBatch)
+	poolBatch.BatchIndex = k.GetNextBatchIndexWithUpdate(ctx, poolBatch.PoolId)
+	poolBatch.BeginHeight = ctx.BlockHeight()
+	poolBatch.Executed = false
+	k.SetPoolBatch(ctx, poolBatch)
 	return nil
 }
 
 // In case of deposit, withdraw, and swap msgs, unlike other normal tx msgs,
 // collect them in the liquidity pool batch and perform an execution once at the endblock to calculate and use the universal price.
 func (k Keeper) ExecutePoolBatch(ctx sdk.Context) {
-	k.IterateAllLiquidityPoolBatches(ctx, func(liquidityPoolBatch types.LiquidityPoolBatch) bool {
-		if !liquidityPoolBatch.Executed {
-			if liquidityPoolBatch.Executed {
+	k.IterateAllPoolBatches(ctx, func(poolBatch types.PoolBatch) bool {
+		if !poolBatch.Executed {
+			if poolBatch.Executed {
 				return false
 			}
-			executedMsgCount, err := k.SwapExecution(ctx, liquidityPoolBatch)
+			executedMsgCount, err := k.SwapExecution(ctx, poolBatch)
 			if err != nil {
 				panic(err)
 			}
-			k.IterateAllLiquidityPoolBatchDepositMsgs(ctx, liquidityPoolBatch, func(batchMsg types.BatchPoolDepositMsg) bool {
+			k.IterateAllPoolBatchDepositMsgs(ctx, poolBatch, func(batchMsg types.BatchPoolDepositMsg) bool {
 				executedMsgCount++
-				if err := k.DepositLiquidityPool(ctx, batchMsg); err != nil {
-					k.RefundDepositLiquidityPool(ctx, batchMsg)
+				if err := k.DepositPool(ctx, batchMsg); err != nil {
+					k.RefundDepositPool(ctx, batchMsg)
 				}
 				return false
 			})
-			k.IterateAllLiquidityPoolBatchWithdrawMsgs(ctx, liquidityPoolBatch, func(batchMsg types.BatchPoolWithdrawMsg) bool {
+			k.IterateAllPoolBatchWithdrawMsgs(ctx, poolBatch, func(batchMsg types.BatchPoolWithdrawMsg) bool {
 				executedMsgCount++
-				if err := k.WithdrawLiquidityPool(ctx, batchMsg); err != nil {
-					k.RefundWithdrawLiquidityPool(ctx, batchMsg)
+				if err := k.WithdrawPool(ctx, batchMsg); err != nil {
+					k.RefundWithdrawPool(ctx, batchMsg)
 				}
 				return false
 			})
 			// set executed when something executed
 			if executedMsgCount > 0 {
-				liquidityPoolBatch.Executed = true
-				k.SetLiquidityPoolBatch(ctx, liquidityPoolBatch)
+				poolBatch.Executed = true
+				k.SetPoolBatch(ctx, poolBatch)
 			}
 		}
 		return false
@@ -140,11 +140,11 @@ func (k Keeper) ReleaseEscrowForMultiSend(withdrawer sdk.AccAddress, withdrawCoi
 }
 
 // In order to deal with the batch at once, Put the message in the batch and the coins of the msgs deposited in escrow.
-func (k Keeper) DepositLiquidityPoolToBatch(ctx sdk.Context, msg *types.MsgDepositToLiquidityPool) error {
-	if err := k.ValidateMsgDepositLiquidityPool(ctx, *msg); err != nil {
+func (k Keeper) DepositPoolToBatch(ctx sdk.Context, msg *types.MsgDepositToPool) error {
+	if err := k.ValidateMsgDepositPool(ctx, *msg); err != nil {
 		return err
 	}
-	poolBatch, found := k.GetLiquidityPoolBatch(ctx, msg.PoolId)
+	poolBatch, found := k.GetPoolBatch(ctx, msg.PoolId)
 	if !found {
 		return types.ErrPoolBatchNotExists
 	}
@@ -163,18 +163,18 @@ func (k Keeper) DepositLiquidityPoolToBatch(ctx sdk.Context, msg *types.MsgDepos
 	}
 
 	poolBatch.DepositMsgIndex += 1
-	k.SetLiquidityPoolBatch(ctx, poolBatch)
-	k.SetLiquidityPoolBatchDepositMsg(ctx, poolBatch.PoolId, batchPoolMsg)
+	k.SetPoolBatch(ctx, poolBatch)
+	k.SetPoolBatchDepositMsg(ctx, poolBatch.PoolId, batchPoolMsg)
 	// TODO: msg event with msgServer after rebase stargate version sdk
 	return nil
 }
 
 // In order to deal with the batch at once, Put the message in the batch and the coins of the msgs deposited in escrow.
-func (k Keeper) WithdrawLiquidityPoolToBatch(ctx sdk.Context, msg *types.MsgWithdrawFromLiquidityPool) error {
-	if err := k.ValidateMsgWithdrawLiquidityPool(ctx, *msg); err != nil {
+func (k Keeper) WithdrawPoolToBatch(ctx sdk.Context, msg *types.MsgWithdrawFromPool) error {
+	if err := k.ValidateMsgWithdrawPool(ctx, *msg); err != nil {
 		return err
 	}
-	poolBatch, found := k.GetLiquidityPoolBatch(ctx, msg.PoolId)
+	poolBatch, found := k.GetPoolBatch(ctx, msg.PoolId)
 	if !found {
 		return types.ErrPoolBatchNotExists
 	}
@@ -193,18 +193,18 @@ func (k Keeper) WithdrawLiquidityPoolToBatch(ctx sdk.Context, msg *types.MsgWith
 	}
 
 	poolBatch.WithdrawMsgIndex += 1
-	k.SetLiquidityPoolBatch(ctx, poolBatch)
-	k.SetLiquidityPoolBatchWithdrawMsg(ctx, poolBatch.PoolId, batchPoolMsg)
+	k.SetPoolBatch(ctx, poolBatch)
+	k.SetPoolBatchWithdrawMsg(ctx, poolBatch.PoolId, batchPoolMsg)
 	// TODO: msg event with msgServer after rebase stargate version sdk
 	return nil
 }
 
 // In order to deal with the batch at once, Put the message in the batch and the coins of the msgs deposited in escrow.
-func (k Keeper) SwapLiquidityPoolToBatch(ctx sdk.Context, msg *types.MsgSwap, OrderExpirySpanHeight int64) (*types.BatchPoolSwapMsg, error) {
+func (k Keeper) SwapPoolToBatch(ctx sdk.Context, msg *types.MsgSwap, OrderExpirySpanHeight int64) (*types.BatchPoolSwapMsg, error) {
 	if err := k.ValidateMsgSwap(ctx, *msg); err != nil {
 		return nil, err
 	}
-	poolBatch, found := k.GetLiquidityPoolBatch(ctx, msg.PoolId)
+	poolBatch, found := k.GetPoolBatch(ctx, msg.PoolId)
 	if !found {
 		return nil, types.ErrPoolBatchNotExists
 	}
@@ -230,8 +230,8 @@ func (k Keeper) SwapLiquidityPoolToBatch(ctx sdk.Context, msg *types.MsgSwap, Or
 	}
 
 	poolBatch.SwapMsgIndex += 1
-	k.SetLiquidityPoolBatch(ctx, poolBatch)
-	k.SetLiquidityPoolBatchSwapMsg(ctx, poolBatch.PoolId, batchPoolMsg)
+	k.SetPoolBatch(ctx, poolBatch)
+	k.SetPoolBatchSwapMsg(ctx, poolBatch.PoolId, batchPoolMsg)
 	// TODO: msg event with msgServer after rebase stargate version sdk
 	return &batchPoolMsg, nil
 }

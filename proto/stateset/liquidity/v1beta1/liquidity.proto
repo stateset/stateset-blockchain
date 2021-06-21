@@ -15,7 +15,7 @@ message PoolType {
 
     // The id of the pool_type to use as pool_type_id for pool creation.
     // Only pool-type-id 1 is supported
-    // {"id":1,"name":"ConstantProductLiquidityPool","min_reserve_coin_num":2,"max_reserve_coin_num":2,"description":""}
+    // {"id":1,"name":"ConstantProductPool","min_reserve_coin_num":2,"max_reserve_coin_num":2,"description":""}
     uint32 id = 1 [(gogoproto.moretags) = "yaml:\"id\"",
         (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
             example: "\"1\"",
@@ -25,17 +25,17 @@ message PoolType {
     // name of the pool type
     string name = 2 [(gogoproto.moretags) = "yaml:\"name\"",
         (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-            example: "\"ConstantProductLiquidityPool\"",
+            example: "\"ConstantProductPool\"",
         }];
 
-    // min number of reserveCoins for LiquidityPoolType only 2 is allowed on this spec
+    // min number of reserveCoins for PoolType only 2 is allowed on this spec
     uint32 min_reserve_coin_num = 3 [(gogoproto.moretags) = "yaml:\"min_reserve_coin_num\"",
         (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
             example: "\"2\"",
             format: "uint32"
         }];
 
-    // max number of reserveCoins for LiquidityPoolType only 2 is allowed on this spec
+    // max number of reserveCoins for PoolType only 2 is allowed on this spec
     uint32 max_reserve_coin_num = 4 [(gogoproto.moretags) = "yaml:\"max_reserve_coin_num\"",
         (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
             example: "\"2\"",

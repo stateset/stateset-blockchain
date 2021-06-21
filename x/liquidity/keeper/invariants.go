@@ -12,32 +12,32 @@ import (
 // register all liquidity invariants
 func RegisterInvariants(ir sdk.InvariantRegistry, k Keeper) {
 	ir.RegisterRoute(types.ModuleName, "escrow-amount",
-		LiquidityPoolsEscrowAmountInvariant(k))
+		PoolsEscrowAmountInvariant(k))
 }
 
 // AllInvariants runs all invariants of the liquidity module
 func AllInvariants(k Keeper) sdk.Invariant {
 	return func(ctx sdk.Context) (string, bool) {
-		res, stop := LiquidityPoolsEscrowAmountInvariant(k)(ctx)
+		res, stop := PoolsEscrowAmountInvariant(k)(ctx)
 		return res, stop
 	}
 }
 
-// LiquidityPoolsEscrowAmountInvariant checks that outstanding unwithdrawn fees are never negative
-func LiquidityPoolsEscrowAmountInvariant(k Keeper) sdk.Invariant {
+// PoolsEscrowAmountInvariant checks that outstanding unwithdrawn fees are never negative
+func PoolsEscrowAmountInvariant(k Keeper) sdk.Invariant {
 	return func(ctx sdk.Context) (string, bool) {
 		remainingCoins := sdk.NewCoins()
-		batches := k.GetAllLiquidityPoolBatches(ctx)
+		batches := k.GetAllPoolBatches(ctx)
 		for _, batch := range batches {
-			swapMsgs := k.GetAllNotToDeleteLiquidityPoolBatchSwapMsgs(ctx, batch)
+			swapMsgs := k.GetAllNotToDeletePoolBatchSwapMsgs(ctx, batch)
 			for _, msg := range swapMsgs {
 				remainingCoins = remainingCoins.Add(msg.RemainingOfferCoin)
 			}
-			depositMsgs := k.GetAllNotToDeleteLiquidityPoolBatchDepositMsgs(ctx, batch)
+			depositMsgs := k.GetAllNotToDeletePoolBatchDepositMsgs(ctx, batch)
 			for _, msg := range depositMsgs {
 				remainingCoins = remainingCoins.Add(msg.Msg.DepositCoins...)
 			}
-			withdrawMsgs := k.GetAllNotToDeleteLiquidityPoolBatchWithdrawMsgs(ctx, batch)
+			withdrawMsgs := k.GetAllNotToDeletePoolBatchWithdrawMsgs(ctx, batch)
 			for _, msg := range withdrawMsgs {
 				remainingCoins = remainingCoins.Add(msg.Msg.PoolCoin)
 			}

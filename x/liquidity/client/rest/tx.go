@@ -15,17 +15,17 @@ import (
 // TODO: Plans to increase completeness on Milestone 2
 // using grpc
 func registerTxRoutes(clientCtx client.Context, r *mux.Router) {
-	//// create liquidityPool
-	//r.HandleFunc(fmt.Sprintf("/liquidity/pool"), newLiquidityPoolHandlerFn(clientCtx)).Methods("POST")
-	//// deposit to liquidityPool
-	//r.HandleFunc(fmt.Sprintf("/liquidity/pool/{%s}/deposit", RestPoolId), newDepositLiquidityPoolHandlerFn(clientCtx)).Methods("POST")
-	//// withdraw from liquidityPool
-	//r.HandleFunc(fmt.Sprintf("/liquidity/pool/{%s}/withdraw", RestPoolId), newWithdrawLiquidityPoolHandlerFn(clientCtx)).Methods("POST")
+	//// create pool
+	//r.HandleFunc(fmt.Sprintf("/liquidity/pool"), newPoolHandlerFn(clientCtx)).Methods("POST")
+	//// deposit to pool
+	//r.HandleFunc(fmt.Sprintf("/liquidity/pool/{%s}/deposit", RestPoolId), newDepositPoolHandlerFn(clientCtx)).Methods("POST")
+	//// withdraw from pool
+	//r.HandleFunc(fmt.Sprintf("/liquidity/pool/{%s}/withdraw", RestPoolId), newWithdrawPoolHandlerFn(clientCtx)).Methods("POST")
 }
 
-func newLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFunc {
+func newPoolHandlerFn(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.MsgCreateLiquidityPoolRequest
+		var req types.MsgCreatePoolRequest
 		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
 			return
 		}
@@ -47,7 +47,7 @@ func newLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFunc {
 		//	return
 		//}
 		//
-		//msg := types.NewMsgCreateLiquidityPool()
+		//msg := types.NewMsgCreatePool()
 		//if err := msg.ValidateBasic(); err != nil {
 		//	rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		//	return
@@ -58,12 +58,12 @@ func newLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFunc {
 }
 
 // HTTP request handler to add liquidity.
-func newDepositLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFunc {
+func newDepositPoolHandlerFn(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		//vars := mux.Vars(r)
 		//poolID := vars[RestPoolId]
 		//
-		//var req DepositLiquidityPoolReq
+		//var req DepositPoolReq
 		//if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
 		//	return
 		//}
@@ -73,7 +73,7 @@ func newDepositLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFunc
 		//	return
 		//}
 		//
-		//msg := types.NewMsgDepositToLiquidityPool()
+		//msg := types.NewMsgDepositToPool()
 		//if err := msg.ValidateBasic(); err != nil {
 		//	rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		//	return
@@ -84,12 +84,12 @@ func newDepositLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFunc
 }
 
 // HTTP request handler to remove liquidity.
-func newWithdrawLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFunc {
+func newWithdrawPoolHandlerFn(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		//vars := mux.Vars(r)
 		//poolID := vars[RestPoolId]
 		//
-		//var req WithdrawLiquidityPoolReq
+		//var req WithdrawPoolReq
 		//if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
 		//	return
 		//}
@@ -105,7 +105,7 @@ func newWithdrawLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFun
 		//}
 		//poolId, err := strconv.ParseUint(req.PoolId, 10, 64)
 		//sdk.NewCoin
-		//msg := types.NewMsgWithdrawFromLiquidityPool(withdrawer, poolId, req.PoolCoin)
+		//msg := types.NewMsgWithdrawFromPool(withdrawer, poolId, req.PoolCoin)
 		//if err := msg.ValidateBasic(); err != nil {
 		//	rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		//	return
@@ -115,8 +115,8 @@ func newWithdrawLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFun
 	}
 }
 
-//// WithdrawLiquidityPoolReq defines the properties of a Deposit from liquidity Pool request's body
-//type CreateLiquidityPoolReq struct {
+//// WithdrawPoolReq defines the properties of a Deposit from liquidity Pool request's body
+//type CreatePoolReq struct {
 //	BaseReq           rest.BaseReq `json:"base_req" yaml:"base_req"`
 //	PoolCreator       string       `json:"pool_creator" yaml:"pool_creator"`
 //	PoolTypeIndex     string       `json:"pool_type_index" yaml:"pool_type_index"`
@@ -124,23 +124,23 @@ func newWithdrawLiquidityPoolHandlerFn(clientCtx client.Context) http.HandlerFun
 //	DepositCoins      string       `json:"deposit_coins" yaml:"deposit_coins"`
 //}
 //
-//// WithdrawLiquidityPoolReq defines the properties of a Deposit from liquidity Pool request's body
-//type WithdrawLiquidityPoolReq struct {
+//// WithdrawPoolReq defines the properties of a Deposit from liquidity Pool request's body
+//type WithdrawPoolReq struct {
 //	BaseReq    rest.BaseReq `json:"base_req" yaml:"base_req"`
 //	Withdrawer string       `json:"withdrawer" yaml:"withdrawer"`
 //	PoolId     string       `json:"pool_id" yaml:"pool_id"`
 //	PoolCoin   string       `json:"pool_coin_amount" yaml:"pool_coin"`
 //}
 //
-//// DepositLiquidityPoolReq defines the properties of a Deposit liquidity request's body
-//type DepositLiquidityPoolReq struct {
+//// DepositPoolReq defines the properties of a Deposit liquidity request's body
+//type DepositPoolReq struct {
 //	BaseReq      rest.BaseReq `json:"base_req" yaml:"base_req"`
 //	Depositor    string       `json:"depositor" yaml:"depositor"`
 //	PoolId       string       `json:"pool_id" yaml:"pool_id"`
 //	DepositCoins string       `json:"deposit_coins_amount" yaml:"deposit_coins"`
 //}
 //
-//// DepositLiquidityPoolReq defines the properties of a Deposit liquidity request's body
+//// DepositPoolReq defines the properties of a Deposit liquidity request's body
 //type SwapReq struct {
 //	BaseReq         rest.BaseReq `json:"base_req" yaml:"base_req"`
 //	SwapRequester   string       `json:"swap_requester" yaml:"swap_requester"`

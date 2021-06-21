@@ -8,13 +8,13 @@ import (
 )
 
 // Execute Swap of the pool batch, Collect swap messages in batch for transact the same price for each batch and run them on endblock.
-func (k Keeper) SwapExecution(ctx sdk.Context, liquidityPoolBatch types.LiquidityPoolBatch) (uint64, error) {
+func (k Keeper) SwapExecution(ctx sdk.Context, poolBatch types.PoolBatch) (uint64, error) {
 	// get All only not processed swap msgs, not executed, not succeed, not toDelete
-	swapMsgs := k.GetAllNotProcessedLiquidityPoolBatchSwapMsgs(ctx, liquidityPoolBatch)
+	swapMsgs := k.GetAllNotProcessedPoolBatchSwapMsgs(ctx, poolBatch)
 	if len(swapMsgs) == 0 {
 		return 0, nil
 	}
-	pool, found := k.GetLiquidityPool(ctx, liquidityPoolBatch.PoolId)
+	pool, found := k.GetPool(ctx, poolBatch.PoolId)
 	if !found {
 		return 0, types.ErrPoolNotExists
 	}
@@ -22,7 +22,7 @@ func (k Keeper) SwapExecution(ctx sdk.Context, liquidityPoolBatch types.Liquidit
 	for _, msg := range swapMsgs {
 		msg.Executed = true
 	}
-	k.SetLiquidityPoolBatchSwapMsgPointers(ctx, pool.PoolId, swapMsgs)
+	k.SetPoolBatchSwapMsgPointers(ctx, pool.PoolId, swapMsgs)
 
 	params := k.GetParams(ctx)
 	currentHeight := ctx.BlockHeight()
@@ -226,8 +226,8 @@ func (k Keeper) SwapExecution(ctx sdk.Context, liquidityPoolBatch types.Liquidit
 	}
 	executedMsgCount := uint64(len(swapMsgs))
 
-	// execute transact, refund, expire, send coins with escrow, update state by TransactAndRefundSwapLiquidityPool
-	if err := k.TransactAndRefundSwapLiquidityPool(ctx, swapMsgs, matchResultMap, pool); err != nil {
+	// execute transact, refund, expire, send coins with escrow, update state by TransactAndRefundSwapPool
+	if err := k.TransactAndRefundSwapPool(ctx, swapMsgs, matchResultMap, pool); err != nil {
 		panic(err)
 		return executedMsgCount, err
 	}

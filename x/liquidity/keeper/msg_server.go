@@ -24,74 +24,74 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-// Message server, handler for CreateLiquidityPool msg
-func (k msgServer) CreateLiquidityPool(goCtx context.Context, msg *types.MsgCreateLiquidityPool) (*types.MsgCreateLiquidityPoolResponse, error) {
+// Message server, handler for CreatePool msg
+func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	err := k.Keeper.CreateLiquidityPool(ctx, msg)
+	err := k.Keeper.CreatePool(ctx, msg)
 	if err != nil {
 		return nil, err
 	}
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			//types.EventTypeCreateLiquidityPool,
+			//types.EventTypeCreatePool,
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.PoolCreatorAddress),
-			sdk.NewAttribute(types.AttributeValueLiquidityPoolId, ""),
-			sdk.NewAttribute(types.AttributeValueLiquidityPoolTypeIndex, fmt.Sprintf("%d", msg.PoolTypeIndex)),
+			sdk.NewAttribute(types.AttributeValuePoolId, ""),
+			sdk.NewAttribute(types.AttributeValuePoolTypeIndex, fmt.Sprintf("%d", msg.PoolTypeIndex)),
 			sdk.NewAttribute(types.AttributeValueReserveCoinDenoms, ""),
 			sdk.NewAttribute(types.AttributeValueReserveAccount, ""),
 			sdk.NewAttribute(types.AttributeValuePoolCoinDenom, ""),
 			sdk.NewAttribute(types.AttributeValueSwapFeeRate, ""),
-			sdk.NewAttribute(types.AttributeValueLiquidityPoolFeeRate, ""),
+			sdk.NewAttribute(types.AttributeValuePoolFeeRate, ""),
 			sdk.NewAttribute(types.AttributeValueBatchSize, ""),
 		),
 	)
-	return &types.MsgCreateLiquidityPoolResponse{}, nil
+	return &types.MsgCreatePoolResponse{}, nil
 }
 
-// Message server, handler for MsgDepositToLiquidityPool
-func (k msgServer) DepositToLiquidityPool(goCtx context.Context, msg *types.MsgDepositToLiquidityPool) (*types.MsgDepositToLiquidityPoolResponse, error) {
+// Message server, handler for MsgDepositToPool
+func (k msgServer) DepositToPool(goCtx context.Context, msg *types.MsgDepositToPool) (*types.MsgDepositToPoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	err := k.Keeper.DepositLiquidityPoolToBatch(ctx, msg)
+	err := k.Keeper.DepositPoolToBatch(ctx, msg)
 	if err != nil {
 		return nil, err
 	}
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			//types.EventTypeDepositToLiquidityPoolToBatch,
+			//types.EventTypeDepositToPoolToBatch,
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.DepositorAddress),
 			sdk.NewAttribute(types.AttributeValueBatchID, ""),
 		),
 	)
-	return &types.MsgDepositToLiquidityPoolResponse{}, nil
+	return &types.MsgDepositToPoolResponse{}, nil
 }
 
-// Message server, handler for MsgWithdrawFromLiquidityPool
-func (k msgServer) WithdrawFromLiquidityPool(goCtx context.Context, msg *types.MsgWithdrawFromLiquidityPool) (*types.MsgWithdrawFromLiquidityPoolResponse, error) {
+// Message server, handler for MsgWithdrawFromPool
+func (k msgServer) WithdrawFromPool(goCtx context.Context, msg *types.MsgWithdrawFromPool) (*types.MsgWithdrawFromPoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	err := k.Keeper.WithdrawLiquidityPoolToBatch(ctx, msg)
+	err := k.Keeper.WithdrawPoolToBatch(ctx, msg)
 	if err != nil {
 		return nil, err
 	}
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			//types.EventTypeWithdrrawFromLiquidityPoolToBatch,
+			//types.EventTypeWithdrrawFromPoolToBatch,
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.WithdrawerAddress),
 			sdk.NewAttribute(types.AttributeValueBatchID, ""),
 		),
 	)
-	return &types.MsgWithdrawFromLiquidityPoolResponse{}, nil
+	return &types.MsgWithdrawFromPoolResponse{}, nil
 }
 
 // Message server, handler for MsgSwap
 func (k msgServer) Swap(goCtx context.Context, msg *types.MsgSwap) (*types.MsgSwapResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if _, err := k.Keeper.SwapLiquidityPoolToBatch(ctx, msg, 0); err != nil {
+	if _, err := k.Keeper.SwapPoolToBatch(ctx, msg, 0); err != nil {
 		return &types.MsgSwapResponse{}, err
 	}
 	return &types.MsgSwapResponse{}, nil

@@ -3,31 +3,31 @@ package types
 // DONTCOVER
 // client is excluded from test coverage in the poc phase milestone 1 and will be included in milestone 2 with completeness
 
-// QueryLiquidityPool liquidity query endpoint supported by the liquidity querier
+// QueryPool liquidity query endpoint supported by the liquidity querier
 const (
-	QueryLiquidityPool  = "liquidityPool"
-	QueryLiquidityPools = "liquidityPools"
+	QueryPool  = "pool"
+	QueryPools = "pools"
 )
 
-// QueryLiquidityPoolParams is the query parameters for 'custom/liquidity'
-type QueryLiquidityPoolParams struct {
+// QueryPoolParams is the query parameters for 'custom/liquidity'
+type QueryPoolParams struct {
 	PoolId uint64 `json:"pool_id" yaml:"pool_id"`
 }
 
 // return params of Liquidity Pool Query
-func NewQueryLiquidityPoolParams(poolId uint64) QueryLiquidityPoolParams {
-	return QueryLiquidityPoolParams{
+func NewQueryPoolParams(poolId uint64) QueryPoolParams {
+	return QueryPoolParams{
 		PoolId: poolId,
 	}
 }
 
 // QueryValidatorsParams defines the params for the following queries:
-// - 'custom/liquidity/liquidityPools'
-type QueryLiquidityPoolsParams struct {
+// - 'custom/liquidity/pools'
+type QueryPoolsParams struct {
 	Page, Limit int
 }
 
 // return params of Liquidity Pools Query
-func NewQueryLiquidityPoolsParams(page, limit int) QueryLiquidityPoolsParams {
-	return QueryLiquidityPoolsParams{page, limit}
+func NewQueryPoolsParams(page, limit int) QueryPoolsParams {
+	return QueryPoolsParams{page, limit}
 }

@@ -29,9 +29,9 @@ func GetQueryCmd() *cobra.Command {
 
 	liquidityQueryCmd.AddCommand(
 		GetCmdQueryParams(),
-		GetCmdQueryLiquidityPool(),
-		GetCmdQueryLiquidityPools(),
-		GetCmdQueryLiquidityPoolBatch(),
+		GetCmdQueryPool(),
+		GetCmdQueryPools(),
+		GetCmdQueryPoolBatch(),
 		GetCmdQueryPoolBatchDepositMsgs(),
 		GetCmdQueryPoolBatchDepositMsg(),
 		GetCmdQueryPoolBatchWithdrawMsgs(),
@@ -79,7 +79,7 @@ $ %s query liquidity params
 	return cmd
 }
 
-func GetCmdQueryLiquidityPool() *cobra.Command {
+func GetCmdQueryPool() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "pool [pool-id]",
 		Args:  cobra.ExactArgs(1),
@@ -105,16 +105,16 @@ $ %s query liquidity pool 1
 			}
 
 			// Query the pool
-			res, err := queryClient.LiquidityPool(
+			res, err := queryClient.Pool(
 				context.Background(),
-				&types.QueryLiquidityPoolRequest{PoolId: poolId},
+				&types.QueryPoolRequest{PoolId: poolId},
 			)
 			if err != nil {
 				return fmt.Errorf("failed to fetch poolId %d: %s", poolId, err)
 			}
 
-			params := &types.QueryLiquidityPoolRequest{PoolId: poolId}
-			res, err = queryClient.LiquidityPool(context.Background(), params)
+			params := &types.QueryPoolRequest{PoolId: poolId}
+			res, err = queryClient.Pool(context.Background(), params)
 			if err != nil {
 				return err
 			}
@@ -128,7 +128,7 @@ $ %s query liquidity pool 1
 	return cmd
 }
 
-func GetCmdQueryLiquidityPools() *cobra.Command {
+func GetCmdQueryPools() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "pools",
 		Args:  cobra.NoArgs,
@@ -152,7 +152,7 @@ $ %s query liquidity pools
 			if err != nil {
 				return err
 			}
-			result, err := queryClient.LiquidityPools(context.Background(), &types.QueryLiquidityPoolsRequest{Pagination: pageReq})
+			result, err := queryClient.Pools(context.Background(), &types.QueryPoolsRequest{Pagination: pageReq})
 			if err != nil {
 				return err
 			}
@@ -164,7 +164,7 @@ $ %s query liquidity pools
 	return cmd
 }
 
-func GetCmdQueryLiquidityPoolBatch() *cobra.Command {
+func GetCmdQueryPoolBatch() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "batch [pool-id]",
 		Args:  cobra.ExactArgs(1),
@@ -190,16 +190,16 @@ $ %s query liquidity batch 1
 			}
 
 			// Query the pool
-			result, err := queryClient.LiquidityPoolBatch(
+			result, err := queryClient.PoolBatch(
 				context.Background(),
-				&types.QueryLiquidityPoolBatchRequest{PoolId: poolId},
+				&types.QueryPoolBatchRequest{PoolId: poolId},
 			)
 			if err != nil {
 				return fmt.Errorf("failed to fetch poolId %d: %s", poolId, err)
 			}
 
-			params := &types.QueryLiquidityPoolBatchRequest{PoolId: poolId}
-			result, err = queryClient.LiquidityPoolBatch(context.Background(), params)
+			params := &types.QueryPoolBatchRequest{PoolId: poolId}
+			result, err = queryClient.PoolBatch(context.Background(), params)
 			if err != nil {
 				return err
 			}

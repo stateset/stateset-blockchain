@@ -1,10 +1,10 @@
 package types
 
 // NewGenesisState is the constructor function for GenesisState
-func NewGenesisState(params Params, liquidityPoolRecords []PoolRecord) *GenesisState {
+func NewGenesisState(params Params, poolRecords []PoolRecord) *GenesisState {
 	return &GenesisState{
 		Params:      params,
-		PoolRecords: liquidityPoolRecords,
+		PoolRecords: poolRecords,
 	}
 }
 

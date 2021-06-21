@@ -10,7 +10,7 @@ option go_package = "github.com/stateset/stateset-blockchain/types";
 // Msg defines the staking Msg service.
 service MsgApi {
   // Submit create liquidity pool message.
-  rpc CreateLiquidityPoolApi(MsgCreateLiquidityPoolRequest) returns (MsgCreateLiquidityPoolResponse) {
+  rpc CreatePoolApi(MsgCreatePoolRequest) returns (MsgCreatePoolResponse) {
     option (google.api.http) = {
       post: "/liquidity/pools"
       body: "*"
@@ -23,7 +23,7 @@ service MsgApi {
   };
 
   // Submit deposit to the liquidity pool batch
-  rpc DepositToLiquidityPoolApi(MsgDepositToLiquidityPoolRequest) returns (MsgDepositToLiquidityPoolResponse) {
+  rpc DepositToPoolApi(MsgDepositToPoolRequest) returns (MsgDepositToPoolResponse) {
     option (google.api.http) = {
       post: "/liquidity/pools/{pool_id}/batch/deposits"
       body: "*"
@@ -35,7 +35,7 @@ service MsgApi {
   };
 
   // Submit withdraw from to the liquidity pool batch
-  rpc WithdrawFromLiquidityPoolApi(MsgWithdrawFromLiquidityPoolRequest) returns (MsgWithdrawFromLiquidityPoolResponse) {
+  rpc WithdrawFromPoolApi(MsgWithdrawFromPoolRequest) returns (MsgWithdrawFromPoolResponse) {
     option (google.api.http) = {
       post: "/liquidity/pools/{pool_id}/batch/withdraws"
       body: "*"

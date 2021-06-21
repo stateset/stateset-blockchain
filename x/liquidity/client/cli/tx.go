@@ -51,7 +51,7 @@ $ %s tx liquidity create-pool 1 1000000000uatom,50000000000uusd --from mykey
 In this example, user requests to create new liquidity pool with 100000000stake and 100000000token.
 User must create with a combination of coins that are not already exist in the network.
 In this version, pool-type-id 1 is only available, which requires two different coins.
-{"id":1,"name":"ConstantProductLiquidityPool","min_reserve_coin_num":2,"max_reserve_coin_num":2,"description":""}
+{"id":1,"name":"ConstantProductPool","min_reserve_coin_num":2,"max_reserve_coin_num":2,"description":""}
 `,
 				version.AppName,
 			),
