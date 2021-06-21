@@ -1,6 +1,6 @@
 PACKAGES=$(shell go list ./... | grep -v '/simulation')
 
-VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
+VERSION := $(shell echo $(shell git describe --tags))
 COMMIT := $(shell git log -1 --format='%H')
 
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=Stateset \
@@ -14,9 +14,8 @@ BUILD_FLAGS := -ldflags '$(ldflags)'
 all: install
 
 install: go.sum
-		@echo "--> Installing statesetd & statesetcli"
-		@go install  $(BUILD_FLAGS) ./cmd/statesetd
-		@go install  $(BUILD_FLAGS) ./cmd/statesetcli
+		go install -mod=readonly $(BUILD_FLAGS) ./cmd/statesetd
+		go install -mod=readonly $(BUILD_FLAGS) ./cmd/statesetcli
 
 go.sum: go.mod
 		@echo "--> Ensure dependencies have not been modified"

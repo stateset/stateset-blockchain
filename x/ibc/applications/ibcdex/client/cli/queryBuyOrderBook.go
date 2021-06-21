@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/domsteil/dex/x/ibcdex/types"
+	"github.com/stateset/stateset-blockchain/x/ibc/applications/ibcdex/types"
 	"github.com/spf13/cobra"
 )
 
