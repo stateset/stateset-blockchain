@@ -13,7 +13,6 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		PortId: PortID,
-		// this line is used by starport scaffolding # genesis/types/default
 		TimedoutPurchaseOrderList: []*TimedoutPurchaseOrder{},
 		SentPurchaseOrderList:     []*SentPurchaseOrder{},
 	}
