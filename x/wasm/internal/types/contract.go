@@ -3,7 +3,7 @@ package types
 import (
 	"fmt"
 
-	wasmTypes "github.com/CosmWasm/go-cosmwasm/types"
+	wasmTypes "github.com/CosmWasm/wasmd/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	core "github.com/stateset/stateset-blockchain/types"

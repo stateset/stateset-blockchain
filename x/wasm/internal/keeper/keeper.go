@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	wasm "github.com/CosmWasm/go-cosmwasm"
+	wasm "github.com/CosmWasm/wasmd"
 	"github.com/spf13/viper"
 
 	"github.com/tendermint/tendermint/libs/log"
