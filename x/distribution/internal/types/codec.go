@@ -4,7 +4,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
-	"github.com/stateset/stateset-blockchain/x/gov"
 )
 
 // RegisterCodec registers concrete types on codec

@@ -1,13 +1,14 @@
 package bank
 
 import (
-	app "github.com/stateset/stateset-blockchain/types"
+	"github.com/TruStory/truchain/x/distribution"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	"github.com/cosmos/cosmos-sdk/x/supply"
+	app "github.com/stateset/stateset-blockchain/types"
 )
 
 // Keeper is the model object for the package bank module
@@ -180,7 +181,6 @@ func (k Keeper) send(ctx sdk.Context,
 
 	return nil
 }
-
 
 // SendCoins moves coins from one account to another
 func (k Keeper) SendCoins(
