@@ -1,8 +1,10 @@
 package types
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/pkg/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const (
@@ -36,31 +38,31 @@ var _ sdk.Msg = &MsgExpireAgreement{}
 
 // MsgCreateAgreement defines a message to create an agreement
 type MsgCreateAgreement struct {
-	AgreementID     uint64         `json:"agreementid"`
-	AgreementName string `json:"agreementName"`
-	AgreementNumber string `json:"agreementNumber"`
-	AgreementType string `json:"agreementType"`
-	AgreementStatus string `json:"agreementStatus"`
-	AgreementNumber string `json:"agreementNumber"`
-	Party string `json:"party"`
-	Counterparty string `json:"counterparty"`
+	AgreementID         uint64 `json:"agreementid"`
+	AgreementName       string `json:"agreementName"`
+	AgreementNumber     string `json:"agreementNumber"`
+	AgreementType       string `json:"agreementType"`
+	AgreementStatus     string `json:"agreementStatus"`
+	AgreementNumber     string `json:"agreementNumber"`
+	Party               string `json:"party"`
+	Counterparty        string `json:"counterparty"`
 	AgreementStartBlock string `json:"AgreementStartBlock"`
-	AgreementEndBlock string `json:"AgreementEndBlock"`
+	AgreementEndBlock   string `json:"AgreementEndBlock"`
 }
 
 // NewMsgCreateAgreement creates a new message to create an agreement
 func NewMsgCreateAgreement(agreementID string, agreementNumber string, agreementName string, agreementType string, agreementStatus string, totalAgreementValue int, party sdk.AccAddress, counterparty sdk.AccAddress, agreementStartBlock string, agreementEndBlock string) MsgCreateAgreement {
-	return MsgCreateAgreement {
-		AgreementID:    agreementID,
-		AgreementNumber: agreementNumber,
-		AgreementName: agreementName,
-		AgreementType: agreementType,
-		AgreementStatus: agreementStatus,
+	return MsgCreateAgreement{
+		AgreementID:         agreementID,
+		AgreementNumber:     agreementNumber,
+		AgreementName:       agreementName,
+		AgreementType:       agreementType,
+		AgreementStatus:     agreementStatus,
 		TotalAgreementValue: totalAgreementValue,
-		Party: party,
-		Counterparty: counterparty,
+		Party:               party,
+		Counterparty:        counterparty,
 		AgreementStartBlock: agreementStartBlock,
-		AgreementEndBlock: agreementEndBlock
+		AgreementEndBlock:   agreementEndBlock,
 	}
 }
 
@@ -88,93 +90,90 @@ func (msg MsgCreateAgreement) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgBytes)
 }
 
-
 // Update Agreement
 func NewMsgUpdateAgreement(creator string, agreementId string, agreementNumber string, agreementName string, agreementType string, agreementStatus string, totalAgreementValue string, party string, counterparty string, AgreementStartBlock string, AgreementEndBlock string) *MsgUpdateAgreement {
 	return &MsgUpdateAgreement{
-	  AgreeemntId: agreementId,
-	  AgreementNumber: agreementNumber,
-	  AgreementName: agreementName,
-	  AgreementType: agreementType,
-	  AgreementStatus: agreementStatus,
-	  TotalAgreementValue: totalAgreementValue,
-	  Party: party,
-	  Counterparty: counterparty,
-	  AgreementStartBlock: AgreementStartBlock,
-	  AgreementEndBlock: AgreementEndBlock,
-	  }
-  }
-  
-  func (msg *MsgUpdateAgreement) Route() string { return RouterKey }
-  
-  func (msg *MsgUpdateAgreement) Type() string { return "UpdateAgreement" }
-  
-  func (msg *MsgUpdateAgreement) GetSigners() []sdk.AccAddress {
+		AgreeemntId:         agreementId,
+		AgreementNumber:     agreementNumber,
+		AgreementName:       agreementName,
+		AgreementType:       agreementType,
+		AgreementStatus:     agreementStatus,
+		TotalAgreementValue: totalAgreementValue,
+		Party:               party,
+		Counterparty:        counterparty,
+		AgreementStartBlock: AgreementStartBlock,
+		AgreementEndBlock:   AgreementEndBlock,
+	}
+}
+
+func (msg *MsgUpdateAgreement) Route() string { return RouterKey }
+
+func (msg *MsgUpdateAgreement) Type() string { return "UpdateAgreement" }
+
+func (msg *MsgUpdateAgreement) GetSigners() []sdk.AccAddress {
 	creator, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-	  panic(err)
+		panic(err)
 	}
 	return []sdk.AccAddress{creator}
-  }
-  
-  func (msg *MsgUpdateAgreement) GetSignBytes() []byte {
+}
+
+func (msg *MsgUpdateAgreement) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
-  }
-  
-  func (msg *MsgUpdateAgreement) ValidateBasic() error {
+}
+
+func (msg *MsgUpdateAgreement) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-	  return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-	}
-	 return nil
-  }
-  
-  var _ sdk.Msg = &MsgCreateAgreement{}
-  
-  // Delete Agreement
-  func NewMsgDeleteAgreement(creator string, id string) *MsgDeleteAgreement {
-	return &MsgDeleteAgreement{
-		  Id: id,
-		  Creator: creator,
-	  }
-  } 
-  func (msg *MsgDeleteAgreement) Route() string {
-	return RouterKey
-  }
-  
-  func (msg *MsgDeleteAgreement) Type() string {
-	return "DeleteAgreement"
-  }
-  
-  func (msg *MsgDeleteAgreement) GetSigners() []sdk.AccAddress {
-	creator, err := sdk.AccAddressFromBech32(msg.Creator)
-	if err != nil {
-	  panic(err)
-	}
-	return []sdk.AccAddress{creator}
-  }
-  
-  func (msg *MsgDeleteAgreement) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
-  }
-  
-  func (msg *MsgDeleteAgreement) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Creator)
-	if err != nil {
-	  return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 	return nil
-  }
-  
+}
 
+var _ sdk.Msg = &MsgCreateAgreement{}
+
+// Delete Agreement
+func NewMsgDeleteAgreement(creator string, id string) *MsgDeleteAgreement {
+	return &MsgDeleteAgreement{
+		Id:      id,
+		Creator: creator,
+	}
+}
+func (msg *MsgDeleteAgreement) Route() string {
+	return RouterKey
+}
+
+func (msg *MsgDeleteAgreement) Type() string {
+	return "DeleteAgreement"
+}
+
+func (msg *MsgDeleteAgreement) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
+}
+
+func (msg *MsgDeleteAgreement) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
+}
+
+func (msg *MsgDeleteAgreement) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+	return nil
+}
 
 // Amend Agreement
 
 // MsgAmendAgreement defines a message to amend an agreement
 type MsgAmendAgreement struct {
-	ID      uint64         `json:"id"`
+	ID           uint64         `json:"id"`
 	Counterparty sdk.AccAddress `json:"counterparty"`
 }
 
@@ -210,8 +209,6 @@ func (msg MsgAmendAgreement) GetSignBytes() []byte {
 func (msg MsgAmendAgreement) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
 }
-
-
 
 // Activate Agreement
 
@@ -259,15 +256,13 @@ func (msg MsgActivateAgreement) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
 }
 
-
-
 // Renew Agreement
 
 // MsgRenewAgreement defines a message to renew an agreement
 type MsgRenewAgreement struct {
-	AgreementID              uint64         `json:"agreementid"`
-	AgreementStatus 		 string         `json:"agreementStatus"`
-	Counterparty    		 sdk.AccAddress `json:"counterparty"`
+	AgreementID     uint64         `json:"agreementid"`
+	AgreementStatus string         `json:"agreementStatus"`
+	Counterparty    sdk.AccAddress `json:"counterparty"`
 }
 
 // Route is the name of the route for an agreement
@@ -306,7 +301,6 @@ func (msg MsgRenewAgreement) GetSignBytes() []byte {
 func (msg MsgRenewAgreement) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
 }
-
 
 // Terminate Agreement
 
@@ -354,8 +348,6 @@ func (msg MsgTerminateAgreement) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
 }
 
-
-
 // Expire Agreement
 
 // MsgExpireAgreement defines a message to expire an agreement
@@ -402,34 +394,27 @@ func (msg MsgExpireAgreement) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
 }
 
-
-
-
-
-
-
-
 // MsgEditAgreement defines a message to edit an agreement
 type MsgEditAgreement struct {
-	AgreementID     uint64         `json:"agreementid"`
-	AgreementName string `json:"agreementName"`
-	AgreementNumber string `json:"agreementNumber"`
-	TotalAgreementValue string `json:"totalAgreementValue"`
-	AgreementStartBlock string `json:"AgreementStartBlock"`
-	AgreementEndBlock string `json:"AgreementEndBlock"`
-	Editor sdk.AccAddress `json:"editor"`
+	AgreementID         uint64         `json:"agreementid"`
+	AgreementName       string         `json:"agreementName"`
+	AgreementNumber     string         `json:"agreementNumber"`
+	TotalAgreementValue string         `json:"totalAgreementValue"`
+	AgreementStartBlock string         `json:"AgreementStartBlock"`
+	AgreementEndBlock   string         `json:"AgreementEndBlock"`
+	Editor              sdk.AccAddress `json:"editor"`
 }
 
 // NewMsgEditAgreement creates a new message to edit a loan
 func NewMsgEditAgreement(agreementId uint64, agreementName string, agreementNumber, totalAgreementValue sdk.Coin, AgreementStartBlock time.Time, AgreementEndBlock time.Time, editor sdk.AccAddress) MsgEditLoan {
 	return MsgEditLoan{
-		ID:     agreementid,
-		AgreementName: agreementName,
-		AgreementNumber: agreementNumber,
+		ID:                  agreementid,
+		AgreementName:       agreementName,
+		AgreementNumber:     agreementNumber,
 		TotalAgreementValue: totalAgreementValue,
 		AgreementStartBlock: AgreementStartBlock,
-		AgreementEndBlock: AgreementEndBlock,
-		Editor: editor,
+		AgreementEndBlock:   AgreementEndBlock,
+		Editor:              editor,
 	}
 }
 

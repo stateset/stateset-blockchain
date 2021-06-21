@@ -90,7 +90,7 @@ import (
 	//distr "github.com/stateset/stateset-blockchain/x/distribution"
 	//"github.com/stateset/stateset-blockchain/x/invoice"
 	//"github.com/stateset/stateset-blockchain/x/liquidity"
-	"github.com/stateset/stateset-blockchain/x/purchaseorder"
+	//"github.com/stateset/stateset-blockchain/x/purchaseorder"
 	//"github.com/stateset/stateset-blockchain/x/wasm"
 )
 
