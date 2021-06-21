@@ -2,6 +2,7 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const (
@@ -56,7 +57,7 @@ func (msg MsgCreatePurchaseOrder) Route() string { return RouterKey }
 func (msg MsgCreatePurchaseOrder) Type() string { return TypeMsgCreatePurchaseOrder }
 
 // ValidateBasic validates basic fields of the Msg
-func (msg MsgCreatePurchaseOrder) ValidateBasic() sdk.Error {
+func (msg MsgCreatePurchaseOrder) ValidateBasic() sdkerrors {
 	if len(msg.Description) == 0 {
 		return ErrInvalidDescrtiptionTooShort(msg.Description)
 	}
@@ -111,7 +112,7 @@ func (msg MsgCompletePurchaseOrder) Type() string {
 }
 
 // ValidateBasic validates basic fields of the Msg
-func (msg MsgCompletePurchaseOrder) ValidateBasic() sdk.Error {
+func (msg MsgCompletePurchaseOrder) ValidateBasic() sdkerrors {
 	if msg.AgreementID == 0 {
 		return ErrUnknownAgreement(msg.AgreementID)
 	}
