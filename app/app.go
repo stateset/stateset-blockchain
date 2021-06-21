@@ -9,6 +9,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/spf13/cast"
+	"github.com/stateset/stateset-blockchain/x/invoice"
+	"github.com/stateset/stateset-blockchain/x/liquidity"
+	"github.com/stateset/stateset-blockchain/x/purchaseorder"
+	"github.com/stateset/stateset-blockchain/x/wasm"
+	"github.com/tendermint/spm/openapiconsole"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmos "github.com/tendermint/tendermint/libs/os"
@@ -75,14 +80,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/cosmos/cosmos-sdk/x/supply"
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradeclient "github.com/cosmos/cosmos-sdk/x/upgrade/client"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	tmjson "github.com/tendermint/tendermint/libs/json"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-
-
 	//"github.com/stateset/stateset-blockchain/x/agreement"
 	//"github.com/stateset/stateset-blockchain/x/auth"
 	//"github.com/stateset/stateset-blockchain/x/auth/ante"
@@ -289,9 +293,9 @@ func NewStatesetApp(
 
 	// add keepers
 	app.AccountKeeper = authkeeper.NewAccountKeeper(
-		appCodec, 
-		keys[authtypes.StoreKey], 
-		app.GetSubspace(authtypes.ModuleName), 
+		appCodec,
+		keys[authtypes.StoreKey],
+		app.GetSubspace(authtypes.ModuleName),
 		authtypes.ProtoBaseAccount,
 		maccPerms,
 	)
@@ -306,9 +310,9 @@ func NewStatesetApp(
 
 	stakingKeeper := stakingkeeper.NewKeeper(
 		appCodec,
-		keys[stakingtypes.StoreKey], 
-		app.AccountKeeper, 
-		app.BankKeeper, 
+		keys[stakingtypes.StoreKey],
+		app.AccountKeeper,
+		app.BankKeeper,
 		app.GetSubspace(stakingtypes.ModuleName),
 	)
 
@@ -317,14 +321,14 @@ func NewStatesetApp(
 		keys[minttypes.StoreKey],
 		app.GetSubspace(minttypes.ModuleName),
 		&stakingKeeper,
-		app.AccountKeeper, 
-		app.BankKeeper, 
+		app.AccountKeeper,
+		app.BankKeeper,
 		authtypes.FeeCollectorName,
 	)
 
 	app.DistrKeeper = distrkeeper.NewKeeper(
 		appCodec,
-		keys[distrtypes.StoreKey], 
+		keys[distrtypes.StoreKey],
 		app.GetSubspace(distrtypes.ModuleName),
 		app.AccountKeeper,
 		app.BankKeeper,
@@ -348,19 +352,14 @@ func NewStatesetApp(
 	)
 
 	app.UpgradeKeeper = upgradekeeper.NewKeeper(
-		skipUpgradeHeights, 
+		skipUpgradeHeights,
 		keys[upgradetypes.StoreKey],
-		appCodec, 
+		appCodec,
 		homePath,
 	)
 
-	// register the staking hooks
-	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	app.StakingKeeper = *stakingKeeper.SetHooks(
-		stakingtypes.NewMultiStakingHooks(
-			app.DistrKeeper.Hooks(),
-			app.SlashingKeeper.Hooks()
-		),
+		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
 	)
 
 	// Create IBC Keeper
@@ -523,7 +522,6 @@ func NewStatesetApp(
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
 
-
 	app.SetAnteHandler(
 		ante.NewAnteHandler(
 			app.AccountKeeper,
@@ -597,11 +595,9 @@ func (app *StatesetApp) ModuleAccountAddrs() map[string]bool {
 	return modAccAddrs
 }
 
-
 func (app *StatesetApp) LegacyAmino() *codec.LegacyAmino {
 	return app.cdc
 }
-
 
 func (app *StatesetApp) AppCodec() codec.Marshaler {
 	return app.appCodec
