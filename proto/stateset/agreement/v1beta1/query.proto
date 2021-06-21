@@ -4,6 +4,8 @@ package stateset.agreement.v1beta1;
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "stateset/agreement/v1beta1/agreement.proto";
 
 option go_package = "github.com/stateset/stateset-blockchain/x/agreements/types";
 
@@ -45,11 +47,16 @@ message QueryAgreementResponse {
 // QueryAgreementRequest is the Query/Agreement request type.
 message QueryAgreementsRequest {
 
-  string agreementId = 1;[ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+  AgreementFilters filters = 1 [(gogoproto.nullable) = false];
+
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 message QueryAgreementsResponse {
-    repeated Agreement agreements = 1 [ (gogoproto.nullable) = false ];
+  
+  repeated Agreement agreements = 1 [ (gogoproto.nullable) = false ];
+
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
     
 }
 
@@ -57,22 +64,7 @@ message QueryAgreementsResponse {
 message QueryAgreementParamsRequest {
   uint64 agreementId = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
 }
+
 message QueryAgreementParamsResponse {
   AgreementParams params = 1 [ (gogoproto.nullable) = false ];
-}
-
-
-message QueryAgreementResponse {
-
-  string creator = 1;
-  string agreement_id = 2;
-  string agreementNumber = 3; 
-  string agreementName = 4; 
-  string agreementType = 5; 
-  string agreementStatus = 6; 
-  int32 totalAgreementValue = 7; 
-  string party = 8; 
-  string counterparty = 9; 
-  string AgreementStartBlock = 10; 
-  string AgreementEndBlock = 11;
 }

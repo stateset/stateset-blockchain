@@ -2,6 +2,7 @@ syntax = "proto3";
 package stateset.agreement.v1beta1;
 
 import "gogoproto/gogo.proto";
+import "stateset/agreement/v1beta1/agreement.proto"
 
 option go_package = "github.com/stateset/stateset-blockchain/x/agreement/types";
 

@@ -80,10 +80,33 @@ message MsgExpireAgreement {
 }
 
 
-service Query {
+// State is an enum which refers to state of an agreement
+enum State {
+  option (gogoproto.goproto_enum_prefix) = false;
+  // Prefix should start with 0 in enum. So declaring dummy state
+  invalid = 0 [(gogoproto.enumvalue_customname) = "AgreementStateInvalid"];
 
-  rpc Status(QueryStatusRequest) returns (QueryStatusResponse) {
-    option (google.api.http).get = "/stateset/agreement/status/{id}";
+  request = 1 [(gogoproto.enumvalue_customname) = "Request"];
 
-  }
+  active = 2 [(gogoproto.enumvalue_customname) = "Activated"];
+
+  amended = 3 [(gogoproto.enumvalue_customname) = "Amended"];
+
+  renewed = 4 [(gogoproto.enumvalue_customname) = "Renewed"];
+
+  terminated = 5 [(gogoproto.enumvalue_customname) = "Terminated"]
+
+  expired = 6 [(gogoproto.enumvalue_customname) = "Expired"]
+}
+
+State state = 2 [(gogoproto.jsontag) = "state", (gogoproto.moretags) = "yaml:\"state\""];
+
+
+message AgreementFilters {
+  option (gogoproto.equal) = false;
+
+  string owner = 1 [(gogoproto.jsontag) = "owner", (gogoproto.moretags) = "yaml:\"owner\""];
+
+  string state = 2 [(gogoproto.jsontag) = "state", (gogoproto.moretags) = "yaml:\"state\""];
+
 }
