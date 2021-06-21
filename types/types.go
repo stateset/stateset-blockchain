@@ -3,7 +3,6 @@ package types
 import (
 	stypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
 )
 
 const (
@@ -40,16 +39,9 @@ const (
 // InitialStake is an `sdk.Coins` representing the balance a new user is granted upon registration
 var InitialStake = sdk.Coin{Amount: sdk.NewInt(330 * SSET), Denom: StakeDenom}
 
-// RegistrationFee is an `auth.StdFee` representing the coin and gas cost of registering a new account
-// TODO: Use more accurate gas estimate [notduncansmith]
-var RegistrationFee = auth.StdFee{
-	Amount: sdk.Coins{sdk.Coin{Amount: sdk.NewInt(1), Denom: StakeDenom}},
-	Gas:    20000,
-}
-
 // NewStatesetCoin returns the desired amount
 func NewStatesetCoin(amount int64) sdk.Coin {
-	return sdk.NewInt64Coin(StakeDenom, amount*STATE)
+	return sdk.NewInt64Coin(StakeDenom, amount*SSET)
 }
 
 // MsgResult is the default success response for a chain request
