@@ -3,7 +3,6 @@ package bank
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/stateset/stateset-blockchain/x/bank/internal/types"
 )
 
 func EndBlocker(ctx sdk.Context, k Keeper, sk types.SupplyKeeper) {

@@ -9,7 +9,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/spf13/cast"
-	"github.com/tendermint/spm/openapiconsole"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmos "github.com/tendermint/tendermint/libs/os"
@@ -76,7 +75,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/cosmos/cosmos-sdk/x/supply"
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradeclient "github.com/cosmos/cosmos-sdk/x/upgrade/client"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
@@ -84,7 +82,6 @@ import (
 	tmjson "github.com/tendermint/tendermint/libs/json"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/stateset/stateset-blockchain/x/agreement"
 	"github.com/stateset/stateset-blockchain/x/auth"
@@ -95,11 +92,10 @@ import (
 	"github.com/stateset/stateset-blockchain/x/invoice"
 	"github.com/stateset/stateset-blockchain/x/liquidity"
 	"github.com/stateset/stateset-blockchain/x/mint"
-	"github.com/stateset/stateset-blockchain/x/params"
 	"github.com/stateset/stateset-blockchain/x/purchaseorder"
-	"github.com/stateset/stateset-blockchain/x/slashing"
-	"github.com/stateset/stateset-blockchain/x/staking"
-	"github.com/stateset/stateset-blockchain/x/wasm"
+	//"github.com/stateset/stateset-blockchain/x/slashing"
+	//"github.com/stateset/stateset-blockchain/x/staking"
+	//"github.com/stateset/stateset-blockchain/x/wasm"
 )
 
 const appName = "StatesetApp"
