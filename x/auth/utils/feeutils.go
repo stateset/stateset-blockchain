@@ -13,9 +13,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	core "github.com/stateset/stateset-blockchain/types"
 
-	treasuryexported "github.com/stateset/stateset-blockchain/x/treasury/exported"
 	wasmexported "github.com/stateset/stateset-blockchain/x/wasm/exported"
-	msgauthexported "github.com/stateset/stateset-blockchainx/msgauth/exported"
 )
 
 type (
