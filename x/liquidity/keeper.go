@@ -4,8 +4,6 @@ import (
 	"errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stateset/stateset-blockchain"
 )
 
 type KeeperPool interface {
