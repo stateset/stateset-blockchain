@@ -12,10 +12,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+	"github.com/cosmos/cosmos-sdk/x/auth/utils"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 
-	feeutils "github.com/stateset/stateset-blockchain/x/auth/client/utils"
+	feeutils "github.com/stateset/stateset-blockchain/x/auth/utils"
 )
 
 // GetTxCmd returns the transaction commands for this module
