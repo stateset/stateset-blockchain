@@ -14,7 +14,6 @@ const (
 	RouterKey                  = types.RouterKey
 	WasmMsgParserRouteBank     = types.WasmMsgParserRouteBank
 	WasmMsgParserRouteStaking  = types.WasmMsgParserRouteStaking
-	WasmMsgParserRouteMarket   = types.WasmMsgParserRouteMarket
 	WasmMsgParserRouteWasm     = types.WasmMsgParserRouteWasm
 	DefaultParamspace          = types.DefaultParamspace
 	EnforcedMaxContractSize    = types.EnforcedMaxContractSize
@@ -30,7 +29,6 @@ const (
 	QueryContractStore         = types.QueryContractStore
 	WasmQueryRouteBank         = types.WasmQueryRouteBank
 	WasmQueryRouteStaking      = types.WasmQueryRouteStaking
-	WasmQueryRouteMarket       = types.WasmQueryRouteMarket
 	WasmQueryRouteOracle       = types.WasmQueryRouteOracle
 	WasmQueryRouteTreasury     = types.WasmQueryRouteTreasury
 	WasmQueryRouteWasm         = types.WasmQueryRouteWasm

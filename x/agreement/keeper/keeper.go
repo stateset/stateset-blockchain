@@ -25,13 +25,12 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketKeeper market.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,
 		paramStore.WithKeyTable(ParamKeyTable()),
 		accountKeeper,
-		marketKeeper,
 	}
 }
 
@@ -159,13 +158,6 @@ func (k Keeper) setAgreement(ctx sdk.Context, agreement Agreement) {
 	store := k.store(ctx)
 	bz := k.codec.MustMarshalBinaryLengthPrefixed(agreement)
 	store.Set(key(agreement.ID), bz)
-}
-
-// setMarketAgreement sets a Market <-> agreement association in store
-func (k Keeper) setMarketAgreement(ctx sdk.Context, MarketID uint64, agreementID uint64) {
-	store := k.store(ctx)
-	bz := k.codec.MustMarshalBinaryLengthPrefixed(agreementID)
-	store.Set(merchantAgreementKey(MarketID, agreementID), bz)
 }
 
 // setMerchantAgreement sets a merchant <-> agreement association in store

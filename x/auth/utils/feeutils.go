@@ -13,10 +13,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	core "github.com/stateset/stateset-blockchain/types"
 
-	marketexported "github.com/stateset/stateset-blockchain/x/market/exported"
-	msgauthexported "github.com/stateset/stateset-blockchainx/msgauth/exported"
 	treasuryexported "github.com/stateset/stateset-blockchain/x/treasury/exported"
 	wasmexported "github.com/stateset/stateset-blockchain/x/wasm/exported"
+	msgauthexported "github.com/stateset/stateset-blockchainx/msgauth/exported"
 )
 
 type (
@@ -201,14 +200,6 @@ func filterMsgAndComputeTax(cliCtx context.CLIContext, msgs []sdk.Msg) (taxes sd
 
 		case msgauthexported.MsgExecAuthorized:
 			tax, err := filterMsgAndComputeTax(cliCtx, msg.Msgs)
-			if err != nil {
-				return nil, err
-			}
-
-			taxes = taxes.Add(tax...)
-
-		case marketexported.MsgSwapSend:
-			tax, err := computeTax(cliCtx, taxRate, sdk.NewCoins(msg.OfferCoin))
 			if err != nil {
 				return nil, err
 			}

@@ -29,20 +29,10 @@ type QueryInvoicesParams struct {
 	IDs []uint64 `json:"ids"`
 }
 
-// QueryMarketInvoicsParams for market invoices
-type QueryMarketInvoicesParams struct {
-	MarketID string `json:"market_id"`
-}
-
 // QueryInvoiceIDRangeParams for invoices by an id range
 type QueryInvoiceIDRangeParams struct {
 	StartID uint64 `json:"start_id"`
 	EndID   uint64 `json:"end_id"`
-}
-
-// QueryMerchantInvoiceParams for market invoices
-type QueryMerchantInvoiceParams struct {
-	Merchant sdk.AccAddress `json:"merchant"`
 }
 
 // QueryInvoicesTimeParams for invoices by time

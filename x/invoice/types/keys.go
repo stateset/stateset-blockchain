@@ -12,7 +12,6 @@ import (
 // - 0x00<invoiceID_Bytes>: Invoice_Bytes
 // - 0x01: nextInvoiceID_Bytes
 //
-// - 0x10<MarketID_Bytes><invoiceID_Bytes>: invoiceID_Bytes
 // - 0x11<merchant_Bytes><invoiceID_Bytes>: invoiceID_Bytes
 // - 0x12<createdTime_Bytes><invoiceID_Bytes>: invoiceID_Bytes
 var (

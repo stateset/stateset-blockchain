@@ -13,16 +13,15 @@ type CodeType = sdk.CodeType
 const (
 	DefaultCodespace sdk.CodespaceType = ModuleName
 
-	ErrorCodeInvalidBodyTooShort         CodeType = 101
-	ErrorCodeInvalidBodyTooLong          CodeType = 102
-	ErrorCodeInvalidID                   CodeType = 103
-	ErrorCodeNotFound                    CodeType = 104
-	ErrorCodeInvalidSType                CodeType = 105
-	ErrorCodeInvoicesWithMarketNotFound CodeType = 106
-	ErrorCodeInvalidSourceURL            CodeType = 107
-	ErrorCodeMerchantJailed               CodeType = 108
-	ErrorCodeAddressNotAuthorised        CodeType = 109
-	ErrorCodeJSONParsing                 CodeType = 110
+	ErrorCodeInvalidBodyTooShort  CodeType = 101
+	ErrorCodeInvalidBodyTooLong   CodeType = 102
+	ErrorCodeInvalidID            CodeType = 103
+	ErrorCodeNotFound             CodeType = 104
+	ErrorCodeInvalidSType         CodeType = 105
+	ErrorCodeInvalidSourceURL     CodeType = 107
+	ErrorCodeMerchantJailed       CodeType = 108
+	ErrorCodeAddressNotAuthorised CodeType = 109
+	ErrorCodeJSONParsing          CodeType = 110
 )
 
 // ErrInvalidBodyTooShort throws an error on invalid invoice body
@@ -47,14 +46,6 @@ func ErrUnknownInvoice(id uint64) sdk.Error {
 		DefaultCodespace,
 		ErrorCodeInvalidID,
 		fmt.Sprintf("Unknown invoice id: %d", id))
-}
-
-// ErrInvalidMarketID throws an error on invalid market id
-func ErrInvalidMarketID(id string) sdk.Error {
-	return sdk.NewError(
-		DefaultCodespace,
-		ErrorCodeClaimsWithMarketNotFound,
-		fmt.Sprintf("Invalid market id: %s", id))
 }
 
 // ErrInvalidSourceURL throws an error when a URL in invalid

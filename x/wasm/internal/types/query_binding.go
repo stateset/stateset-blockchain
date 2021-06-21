@@ -42,7 +42,6 @@ var _ wasmTypes.Querier = Querier{}
 const (
 	WasmQueryRouteBank     = "bank"
 	WasmQueryRouteStaking  = "staking"
-	WasmQueryRouteMarket   = "market"
 	WasmQueryRouteOracle   = "oracle"
 	WasmQueryRouteTreasury = "treasury"
 	WasmQueryRouteWasm     = "wasm"

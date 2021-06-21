@@ -17,19 +17,16 @@ type Keeper struct {
 	storeKey   sdk.StoreKey
 	codec      *codec.Codec
 	paramStore params.Subspace
-
 	accountKeeper   AccountKeeper
-	marketKeeper market.Keeper
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper, marketKeeper market.Keeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,
 		paramStore.WithKeyTable(ParamKeyTable()),
-		accountKeeper,
-		marketKeeper,
+		accountKeeper
 	}
 }
 
@@ -46,7 +43,7 @@ func (k Keeper) CreateInvoice(ctx sdk.Context, body, invoiceID string,
 	if err != nil {
 		return
 	}
-	invoice = NewInvoice(invoiceID, MarketID, body, merchant, source,
+	invoice = NewInvoice(invoiceID, body, merchant, source,
 		ctx.BlockHeader().Time,
 	)
 
@@ -136,11 +133,6 @@ func (k Keeper) InvoicessAfterTime(ctx sdk.Context, createdTime time.Time) (invo
 	iterator := k.afterCreatedTimeInvoicesIterator(ctx, createdTime)
 
 	return k.iterateAssociated(ctx, iterator)
-}
-
-// MarketInvoices gets all the invoices for a given market
-func (k Keeper) MarketInvoices(ctx sdk.Context, MarketID string) (invoices Invoices) {
-	return k.associatedInvoices(ctx, marketInvoicesKey(MarketID))
 }
 
 // MerchantInvoices gets all the invoices for a given merchant

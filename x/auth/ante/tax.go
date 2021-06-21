@@ -118,9 +118,6 @@ func FilterMsgAndComputeTax(ctx sdk.Context, tk TreasuryKeeper, msgs []sdk.Msg) 
 				taxes = taxes.Add(computeTax(ctx, tk, input.Coins)...)
 			}
 
-		case marketexported.MsgSwapSend:
-			taxes = taxes.Add(computeTax(ctx, tk, sdk.NewCoins(msg.OfferCoin))...)
-
 		case wasmexported.MsgInstantiateContract:
 			taxes = taxes.Add(computeTax(ctx, tk, msg.InitCoins)...)
 

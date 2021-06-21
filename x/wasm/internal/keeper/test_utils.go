@@ -44,7 +44,6 @@ func makeTestCodec() *codec.Codec {
 	supply.RegisterCodec(cdc)
 	distr.RegisterCodec(cdc)
 	oracle.RegisterCodec(cdc)
-	market.RegisterCodec(cdc)
 
 	return cdc
 }
@@ -59,8 +58,6 @@ type TestInput struct {
 	StakingKeeper  staking.Keeper
 	DistrKeeper    distr.Keeper
 	OracleKeeper   oracle.Keeper
-	MarketKeeper   market.Keeper
-	TreasuryKeeper treasury.Keeper
 	WasmKeeper     Keeper
 }
 
@@ -74,7 +71,6 @@ func CreateTestInput(t *testing.T) TestInput {
 	keyDistr := sdk.NewKVStoreKey(distr.StoreKey)
 	keySupply := sdk.NewKVStoreKey(supply.StoreKey)
 	keyOracle := sdk.NewKVStoreKey(oracle.StoreKey)
-	keyMarket := sdk.NewKVStoreKey(market.StoreKey)
 	keyTreasury := sdk.NewKVStoreKey(treasury.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -87,7 +83,6 @@ func CreateTestInput(t *testing.T) TestInput {
 	ms.MountStoreWithDB(keyDistr, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keySupply, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyOracle, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(keyMarket, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyTreasury, sdk.StoreTypeIAVL, db)
 
 	require.NoError(t, ms.LoadLatestVersion())
@@ -98,7 +93,6 @@ func CreateTestInput(t *testing.T) TestInput {
 		staking.BondedPoolName:    true,
 		distr.ModuleName:          true,
 		oracle.ModuleName:         true,
-		market.ModuleName:         true,
 		treasury.ModuleName:       true,
 	}
 
@@ -127,7 +121,6 @@ func CreateTestInput(t *testing.T) TestInput {
 		staking.BondedPoolName:    {supply.Burner, supply.Staking},
 		distr.ModuleName:          nil,
 		oracle.ModuleName:         nil,
-		market.ModuleName:         {supply.Burner, supply.Minter},
 		treasury.ModuleName:       {supply.Minter},
 	}
 
@@ -152,16 +145,10 @@ func CreateTestInput(t *testing.T) TestInput {
 		distrKeeper, stakingKeeper, supplyKeeper, distr.ModuleName,
 	)
 
-	marketKeeper := market.NewKeeper(
-		cdc,
-		keyMarket, paramsKeeper.Subspace(market.DefaultParamspace),
-		oracleKeeper, supplyKeeper,
-	)
-
 	treasuryKeeper := treasury.NewKeeper(
 		cdc,
 		keyTreasury, paramsKeeper.Subspace(treasury.DefaultParamspace),
-		supplyKeeper, marketKeeper, stakingKeeper, distrKeeper,
+		supplyKeeper, stakingKeeper, distrKeeper,
 		oracle.ModuleName, distr.ModuleName,
 	)
 
@@ -178,7 +165,6 @@ func CreateTestInput(t *testing.T) TestInput {
 	notBondedPool := supply.NewEmptyModuleAccount(staking.NotBondedPoolName, supply.Burner, supply.Staking)
 	bondPool := supply.NewEmptyModuleAccount(staking.BondedPoolName, supply.Burner, supply.Staking)
 	distrAcc := supply.NewEmptyModuleAccount(distr.ModuleName)
-	marketAcc := supply.NewEmptyModuleAccount(types.ModuleName, supply.Burner, supply.Minter)
 
 	// funds for huge withdraw
 	distrAcc.SetCoins(sdk.NewCoins(sdk.NewInt64Coin(core.MicroLunaDenom, 500000)))
@@ -188,7 +174,6 @@ func CreateTestInput(t *testing.T) TestInput {
 	supplyKeeper.SetModuleAccount(ctx, bondPool)
 	supplyKeeper.SetModuleAccount(ctx, notBondedPool)
 	supplyKeeper.SetModuleAccount(ctx, distrAcc)
-	supplyKeeper.SetModuleAccount(ctx, marketAcc)
 
 	stakingKeeper.SetHooks(staking.NewMultiStakingHooks(distrKeeper.Hooks()))
 
@@ -214,21 +199,17 @@ func CreateTestInput(t *testing.T) TestInput {
 	bankHandler := bank.NewHandler(bankKeeper)
 	stakingHandler := staking.NewHandler(stakingKeeper)
 	distrHandler := distr.NewHandler(distrKeeper)
-	marketHandler := market.NewHandler(marketKeeper)
 	router.AddRoute(bank.RouterKey, bankHandler)
 	router.AddRoute(staking.RouterKey, stakingHandler)
 	router.AddRoute(distr.RouterKey, distrHandler)
-	router.AddRoute(market.RouterKey, marketHandler)
 	router.AddRoute(types.RouterKey, TestHandler(keeper))
 
-	marketKeeper.SetParams(ctx, market.DefaultParams())
 	oracleKeeper.SetParams(ctx, oracle.DefaultParams())
 
 	keeper.SetParams(ctx, types.DefaultParams())
 	keeper.RegisterQueriers(map[string]types.WasmQuerierInterface{
 		types.WasmQueryRouteBank:     bankwasm.NewWasmQuerier(bankKeeper),
 		types.WasmQueryRouteStaking:  stakingwasm.NewWasmQuerier(stakingKeeper),
-		types.WasmQueryRouteMarket:   marketwasm.NewWasmQuerier(marketKeeper),
 		types.WasmQueryRouteTreasury: treasurywasm.NewWasmQuerier(treasuryKeeper),
 		types.WasmQueryRouteWasm:     NewWasmQuerier(keeper),
 		types.WasmQueryRouteOracle:   oraclewasm.NewWasmQuerier(oracleKeeper),
@@ -236,7 +217,6 @@ func CreateTestInput(t *testing.T) TestInput {
 	keeper.RegisterMsgParsers(map[string]types.WasmMsgParserInterface{
 		types.WasmMsgParserRouteBank:    bankwasm.NewWasmMsgParser(),
 		types.WasmMsgParserRouteStaking: stakingwasm.NewWasmMsgParser(),
-		types.WasmMsgParserRouteMarket:  marketwasm.NewWasmMsgParser(),
 		types.WasmMsgParserRouteWasm:    NewWasmMsgParser(),
 	})
 
@@ -251,7 +231,6 @@ func CreateTestInput(t *testing.T) TestInput {
 		stakingKeeper,
 		distrKeeper,
 		oracleKeeper,
-		marketKeeper,
 		treasuryKeeper,
 		keeper}
 }
