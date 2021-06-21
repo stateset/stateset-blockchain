@@ -6,33 +6,32 @@ import (
 	"github.com/stateset/stateset-blockchain/x/agreement/types"
 )
 
-// GenesisState defines genesis data for the module
-type GenesisState struct {
-	Agreements []Agreement `json:"agreements"`
-	Params Params  `json:"params"`
-}
-
-// NewGenesisState creates a new genesis state.
-func NewGenesisState() GenesisState {
-	return GenesisState{
-		Agreements: nil,
-		Params: DefaultParams(),
+// DefaultGenesis returns the default Capability genesis state
+func DefaultGenesis() *GenesisState {
+	return &GenesisState{
+		// this line is used by starport scaffolding # ibc/genesistype/default
+		// this line is used by starport scaffolding # genesis/types/default
+		AgreementList: []*Agreement{},
 	}
 }
 
-// DefaultGenesisState returns a default genesis state
-func DefaultGenesisState(cdc codec.JSONMarshaler) GenesisState { return NewGenesisState() }
+// Validate performs basic genesis state validation returning an error upon any
+// failure.
+func (gs GenesisState) Validate() error {
+	// this line is used by starport scaffolding # ibc/genesistype/validate
 
-// InitGenesis initializes stateset from genesis file
-func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) {
+	// this line is used by starport scaffolding # genesis/types/validate
+	// Check for duplicated ID in agreement
+	agreementIdMap := make(map[uint64]bool)
 
-	k.SetPort(ctx, genState.PortId)
-	
-	for _, c := range data.Agreements {
-		k.setAgreement(ctx, c)
+	for _, elem := range gs.AgreementList {
+		if _, ok := agreementIdMap[elem.Id]; ok {
+			return fmt.Errorf("duplicated id for agreement")
+		}
+		agreementIdMap[elem.Id] = true
 	}
-	k.setAgreementID(ctx, uint64(len(data.Agreements)+1))
-	k.SetParams(ctx, data.Params)
+
+	return nil
 }
 
 // ExportGenesis returns the capability module's exported genesis.
@@ -44,17 +43,4 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.PortId = k.GetPort(ctx)
 
 	return genesis
-}
-
-
-// ValidateGenesis validates the genesis state data
-func ValidateGenesis(cdc codec.JSONMarshaler, config client.TxEncodingConfig, bz json.RawMessage) error {
-	if data.Params.MinAgreementLength < 1 {
-		return fmt.Errorf("Param: MinAgreementLength must have a positive value")
-	}
-	if data.Params.MaxAgreementLength < 1 {
-		return fmt.Errorf("Param: MaxAgreeemntLength must have a positive value")
-	}
-
-	return nil
 }
