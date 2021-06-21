@@ -6,13 +6,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	
-
-	tutils "github.com/stateset/stateset-blockchain/x/auth/client/utils"
 )
 
 // GetTxFeesEstimateCommand will create a send tx and sign it with the given key.

@@ -11,7 +11,6 @@ import (
 
 	"github.com/gorilla/mux"
 
-	feeutils "github.com/stateset/stateset-blockchain/x/auth/client/utils"
 	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
 )
 
