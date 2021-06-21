@@ -6,8 +6,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/domsteil/stateset/x/agreement/types"
 	"github.com/spf13/cobra"
+	"github.com/stateset/stateset-blockchain/x/agreement/types"
 )
 
 func CmdListSentAgreement() *cobra.Command {
