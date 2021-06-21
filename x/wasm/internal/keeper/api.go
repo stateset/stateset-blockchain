@@ -5,6 +5,8 @@ import (
 
 	cosmwasm "github.com/CosmWasm/wasmd"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
 )
 
 func (k Keeper) getCosmwamAPI(ctx sdk.Context) cosmwasm.GoAPI {
