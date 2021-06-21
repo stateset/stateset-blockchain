@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/stateset/stateset-blockchain/x/params/subspace"
 	"math/big"
 	"math/rand"
 	"net/http"
@@ -20,7 +19,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	apptypes "github.com/stateset/stateset-blockchain/app/types"
+	apptypes "github.com/stateset/stateset-blockchain/types"
 )
 
 const (
