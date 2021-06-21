@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	core "github.com/stateset/stateset-blockchain/types"
 )
 
 // Model is a struct that holds a KV pair
