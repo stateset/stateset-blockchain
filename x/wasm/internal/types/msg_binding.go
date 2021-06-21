@@ -3,8 +3,6 @@ package types
 import (
 	"encoding/json"
 
-	wasmTypes "github.com/CosmWasm/wasmd/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
