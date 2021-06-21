@@ -19,7 +19,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 
-	feeutils "github.com/stateset/stateset-blockchain/x/auth/client/feeutils"
 	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
 	wasmUtils "github.com/stateset/stateset-blockchain/x/wasm/utils"
 )

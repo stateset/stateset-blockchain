@@ -4,10 +4,8 @@ import (
 	"bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stateset/stateset-blockchain/core/x/wasm/internal/types"
-
+	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
 )
-
 
 func InitGenesis(ctx sdk.Context, keeper Keeper, data types.GenesisState) {
 	keeper.SetParams(ctx, data.Params)
