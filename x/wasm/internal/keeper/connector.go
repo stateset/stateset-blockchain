@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	wasmTypes "github.com/CosmWasm/wasmd/types"
 	"github.com/stateset/stateset-blockchain/x/auth/ante"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
