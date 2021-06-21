@@ -351,7 +351,7 @@ func NewStatesetApp(
 		skipUpgradeHeights, 
 		keys[upgradetypes.StoreKey],
 		appCodec, 
-		homePath
+		homePath,
 	)
 
 	// register the staking hooks
