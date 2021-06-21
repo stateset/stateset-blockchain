@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/domsteil/stateset/x/agreement/types"
+	"github.com/stateset/stateset-blockchain/x/agreement/types"
 	"github.com/stretchr/testify/assert"
 )
 

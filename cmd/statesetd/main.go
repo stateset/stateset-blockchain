@@ -5,7 +5,6 @@ import (
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 	"github.com/stateset/stateset-blockchain/app"
-	"github.com/stateset/stateset-blockchain/cmd/statesetd/cmd"
 )
 
 func main() {

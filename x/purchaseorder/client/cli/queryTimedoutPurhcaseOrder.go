@@ -6,8 +6,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/domsteil/stateset/x/purchaseorder/types"
 	"github.com/spf13/cobra"
+	"github.com/stateset/stateset-blockchain/x/purchaseorder/types"
 )
 
 func CmdListTimedoutPurchaseOrder() *cobra.Command {
