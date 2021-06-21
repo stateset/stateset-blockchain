@@ -1,35 +1,35 @@
-FROM cosmwasm/go-ext-builder:0001-alpine AS rust-builder
+FROM golang:alpine AS build-env
 
-ENV PACKAGES curl make git libc-dev bash gcc linux-headers eudev-dev python
+# Set up dependencies
+ENV PACKAGES curl make git libc-dev bash gcc linux-headers eudev-dev python3
 
+# Set working directory for the build
 WORKDIR /go/src/github.com/stateset/stateset-blockchain
 
-COPY go.* /go/src/github.com/stateset/stateset-blockchain/
-
-RUN apk add --no-cache git \
-    && go mod download github.com/CosmWasm/go-cosmwasm \
-    && export GO_WASM_DIR=$(go list -f "{{ .Dir }}" -m github.com/CosmWasm/go-cosmwasm) \
-    && cd ${GO_WASM_DIR} \
-    && cargo build --release --features backtraces --example muslc \
-    && mv ${GO_WASM_DIR}/target/release/examples/libmuslc.a /lib/libgo_cosmwasm_muslc.a
-
-
-FROM cosmwasm/go-ext-builder:0001-alpine AS go-builder
-
-WORKDIR /go/src/github.com/stateset/stateset-blockchain
-
-RUN apk add --no-cache git libusb-dev linux-headers
-
+# Add source files
 COPY . .
-COPY --from=rust-builder /lib/libgo_cosmwasm_muslc.a /lib/libgo_cosmwasm_muslc.a
 
-RUN BUILD_TAGS=muslc make update-swagger-docs build
+# Install minimum necessary dependencies, build Cosmos SDK, remove packages
+RUN apk add --no-cache $PACKAGES && \
+    make install
 
-FROM alpine:3
+# Final image
+FROM alpine:edge
 
-WORKDIR /root
+ENV stateset /stateset
 
-COPY --from=go-builder /go/src/github.com/stateset/stateset-blockchain/build/statesetd /usr/local/bin/statesetd
-COPY --from=go-builder /go/src/github.com/stateset/stateset-blockchain/build/statesetcli /usr/local/bin/statesetcli
+# Install ca-certificates
+RUN apk add --update ca-certificates
 
-CMD [ "statesetd", "--help" ]
+RUN addgroup stateset && \
+    adduser -S -G stateset stateset -h "$STATESET"
+
+USER stateset
+
+WORKDIR $STATESET
+
+# Copy over binaries from the build-env
+COPY --from=build-env /go/bin/statesetd /usr/bin/statesetd
+
+# Run statesetd by default, omit entrypoint to ease using container with statesetcli
+CMD ["statesetd"]

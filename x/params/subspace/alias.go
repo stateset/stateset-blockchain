@@ -1,8 +1,6 @@
 package subspace
 
-import (
-	"github.com/cosmos/cosmos-sdk/x/params/subspace"
-)
+import "github.com/cosmos/cosmos-sdk/x/params/subspace"
 
 type (
 	ParamSetPairs    = subspace.ParamSetPairs

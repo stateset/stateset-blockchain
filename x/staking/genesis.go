@@ -3,7 +3,6 @@ package staking
 import (
 	"fmt"
 
-	supplyexported "github.com/cosmos/cosmos-sdk/x/supply/exported"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 
