@@ -1,6 +1,5 @@
 package liquidity
 
-
 import (
 	"encoding/json"
 	"errors"
@@ -8,12 +7,9 @@ import (
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stateset/stateset-blockchain"
 )
 
 type PoolStatus int
-
 
 const (
 	Enabled PoolStatus = iota
@@ -73,7 +69,7 @@ func GetPoolStatus(ps string) PoolStatus {
 // Pool is a struct that contains all the metadata of a pooldata
 // This is the structure THORNode will saved to the key value store
 type Pool struct {
-	BalanceState  sdk.Uint       `json:"balance_state"`  // how many STATE in the pool
+	BalanceState sdk.Uint       `json:"balance_state"` // how many STATE in the pool
 	BalanceAsset sdk.Uint       `json:"balance_asset"` // how many asset in the pool
 	Asset        common.Asset   `json:"asset"`         // what's the asset's asset
 	PoolUnits    sdk.Uint       `json:"pool_units"`    // total units of the pool
@@ -86,7 +82,7 @@ type Pools []Pool
 // NewPool Returns a new Pool
 func NewPool() Pool {
 	return Pool{
-		BalanceState:  sdk.ZeroUint(),
+		BalanceState: sdk.ZeroUint(),
 		BalanceAsset: sdk.ZeroUint(),
 		PoolUnits:    sdk.ZeroUint(),
 		Status:       Enabled,
