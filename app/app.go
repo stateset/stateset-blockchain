@@ -88,7 +88,6 @@ import (
 	"github.com/stateset/stateset-blockchain/x/auth"
 	"github.com/stateset/stateset-blockchain/x/auth/ante"
 	"github.com/stateset/stateset-blockchain/x/bank"
-	distr "github.com/stateset/stateset-blockchain/x/distribution"
 	"github.com/stateset/stateset-blockchain/x/invoice"
 	"github.com/stateset/stateset-blockchain/x/liquidity"
 	"github.com/stateset/stateset-blockchain/x/purchaseorder"
