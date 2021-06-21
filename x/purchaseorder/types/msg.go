@@ -82,7 +82,7 @@ func (msg MsgCreatePurchaseOrder) GetSignBytes() []byte {
 
 // GetSigners gets the signs of the Msg
 func (msg MsgCreatePurchaseOrder) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Counterparty}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Counterparty)}
 }
 
 
