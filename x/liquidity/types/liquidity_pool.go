@@ -6,9 +6,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stateset/stateset-blockchain/x/liquidity/keeper"
-	"github.com/stateset/stateset-blockchain/x/liquidity/types"
 	
 )
 
