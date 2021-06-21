@@ -9,9 +9,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// magic bytes to identify gzip.
-// See https://www.ietf.org/rfc/rfc1952.txt
-// and https://github.com/golang/go/blob/master/src/net/http/sniff.go#L186
 var gzipIdent = []byte("\x1F\x8B\x08")
 
 // uncompress returns gzip uncompressed content or given src when not gzip.
