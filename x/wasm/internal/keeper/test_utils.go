@@ -25,8 +25,6 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	core "github.com/stateset/stateset-blockchain/types"
-	bankwasm "github.com/stateset/stateset-blockchain/x/bank/wasm"
-	stakingwasm "github.com/stateset/stateset-blockchain/x/staking/wasm"
 	"github.com/stateset/stateset-blockchain/x/treasury"
 	"github.com/stateset/stateset-blockchain/x/wasm/config"
 	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
@@ -50,15 +48,15 @@ func makeTestCodec() *codec.Codec {
 
 // TestInput nolint
 type TestInput struct {
-	Ctx            sdk.Context
-	Cdc            *codec.Codec
-	AccKeeper      auth.AccountKeeper
-	BankKeeper     bank.Keeper
-	SupplyKeeper   supply.Keeper
-	StakingKeeper  staking.Keeper
-	DistrKeeper    distr.Keeper
-	OracleKeeper   oracle.Keeper
-	WasmKeeper     Keeper
+	Ctx           sdk.Context
+	Cdc           *codec.Codec
+	AccKeeper     auth.AccountKeeper
+	BankKeeper    bank.Keeper
+	SupplyKeeper  supply.Keeper
+	StakingKeeper staking.Keeper
+	DistrKeeper   distr.Keeper
+	OracleKeeper  oracle.Keeper
+	WasmKeeper    Keeper
 }
 
 // CreateTestInput nolint

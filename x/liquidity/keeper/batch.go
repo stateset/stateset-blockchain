@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/tendermint/liquidity/x/liquidity/types"
+	"github.com/stateset/stateset-blockchain/x/liquidity/types"
 )
 
 // Reinitialize batch messages that were not executed in the previous batch and delete batch messages that were executed or ready to delete.

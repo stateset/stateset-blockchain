@@ -6,7 +6,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
-	"github.com/stateset/stateset-blockchain/x/slashing/simulation"
 	cli "github.com/stateset/stateset-blockchain/x/wasm/client"
 	"github.com/stateset/stateset-blockchain/x/wasm/rest"
 

@@ -15,8 +15,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/stateset/stateset-blockchain/x/wasm/client/utils"
 	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
+	"github.com/stateset/stateset-blockchain/x/wasm/utils"
 )
 
 const flagRaw = "raw"

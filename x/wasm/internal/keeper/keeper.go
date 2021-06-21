@@ -16,7 +16,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/stateset/stateset-blockchain/x/params"
 	"github.com/stateset/stateset-blockchain/x/wasm/config"
 	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
 )
