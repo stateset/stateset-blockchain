@@ -5,11 +5,9 @@ import (
 	"math/rand"
 
 	"github.com/gorilla/mux"
-	"github.com/ovrclk/akash/x/cert/simulation"
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
