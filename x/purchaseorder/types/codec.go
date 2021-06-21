@@ -22,7 +22,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCompletePurchaseOrder{}, "stateset/MsgCompletePurchaseOrder", nil)
 	cdc.RegisterConcrete(&MsgCancelPurchaseOrder{}, "stateset/MsgCancelPurchaseOrder", nil)
 	cdc.RegisterConcrete(&MsgFinancePurchaseOrder{}, "stateset/MsgFinancePurchaseOrder", nil)
-	cdc.RegisterConcrete(&MsgSendIbcPurchaseOrder{}, "purchaseorder/SendIbcPurchaseOrder", nil)
+	cdc.RegisterConcrete(&MsgSendIbcPurchaseOrder{}, "stateset/SendIbcPurchaseOrder", nil)
 
 }
 

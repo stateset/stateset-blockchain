@@ -19,7 +19,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(MsgRenewAgreement{}, "stateset/MsgRenewAgreement", nil)
 	cdc.RegisterConcrete(MsgTerminateAgreement{}, "stateset/MsgTerminateAgreement", nil)
 	cdc.RegisterConcrete(MsgExpireAgreement{}, "stateset/MsgExpireAgreement", nil)
-	cdc.RegisterConcrete(&MsgSendIbcAgreement{}, "agreement/SendIbcAgreement", nil)
+	cdc.RegisterConcrete(&MsgSendIbcAgreement{}, "stateset/SendIbcAgreement", nil)
 
 	c.RegisterConcrete(Agreement{}, "stateset/Agreement", nil)
 }

@@ -1,13 +1,13 @@
 package bank
 
 import (
-	"github.com/TruStory/truchain/x/distribution"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/gaskv"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
-	"github.com/cosmos/cosmos-sdk/x/supply"
+
 	app "github.com/stateset/stateset-blockchain/types"
 )
 

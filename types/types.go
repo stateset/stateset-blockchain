@@ -10,7 +10,7 @@ const (
 	// AppName is the name of the Cosmos app
 	AppName = "Stateset"
 	// StakeDenom is the name of the main staking currency
-	StakeDenom = "ustate"
+	StakeDenom = "usset"
 	// Hostname is the address the app's HTTP server will bind to
 	Hostname = "0.0.0.0"
 	// Portname is the port the app's HTTP server will bind to
@@ -24,17 +24,17 @@ const (
 
 const (
 	// Bech32PrefixAccAddr defines the Bech32 prefix of an account's address
-	Bech32PrefixAccAddr = "state"
+	Bech32PrefixAccAddr = "sset"
 	// Bech32PrefixAccPub defines the Bech32 prefix of an account's public key
-	Bech32PrefixAccPub = "statepub"
+	Bech32PrefixAccPub = "ssetpub"
 	// Bech32PrefixValAddr defines the Bech32 prefix of a validator's operator address
-	Bech32PrefixValAddr = "statevaloper"
+	Bech32PrefixValAddr = "ssetvaloper"
 	// Bech32PrefixValPub defines the Bech32 prefix of a validator's operator public key
-	Bech32PrefixValPub = "statevaloperpub"
+	Bech32PrefixValPub = "ssetvaloperpub"
 	// Bech32PrefixConsAddr defines the Bech32 prefix of a consensus node address
-	Bech32PrefixConsAddr = "statevalcons"
+	Bech32PrefixConsAddr = "ssetvalcons"
 	// Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key
-	Bech32PrefixConsPub = "statevalconspub"
+	Bech32PrefixConsPub = "ssetvalconspub"
 )
 
 // InitialStake is an `sdk.Coins` representing the balance a new user is granted upon registration
@@ -77,9 +77,9 @@ type Stake struct {
 type CompletedStateset struct {
 	ID                          int64                       `json:"id"`
 	Merchant                    sdk.AccAddress              `json:"merchant"`
-	Depositors                  []Stake                    `json:"depositors"`
-	Borrowers                   []Stake                    `json:"borrowers"`
-	StakeDistributionResults   StakeDistributionResults   `json:"Stake_distribution_results"`
+	Depositors                  []Stake                     `json:"depositors"`
+	Borrowers                   []Stake                     `json:"borrowers"`
+	StakeDistributionResults    StakeDistributionResults    `json:"Stake_distribution_results"`
 	InterestDistributionResults InterestDistributionResults `json:"interest_distribution_results"`
 }
 
