@@ -19,7 +19,7 @@ const (
 
 // Coin units
 const (
-	STATE = 1
+	SSET = 1
 )
 
 const (
@@ -38,7 +38,7 @@ const (
 )
 
 // InitialStake is an `sdk.Coins` representing the balance a new user is granted upon registration
-var InitialStake = sdk.Coin{Amount: sdk.NewInt(330 * STATE), Denom: StakeDenom}
+var InitialStake = sdk.Coin{Amount: sdk.NewInt(330 * SSET), Denom: StakeDenom}
 
 // RegistrationFee is an `auth.StdFee` representing the coin and gas cost of registering a new account
 // TODO: Use more accurate gas estimate [notduncansmith]
