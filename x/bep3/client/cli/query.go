@@ -27,7 +27,7 @@ const (
 )
 
 // GetQueryCmd returns the cli query commands for this module
-func GetQueryCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetQueryCmd(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	// Group bep3 queries under a subcommand
 	bep3QueryCmd := &cobra.Command{
 		Use:                        "bep3",
@@ -51,7 +51,7 @@ func GetQueryCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
 }
 
 // QueryCalcRandomNumberHashCmd calculates the random number hash for a number and timestamp
-func QueryCalcRandomNumberHashCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func QueryCalcRandomNumberHashCmd(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "calc-rnh [unix-timestamp]",
 		Short:   "calculates an example random number hash from an optional timestamp",
@@ -95,7 +95,7 @@ func QueryCalcRandomNumberHashCmd(queryRoute string, cdc *codec.Codec) *cobra.Co
 }
 
 // QueryCalcSwapIDCmd calculates the swapID for a random number hash, sender, and sender other chain
-func QueryCalcSwapIDCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func QueryCalcSwapIDCmd(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "calc-swapid [random-number-hash] [sender] [sender-other-chain]",
 		Short:   "calculate swap ID for the given random number hash, sender, and sender other chain",
@@ -123,7 +123,7 @@ func QueryCalcSwapIDCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
 }
 
 // QueryGetAssetSupplyCmd queries as asset's current in swap supply, active, supply, and supply limit
-func QueryGetAssetSupplyCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func QueryGetAssetSupplyCmd(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "supply [denom]",
 		Short:   "get information about an asset's supply",
@@ -153,7 +153,7 @@ func QueryGetAssetSupplyCmd(queryRoute string, cdc *codec.Codec) *cobra.Command 
 }
 
 // QueryGetAssetSuppliesCmd queries AssetSupplies in the store
-func QueryGetAssetSuppliesCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func QueryGetAssetSuppliesCmd(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "supplies",
 		Short:   "get a list of all asset supplies",
@@ -180,7 +180,7 @@ func QueryGetAssetSuppliesCmd(queryRoute string, cdc *codec.Codec) *cobra.Comman
 }
 
 // QueryGetAtomicSwapCmd queries an AtomicSwap by swapID
-func QueryGetAtomicSwapCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func QueryGetAtomicSwapCmd(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "swap [swap-id]",
 		Short:   "get atomic swap information",
@@ -217,7 +217,7 @@ func QueryGetAtomicSwapCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
 }
 
 // QueryGetAtomicSwapsCmd queries AtomicSwaps in the store
-func QueryGetAtomicSwapsCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func QueryGetAtomicSwapsCmd(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "swaps",
 		Short: "query atomic swaps with optional filters",
@@ -312,7 +312,7 @@ $ stcli q bep3 swaps --page=2 --limit=100
 }
 
 // QueryParamsCmd queries the bep3 module parameters
-func QueryParamsCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func QueryParamsCmd(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "params",
 		Short:   "get the bep3 module parameters",

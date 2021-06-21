@@ -22,7 +22,7 @@ import (
 )
 
 // TxCmd returns the transaction commands for this module
-func TxCmd(cdc *codec.Codec) *cobra.Command {
+func TxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	agreementTxCmd := &cobra.Command{
 		Use:                        "agreement",
 		Short:                      "agreement transactions subcommands",
@@ -115,7 +115,7 @@ func CmdCreateAgreement() *cobra.Command {
 	}
 
 // GetCmdActivateAgreement cli command for activating an agreement 
-func GetCmdActivateAgreement(cdc *codec.Codec) *cobra.Command {
+func GetCmdActivateAgreement(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "activate [agreement-id]",
 		Short:   "activate agreement by id",
@@ -146,7 +146,7 @@ func GetCmdActivateAgreement(cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdAmendAgreement cli command for activating an agreement 
-func GetCmdAmendAgreement(cdc *codec.Codec) *cobra.Command {
+func GetCmdAmendAgreement(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "amend [agreement-id]",
 		Short:   "amend agreement by id",
@@ -177,7 +177,7 @@ func GetCmdAmendAgreement(cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdRenewAgreement cli command for activating an agreement 
-func GetCmdRenewAgreement(cdc *codec.Codec) *cobra.Command {
+func GetCmdRenewAgreement(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "renew [agreement-id]",
 		Short:   "renew agreement by id",
@@ -208,7 +208,7 @@ func GetCmdRenewAgreement(cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdTeriminateAgreement cli command for activating an agreement 
-func GetCmdTerminateAgreement(cdc *codec.Codec) *cobra.Command {
+func GetCmdTerminateAgreement(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "terminate [agreement-id]",
 		Short:   "terminate agreement by id",
@@ -239,7 +239,7 @@ func GetCmdTerminateAgreement(cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdExpireAgreement cli command for activating an agreement 
-func GetCmdExpireAgreement(cdc *codec.Codec) *cobra.Command {
+func GetCmdExpireAgreement(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "expire [agreement-id]",
 		Short:   "expire agreement by id",

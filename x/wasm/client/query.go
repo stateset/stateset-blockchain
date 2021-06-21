@@ -22,7 +22,7 @@ import (
 const flagRaw = "raw"
 
 // GetQueryCmd returns the cli query commands for wasm   module
-func GetQueryCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetQueryCmd(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	queryCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      "Querying commands for the wasm module",
@@ -42,7 +42,7 @@ func GetQueryCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdQueryCodeInfo is for querying code information
-func GetCmdQueryCodeInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetCmdQueryCodeInfo(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:   "code [code-id]",
 		Short: "query code information",
@@ -76,7 +76,7 @@ func GetCmdQueryCodeInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdQueryByteCode returns the bytecode for a given contract
-func GetCmdQueryByteCode(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetCmdQueryByteCode(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:   "bytecode [code-id] [output-filename]",
 		Short: "Downloads wasm bytecode for given code id",
@@ -122,7 +122,7 @@ func GetCmdQueryByteCode(queryRoute string, cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdGetContractInfo gets details about a given contract
-func GetCmdGetContractInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetCmdGetContractInfo(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:   "contract [contract-address]",
 		Short: "Prints out metadata of a contract given its address",
@@ -156,7 +156,7 @@ func GetCmdGetContractInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdGetContractStore send query msg to a given contract
-func GetCmdGetContractStore(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetCmdGetContractStore(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:   "contract-store [bech32-address] [msg]",
 		Short: "Query contract store of the address with query data and prints the returned result",
@@ -195,7 +195,7 @@ func GetCmdGetContractStore(queryRoute string, cdc *codec.Codec) *cobra.Command 
 }
 
 // GetCmdGetRawStore dumps full internal state of a given contract
-func GetCmdGetRawStore(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetCmdGetRawStore(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:   "raw-store [bech32-address] [key] [subkey]",
 		Short: "Prints out raw store of a contract",
@@ -240,7 +240,7 @@ func GetCmdGetRawStore(queryRoute string, cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdQueryParams implements the query params command.
-func GetCmdQueryParams(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetCmdQueryParams(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "params",
 		Args:  cobra.NoArgs,

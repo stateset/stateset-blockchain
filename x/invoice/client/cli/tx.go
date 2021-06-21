@@ -24,7 +24,7 @@ import (
 )
 
 // GetTxCmd returns the transaction commands for this module
-func GetTxCmd(cdc *codec.Codec) *cobra.Command {
+func GetTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	invoiceTxCmd := &cobra.Command{
 		Use:                        "invoice",
 		Short:                      "invoice transactions subcommands",
@@ -43,7 +43,7 @@ func GetTxCmd(cdc *codec.Codec) *cobra.Command {
 }
 
 
-func GetCmdCreateInvoice(cdc *codec.Codec) *cobra.Command {
+func GetCmdCreateInvoice(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create [name] [number] [start] [end] [amount] [timestamp] [from] [to]",
 		Short: "create a new invoice",
@@ -110,7 +110,7 @@ func GetCmdCreateInvoice(cdc *codec.Codec) *cobra.Command {
 }
 
 
-func GetCmdCancelInvoice(cdc *codec.Codec) *cobra.Command {
+func GetCmdCancelInvoice(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "cancel [invoice-id]",
 		Short:   "cancel invoice by id",
@@ -142,7 +142,7 @@ func GetCmdCancelInvoice(cdc *codec.Codec) *cobra.Command {
 
 
 
-func GetCmdPayInvoice(cdc *codec.Codec) *cobra.Command {
+func GetCmdPayInvoice(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "pay [invoice-id]",
 		Short:   "pay invoice by id",

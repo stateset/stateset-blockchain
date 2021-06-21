@@ -6,7 +6,7 @@ import (
 )
 
 // RegisterCodec registers concrete types on the codec
-func RegisterCodec(cdc *codec.Codec) {
+func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterInterface((*exported.GenesisAccount)(nil), nil)
 	cdc.RegisterInterface((*exported.Account)(nil), nil)
 	cdc.RegisterConcrete(&auth.BaseAccount{}, "core/Account", nil)

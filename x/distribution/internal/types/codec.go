@@ -6,7 +6,7 @@ import (
 )
 
 // RegisterCodec registers concrete types on codec
-func RegisterCodec(cdc *codec.Codec) {
+func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(distrtypes.MsgWithdrawDelegatorReward{}, "distribution/MsgWithdrawDelegationReward", nil)
 	cdc.RegisterConcrete(distrtypes.MsgWithdrawValidatorCommission{}, "distribution/MsgWithdrawValidatorCommission", nil)
 	cdc.RegisterConcrete(distrtypes.MsgSetWithdrawAddress{}, "distribution/MsgModifyWithdrawAddress", nil)
@@ -15,7 +15,7 @@ func RegisterCodec(cdc *codec.Codec) {
 }
 
 // ModuleCdc is generic sealed codec to be used throughout module
-var ModuleCdc *codec.Codec
+var ModuleCdc *codec.LegacyAmino
 
 func init() {
 	ModuleCdc = codec.New()

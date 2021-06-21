@@ -21,7 +21,7 @@ import (
 
 // Keeper will have a reference to Wasmer with it's own data directory.
 type Keeper struct {
-	cdc        *codec.Codec
+	cdc        *codec.LegacyAmino
 	storeKey   sdk.StoreKey
 	paramSpace params.Subspace
 
@@ -42,7 +42,7 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new contract Keeper instance
-func NewKeeper(cdc *codec.Codec, storeKey sdk.StoreKey,
+func NewKeeper(cdc *codec.LegacyAmino, storeKey sdk.StoreKey,
 	paramspace params.Subspace, accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper, supplyKeeper types.SupplyKeeper, treasuryKeeper types.TreasuryKeeper, router sdk.Router,
 	supportedFeatures string,

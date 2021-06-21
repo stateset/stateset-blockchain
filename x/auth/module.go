@@ -29,7 +29,7 @@ func (AppModuleBasic) Name() string {
 }
 
 // RegisterCodec registers the auth module's types for the given codec.
-func (AppModuleBasic) RegisterCodec(cdc *codec.Codec) {
+func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
 	RegisterCodec(cdc)
 	*CosmosModuleCdc = *ModuleCdc // nolint (DO NOT TOUCH)
 }
@@ -51,12 +51,12 @@ func (AppModuleBasic) RegisterRESTRoutes(cliCtx context.CLIContext, route *mux.R
 }
 
 // GetTxCmd returns the root tx command for the auth module.
-func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
+func (AppModuleBasic) GetTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	return CosmosAppModuleBasic{}.GetTxCmd(cdc)
 }
 
 // GetQueryCmd returns the root query command for the auth module.
-func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
+func (AppModuleBasic) GetQueryCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	return CosmosAppModuleBasic{}.GetQueryCmd(cdc)
 }
 

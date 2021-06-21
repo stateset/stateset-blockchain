@@ -35,7 +35,7 @@ func (AppModuleBasic) Name() string {
 }
 
 // RegisterCodec registers the wasm module's types for the given codec.
-func (AppModuleBasic) RegisterCodec(cdc *codec.Codec) {
+func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
 	RegisterCodec(cdc)
 }
 
@@ -61,12 +61,12 @@ func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router
 }
 
 // GetTxCmd returns the root tx command for the wasm module.
-func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
+func (AppModuleBasic) GetTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	return cli.GetTxCmd(cdc)
 }
 
 // GetQueryCmd returns no root query command for the wasm module.
-func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
+func (AppModuleBasic) GetQueryCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	return cli.GetQueryCmd(QuerierRoute, cdc)
 }
 

@@ -5,7 +5,7 @@ import (
 )
 
 // ModuleCodec encodes module codec
-var ModuleCodec *codec.Codec
+var ModuleCodec *codec.LegacyAmino
 
 const (
 	ModuleName        = "statesetbank"

@@ -12,7 +12,7 @@ import (
 )
 
 // GetTxFeesEstimateCommand will create a send tx and sign it with the given key.
-func GetTxFeesEstimateCommand(cdc *codec.Codec) *cobra.Command {
+func GetTxFeesEstimateCommand(cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "estimate-fee [file]",
 		Args:  cobra.ExactArgs(1),

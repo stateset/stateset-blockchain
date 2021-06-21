@@ -16,7 +16,7 @@ import (
 // Keeper of the bep3 store
 type Keeper struct {
 	key           sdk.StoreKey
-	cdc           *codec.Codec
+	cdc           *codec.LegacyAmino
 	paramSubspace subspace.Subspace
 	supplyKeeper  types.SupplyKeeper
 	accountKeeper types.AccountKeeper
@@ -24,7 +24,7 @@ type Keeper struct {
 }
 
 // NewKeeper creates a bep3 keeper
-func NewKeeper(cdc *codec.Codec, key sdk.StoreKey, sk types.SupplyKeeper, ak types.AccountKeeper,
+func NewKeeper(cdc *codec.LegacyAmino, key sdk.StoreKey, sk types.SupplyKeeper, ak types.AccountKeeper,
 	paramstore subspace.Subspace, maccs map[string]bool) Keeper {
 	if !paramstore.HasKeyTable() {
 		paramstore = paramstore.WithKeyTable(types.ParamKeyTable())

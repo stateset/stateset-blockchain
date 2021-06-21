@@ -174,7 +174,7 @@ func init() {
 
 // MakeCodec creates the application codec. The codec is sealed before it is
 // returned.
-func MakeCodec() *codec.Codec {
+func MakeCodec() *codec.LegacyAmino {
 	var cdc = codec.New()
 
 	ModuleBasics.RegisterCodec(cdc)

@@ -30,7 +30,7 @@ const (
 )
 
 // GetTxCmd returns the transaction commands for this module
-func GetTxCmd(cdc *codec.Codec) *cobra.Command {
+func GetTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      "Wasm transaction subcommands",
@@ -49,7 +49,7 @@ func GetTxCmd(cdc *codec.Codec) *cobra.Command {
 }
 
 // StoreCodeCmd will upload code to be reused.
-func StoreCodeCmd(cdc *codec.Codec) *cobra.Command {
+func StoreCodeCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "store [wasm-file]",
 		Short: "Upload a wasm binary",
@@ -100,7 +100,7 @@ func StoreCodeCmd(cdc *codec.Codec) *cobra.Command {
 }
 
 // InstantiateContractCmd will instantiate a contract from previously uploaded code.
-func InstantiateContractCmd(cdc *codec.Codec) *cobra.Command {
+func InstantiateContractCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "instantiate [code-id-int64] [json-encoded-args] [coins]",
 		Short: "Instantiate a wasm contract",
@@ -185,7 +185,7 @@ $ statesetcli instantiate 1 '{"arbiter": "stateset~~"}' "1000000ustate"
 }
 
 // ExecuteContractCmd will instantiate a contract from previously uploaded code.
-func ExecuteContractCmd(cdc *codec.Codec) *cobra.Command {
+func ExecuteContractCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "execute [contract-addr-bech32] [json-encoded-args] [coins]",
 		Short: "Execute a command on a wasm contract",
@@ -261,7 +261,7 @@ func ExecuteContractCmd(cdc *codec.Codec) *cobra.Command {
 }
 
 // MigrateContractCmd will instantiate a contract from previously uploaded code.
-func MigrateContractCmd(cdc *codec.Codec) *cobra.Command {
+func MigrateContractCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "migrate [contract-addr-bech32] [new-code-id] [json-encoded-args]",
 		Short: "Migrate a contract to new code base",
@@ -314,7 +314,7 @@ $ statesetcli tx wasm migrate stateset... 10 '{"verifier": "stateset..."}'
 }
 
 // UpdateContractOwnerCmd will instantiate a contract from previously uploaded code.
-func UpdateContractOwnerCmd(cdc *codec.Codec) *cobra.Command {
+func UpdateContractOwnerCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-owner [contract-addr-bech32] [new-owner]",
 		Short: "update a contract owner",

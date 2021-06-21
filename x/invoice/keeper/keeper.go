@@ -15,13 +15,13 @@ import (
 // Keeper is the model object for the module
 type Keeper struct {
 	storeKey   sdk.StoreKey
-	codec      *codec.Codec
+	codec      *codec.LegacyAmino
 	paramStore params.Subspace
 	accountKeeper   AccountKeeper
 }
 
 // NewKeeper creates a new account keeper
-func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec, accountKeeper AccountKeeper) Keeper {
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.LegacyAmino, accountKeeper AccountKeeper) Keeper {
 	return Keeper{
 		storeKey,
 		codec,

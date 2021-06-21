@@ -36,7 +36,7 @@ func (AppModuleBasic) Name() string {
 }
 
 // RegisterCodec registers the bep3 module's types for the given codec.
-func (AppModuleBasic) RegisterCodec(cdc *codec.Codec) {
+func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
 	RegisterCodec(cdc)
 }
 
@@ -62,12 +62,12 @@ func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router
 }
 
 // GetTxCmd returns the root tx command for the bep3 module.
-func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
+func (AppModuleBasic) GetTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	return cli.GetTxCmd(cdc)
 }
 
 // GetQueryCmd returns no root query command for the bep3 module.
-func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
+func (AppModuleBasic) GetQueryCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	return cli.GetQueryCmd(StoreKey, cdc)
 }
 

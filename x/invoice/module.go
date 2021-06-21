@@ -3,7 +3,7 @@ package invoice
 import (
 	"encoding/json"
 
-	
+	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
@@ -31,7 +31,7 @@ func (AppModuleBasic) Name() string {
 }
 
 // RegisterCodec registers the types needed for amino encoding/decoding
-func (AppModuleBasic) RegisterCodec(cdc *codec.Codec) {
+func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
 	RegisterCodec(cdc)
 }
 
@@ -57,10 +57,10 @@ func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router
 }
 
 // GetTxCmd returns the root tx command for the supply module.
-func (AppModuleBasic) GetTxCmd(_ *codec.Codec) *cobra.Command { return nil }
+func (AppModuleBasic) GetTxCmd() *cobra.Command { return nil }
 
 // GetQueryCmd returns no root query command for the supply module.
-func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
+func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 	return nil
 }
 

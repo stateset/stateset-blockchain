@@ -14,7 +14,7 @@ import (
 // Keeper is the model object for the package bank module
 type Keeper struct {
 	storeKey     sdk.StoreKey
-	codec        *codec.Codec
+	codec        *codec.LegacyAmino
 	paramStore   params.Subspace
 	bankKeeper   bank.Keeper
 	codespace    sdk.CodespaceType
@@ -22,7 +22,7 @@ type Keeper struct {
 }
 
 // NewKeeper creates a bank keeper.
-func NewKeeper(codec *codec.Codec, storeKey sdk.StoreKey, bankKeeper bank.Keeper,
+func NewKeeper(codec *codec.LegacyAmino, storeKey sdk.StoreKey, bankKeeper bank.Keeper,
 	paramStore params.Subspace, codespace sdk.CodespaceType, supplyKeeper supply.Keeper) Keeper {
 	return Keeper{
 		storeKey:     storeKey,

@@ -18,7 +18,7 @@ import (
 )
 
 // GetTxCmd returns the transaction commands for this module
-func GetTxCmd(cdc *codec.Codec) *cobra.Command {
+func GetTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:                        bank.ModuleName,
 		Short:                      "Stateset Bank transaction subcommands",
@@ -33,7 +33,7 @@ func GetTxCmd(cdc *codec.Codec) *cobra.Command {
 }
 
 // SendTxCmd will create a send tx and sign it with the given key.
-func SendTxCmd(cdc *codec.Codec) *cobra.Command {
+func SendTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "send [from_key_or_address] [to_address] [coins]",
 		Short: "Create and sign a send tx",

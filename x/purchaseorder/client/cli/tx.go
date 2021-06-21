@@ -24,7 +24,7 @@ import (
 )
 
 // GetTxCmd returns the transaction commands for this module
-func GetTxCmd(cdc *codec.Codec) *cobra.Command {
+func GetTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	purchaseorderTxCmd := &cobra.Command{
 		Use:                        "purchaseorder",
 		Short:                      "purchaseorder transactions subcommands",
@@ -43,7 +43,7 @@ func GetTxCmd(cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdCreatePurchaseOrder cli command for creating atomic swaps
-func GetCmdCreatePurchaseOrder(cdc *codec.Codec) *cobra.Command {
+func GetCmdCreatePurchaseOrder(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create [name] [number] [start] [end] [amount] [timestamp] [from] [to]",
 		Short: "create a new purchase order",
@@ -111,7 +111,7 @@ func GetCmdCreatePurchaseOrder(cdc *codec.Codec) *cobra.Command {
 }
 
 
-func GetCmdCancelPurchaseOrder(cdc *codec.Codec) *cobra.Command {
+func GetCmdCancelPurchaseOrder(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "cancel [purchaseorder-id]",
 		Short:   "cancel purchaseorder by id",
@@ -142,7 +142,7 @@ func GetCmdCancelPurchaseOrder(cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdCompletePurchaseOrder cli command for completeing a purchase order
-func GetCmdCompletePurchaseOrder(cdc *codec.Codec) *cobra.Command {
+func GetCmdCompletePurchaseOrder(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:     "complete [purchaseorder-id]",
 		Short:   "complete purchaseorder by id",

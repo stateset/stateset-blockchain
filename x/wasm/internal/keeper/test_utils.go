@@ -28,7 +28,7 @@ import (
 	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
 )
 
-func makeTestCodec() *codec.Codec {
+func makeTestCodec() *codec.LegacyAmino {
 	var cdc = codec.New()
 
 	// Register AppAccount
@@ -47,7 +47,7 @@ func makeTestCodec() *codec.Codec {
 // TestInput nolint
 type TestInput struct {
 	Ctx           sdk.Context
-	Cdc           *codec.Codec
+	Cdc           *codec.LegacyAmino
 	AccKeeper     auth.AccountKeeper
 	BankKeeper    bank.Keeper
 	SupplyKeeper  supply.Keeper

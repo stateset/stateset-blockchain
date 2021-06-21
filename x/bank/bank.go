@@ -3,7 +3,7 @@ package bank
 import "github.com/cosmos/cosmos-sdk/codec"
 
 // RegisterCodec registers all the necessary types and interfaces for the module
-func RegisterCodec(c *codec.Codec) {
+func RegisterCodec(c *codec.LegacyAmino) {
 	c.RegisterConcrete(MsgSend{}, "stateset/MsgSend", nil)
 	c.RegisterConcrete(MsgIssue{}, "stateset/MsgIssue", nil)
 	c.RegisterConcrete(MsgBurn{}, "stateset/MsgBurn", nil)

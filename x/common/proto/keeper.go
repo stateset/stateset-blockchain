@@ -55,7 +55,7 @@ type VersionKeeper interface {
 // ProtocolKeeper is designed for a protocol controller
 type ProtocolKeeper struct {
 	storeKey sdk.StoreKey
-	cdc      *codec.Codec
+	cdc      *codec.LegacyAmino
 }
 
 // NewProtocolKeeper creates a new instance of ProtocolKeeper

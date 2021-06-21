@@ -3,7 +3,7 @@ package invoice
 import "github.com/cosmos/cosmos-sdk/codec"
 
 // RegisterCodec registers all the necessary types and interfaces for the module
-func RegisterCodec(c *codec.Codec) {
+func RegisterCodec(c *codec.LegacyAmino) {
 	c.RegisterConcrete(MsgCreateInvoice{}, "stateset/MsgCreateInvoice", nil)
 	c.RegisterConcrete(MsgCancelInvoice{}, "stateset/MsgCancelInvoice", nil)
 	c.RegisterConcrete(MsgEditInvoice{}, "stateset/MsgEditInvoice", nil)
@@ -18,7 +18,7 @@ func RegisterCodec(c *codec.Codec) {
 }
 
 // ModuleCodec encodes module codec
-var ModuleCodec *codec.Codec
+var ModuleCodec *codec.LegacyAmino
 
 func init() {
 	ModuleCodec = codec.New()
