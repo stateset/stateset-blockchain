@@ -93,8 +93,6 @@ import (
 	//"github.com/stateset/stateset-blockchain/x/liquidity"
 	// "github.com/stateset/stateset-blockchain/x/mint"
 	"github.com/stateset/stateset-blockchain/x/purchaseorder"
-	//"github.com/stateset/stateset-blockchain/x/slashing"
-	//"github.com/stateset/stateset-blockchain/x/staking"
 	//"github.com/stateset/stateset-blockchain/x/wasm"
 )
 

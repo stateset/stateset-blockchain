@@ -5,7 +5,6 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stateset/stateset-blockchain/x/params/subspace"
 )
 
 // Parameter store key
