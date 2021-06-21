@@ -29,7 +29,7 @@ type QueryPurchaseOrdersParams struct {
 	IDs []uint64 `json:"ids"`
 }
 
-// QueryPurchaseOrdersIDRangeParams for agreements by an id range
+// QueryPurchaseOrdersIDRangeParams for purchaseorders by an id range
 type QueryPurchaseOrdersIDRangeParams struct {
 	StartID uint64 `json:"start_id"`
 	EndID   uint64 `json:"end_id"`
@@ -92,16 +92,16 @@ func queryPurchaseOrdersByIDs(ctx sdk.Context, req abci.RequestQuery, keeper Kee
 		return nil, ErrJSONParse(codecErr)
 	}
 
-	var agreements PurchaseOrders
+	var purchaseorders PurchaseOrders
 	for _, id := range params.IDs {
 		agreement, ok := keeper.PurchaseOrder(ctx, id)
 		if !ok {
 			return nil, ErrUnknownPurchaseOrder(id)
 		}
-		agreements = append(agreements, agreement)
+		purchaseorders = append(purchaseorders, agreement)
 	}
 
-	return mustMarshal(agreements)
+	return mustMarshal(purchaseorders)
 }
 
 
@@ -111,9 +111,9 @@ func queryPurchaseOrdersByIDRange(ctx sdk.Context, req abci.RequestQuery, keeper
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
-	agreements := keeper.PurchaseOrdersBetweenIDs(ctx, params.StartID, params.EndID)
+	purchaseorders := keeper.PurchaseOrdersBetweenIDs(ctx, params.StartID, params.EndID)
 
-	return mustMarshal(agreements)
+	return mustMarshal(purchaseorders)
 }
 
 func queryPurchaseOrdersBeforeTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
@@ -122,9 +122,9 @@ func queryPurchaseOrdersBeforeTime(ctx sdk.Context, req abci.RequestQuery, keepe
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
-	agreements := keeper.PurchaseOrdersBeforeTime(ctx, params.CreatedTime)
+	purchaseorders := keeper.PurchaseOrdersBeforeTime(ctx, params.CreatedTime)
 
-	return mustMarshal(agreements)
+	return mustMarshal(purchaseorders)
 }
 
 func queryPurchaseOrdersAfterTime(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
@@ -133,9 +133,9 @@ func queryPurchaseOrdersAfterTime(ctx sdk.Context, req abci.RequestQuery, keeper
 	if codecErr != nil {
 		return nil, ErrJSONParse(codecErr)
 	}
-	agreements := keeper.PurchaseOrdersAfterTime(ctx, params.CreatedTime)
+	purchaseorders := keeper.PurchaseOrdersAfterTime(ctx, params.CreatedTime)
 
-	return mustMarshal(agreements)
+	return mustMarshal(purchaseorders)
 }
 
 func queryParams(ctx sdk.Context, keeper Keeper) (result []byte, err sdk.Error) {

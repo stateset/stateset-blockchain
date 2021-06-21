@@ -19,7 +19,7 @@ Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint.
 
 1. Install Go by following the [official docs](https://golang.org/doc/install). 
 
-**Go version must be 1.13+**.
+**Go version must be 1.15+**.
 
 2. Install the Stateset Binaries
 
