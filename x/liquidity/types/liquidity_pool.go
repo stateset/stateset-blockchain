@@ -1,17 +1,13 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 	"strings"
+
+	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// Calculate unique Pool key of the liquidity pool
-// need to validate alphabetical ordering of ReserveCoinDenoms when New() and Store
-// Denominations can be 3 ~ 128 characters long and support letters, followed by either
-// a letter, a number or a separator ('/').
-// reDnmString = `[a-zA-Z][a-zA-Z0-9/]{2,127}`.
 func (lp LiquidityPool) GetPoolKey() string {
 	return GetPoolKey(lp.ReserveCoinDenoms, lp.PoolTypeIndex)
 }

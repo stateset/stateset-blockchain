@@ -52,8 +52,7 @@ func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 
 // RegisterRESTRoutes registers the REST routes for the supply module.
 func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
-	// no REST routes, use GraphQL API endpoint
-	// i.e: rest.RegisterRoutes(ctx, rtr)
+
 }
 
 func (AppModuleBasic) RegisterGRPCRoutes(ctx client.Context, *runtime.ServeMux) {
