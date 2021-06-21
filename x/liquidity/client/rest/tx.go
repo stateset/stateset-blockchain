@@ -4,11 +4,12 @@ package rest
 // client is excluded from test coverage in the poc phase milestone 1 and will be included in milestone 2 with completeness
 
 import (
+	"net/http"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/gorilla/mux"
-	"github.com/tendermint/liquidity/x/liquidity/types"
-	"net/http"
+	"github.com/stateset/stateset-blockchain/x/liquidity/types"
 )
 
 // TODO: Plans to increase completeness on Milestone 2

@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"gitlab.com/stateset/stateset-blockchain"
+	"github.com/stateset/stateset-blockchain"
 )
 
 type KeeperPool interface {

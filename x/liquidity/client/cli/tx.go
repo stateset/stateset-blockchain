@@ -5,16 +5,17 @@ package cli
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
-	"strconv"
-	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/tendermint/liquidity/x/liquidity/types"
+	"github.com/stateset/stateset-blockchain/x/liquidity/types"
 )
 
 // GetTxCmd returns a root CLI command handler for all x/liquidity transaction commands.
