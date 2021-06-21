@@ -13,8 +13,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	bankrest "github.com/cosmos/cosmos-sdk/x/bank/client/rest"
-
-	feeutils "github.com/stateset/stateset-blockchain/x/auth/client/utils"
+	feeutils "github.com/stateset/stateset-blockchain/x/auth/client/feeutils"
 )
 
 // RegisterRoutes - Central function to define routes that get registered by the main application
