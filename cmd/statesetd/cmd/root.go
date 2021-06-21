@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com//app/params"
+	"github.com/app/params"
 	"github.com/cosmos/cosmos-sdk/snapshots"
 
 	"github.com/spf13/cast"

@@ -11,7 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/gorilla/mux"
 
-	"github.com/stateset/stateset-blockchain/x/agreement"
 )
 
 const restAgreementID = "agreement-id"
