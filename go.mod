@@ -3,7 +3,8 @@ module github.com/stateset/stateset-blockchain
 go 1.16
 
 require (
-	github.com/CosmWasm/go-cosmwasm v0.10.0
+
+	github.com/CosmWasm/wasmd v0.16.0
 	github.com/cosmos/cosmos-sdk v0.42.4
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2 // indirect
