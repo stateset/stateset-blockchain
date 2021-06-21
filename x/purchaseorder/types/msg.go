@@ -8,8 +8,8 @@ import (
 const (
 	// TypeMsgCreatePurchaseOrder represents the type of the message for creating new purchaseorder
 	TypeMsgCreatePurchaseOrder = "create_purchaseorder"
-	// TypeMsgEditAgreement represents the type of the message for editing an purchaseorder
-	TypeMsgEditPurchaseOrder = "edit_purchasorder"
+	// TypeMsgUpdateAgreement represents the type of the message for updating an purchaseorder
+	TypeMsgUpdatePurchaseOrder = "update_purchasorder"
 	// TypeMsgDeletePurchaseOrder represents the type of the message for activating an purchaseorder
 	TypeMsgDeletePurchaseOrder = "delete_purchasorder"
 	// TypeMsgEditPurchaseOrder represents the type of the message for activating an purchaseorder
@@ -89,7 +89,7 @@ func (msg MsgCreatePurchaseOrder) GetSigners() []sdk.AccAddress {
 // Edit Purchase Order
 
 // MsgAmendAgreement defines a message to amend an purchaseorder
-type MsgEditPurchaseOrder struct {
+type MsgUpdatePurchaseOrder struct {
 	ID      uint64         `json:"id"`
 	Counterparty sdk.AccAddress `json:"counterparty"`
 }
