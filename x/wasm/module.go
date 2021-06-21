@@ -6,6 +6,9 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
+	"github.com/stateset/stateset-blockchain/x/slashing/simulation"
+	cli "github.com/stateset/stateset-blockchain/x/wasm/client"
+	"github.com/stateset/stateset-blockchain/x/wasm/rest"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
@@ -16,10 +19,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	sim "github.com/cosmos/cosmos-sdk/x/simulation"
-
-	"github.com/stateset/stateset-blockchain/x/wasm/client/cli"
-	"github.com/stateset/stateset-blockchain/x/wasm/client/rest"
-	"github.com/stateset/stateset-blockchain/x/wasm/simulation"
 )
 
 var (

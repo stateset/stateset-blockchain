@@ -13,7 +13,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	core "github.com/stateset/stateset-blockchain/core/types"
+	core "github.com/stateset/stateset-blockchain/types"
 )
 
 var (
