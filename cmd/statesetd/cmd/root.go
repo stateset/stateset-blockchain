@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com//app/params"
 	"github.com/cosmos/cosmos-sdk/snapshots"
-	"github.com/stateset/stateset-blockchain/app/params"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
@@ -34,11 +34,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	"github.com/stateset/stateset-blockchain/app"
-
 )
 
 var ChainID string
-s
+
 // NewRootCmd creates a new root command for simd. It is called once in the
 // main function.
 func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
