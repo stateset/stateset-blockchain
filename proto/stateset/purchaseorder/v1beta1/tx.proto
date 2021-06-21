@@ -18,7 +18,7 @@ service Msg {
   rpc Update(MsgUpdatePurchaseOrderRequest) returns (MsgUpdatePurchaseOrderResponse);
 
   // Delete defines a method to delete a purchase order.
-  rpc Update(MsgDeletePurchaseOrderRequest) returns (MsgDeletePurchaseOrderResponse);
+  rpc Delete(MsgDeletePurchaseOrderRequest) returns (MsgDeletePurchaseOrderResponse);
 
   // Complete defines a method to complete a purchase order
   rpc Complete(MsgCompletePurchaseOrderRequest) returns (MsgCompletePurchaseOrderResponse);

@@ -14,6 +14,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterInterface((*Agreement)(nil), nil)
 	cdc.RegisterConcrete(MsgCreateAgreement{}, "stateset/MsgCreateAgreement", nil)
 	cdc.RegisterConcrete(MsgEditAgreement{}, "stateset/MsgEditAgreement", nil)
+	cdc.RegisterConcrete(MsgEditAgreement{}, "stateset/MsgDeleteAgreement", nil)
 	cdc.RegisterConcrete(MsgAmendAgreement{}, "stateset/MsgAmendAgreement", nil)
 	cdc.RegisterConcrete(MsgRenewAgreement{}, "stateset/MsgRenewAgreement", nil)
 	cdc.RegisterConcrete(MsgTerminateAgreement{}, "stateset/MsgTerminateAgreement", nil)
@@ -29,6 +30,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		(*sdk.Msg)(nil),
 		&MsgCreateAgreement{},
 		&MsgEditAgreement{},
+		&MsgDeleteAgreement{},
 		&MsgAmendAgreement{},
 		&MsgRenewAgreement{},
 		&MsgTerminateAgreement{},

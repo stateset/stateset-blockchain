@@ -10,6 +10,8 @@ const (
 	TypeMsgCreateAgreement = "create_agreement"
 	// TypeMsgEditAgreement represents the type of the message for editing an agreement
 	TypeMsgEditAgreement = "edit_agreement"
+	// TypeMsgActivateAgreement represents the type of the message for delete an agreement
+	TypeMsgDeleteAgreement = "delete_agreement"
 	// TypeMsgActivateAgreement represents the type of the message for activating an agreement
 	TypeMsgActivateAgreement = "activate_agreement"
 	// TypeMsgRenewAgreement represents the type of the message for amending an agreement
@@ -18,13 +20,14 @@ const (
 	TypeMsgRenewAgreement = "renew_agreement"
 	// TypeMsgTerminateAgreement represents the type of the message for renewing an agreement
 	TypeMsgTerminateAgreement = "terminate_agreement"
-	// TypeMsgPaybackLoan represents the type of the message for creating new loan
+	// TypeMsgPaybackLoan represents the type of the message for expiring an agreement
 	TypeMsgExpireAgreement = "expire_agreement"
 )
 
 // verify interface at compile time
 var _ sdk.Msg = &MsgCreateAgreement{}
 var _ sdk.Msg = &MsgEditAgreement{}
+var _ sdk.Msg = &MsgDeleteAgreement{}
 var _ sdk.Msg = &MsgActivateAgreement{}
 var _ sdk.Msg = &MsgAmendAgreement{}
 var _ sdk.Msg = &MsgRenewAgreement{}

@@ -11,6 +11,8 @@ const (
 	TypeMsgCreatePurchaseOrder = "create_purchaseorder"
 	// TypeMsgEditAgreement represents the type of the message for editing an purchaseorder
 	TypeMsgEditPurchaseOrder = "edit_purchasorder"
+	// TypeMsgDeletePurchaseOrder represents the type of the message for activating an purchaseorder
+	TypeMsgDeletePurchaseOrder = "delete_purchasorder"
 	// TypeMsgEditPurchaseOrder represents the type of the message for activating an purchaseorder
 	TypeMsgCompletePurchaseOrder = "complete_purchaseorder"
 	// TypeMsgCompletePurchaseOrder represents the type of the message for amending an purchaseorder
@@ -28,6 +30,7 @@ const (
 // verify interface at compile time
 var _ sdk.Msg = &MsgCreatePurchaseOrder{}
 var _ sdk.Msg = &MsgEditPurchaseOrder{}
+var _ sdk.Msg = &MsgDeletePurchaseOrder{}
 var _ sdk.Msg = &MsgCompletePurchaseOrder{}
 var _ sdk.Msg = &MsgCancelPurchaseOrder{}
 var _ sdk.Msg = &MsgFinancePurchaseOrder{}
@@ -37,7 +40,7 @@ var _ sdk.Msg = &MsgUpdateParams{}
 // MsgCreatePurchaseOrder defines a message to create an purchaseorder
 type MsgCreatePurchaseOrder struct {
 	AgreementID string             `json:"agreement_id"`
-	PurchaseOrderID 	  string 			 `json:"purchaseorder_id"`
+	PurchaseOrderID 	  string 	`json:"purchaseorder_id"`
 	Body          string         	 `json:"body"`
 	Lender        sdk.AccAddress     `json:"counterparty"`
 	Source        string             `json:"source,omitempty"`
@@ -91,7 +94,7 @@ type MsgEditPurchaseOrder struct {
 	Counterparty sdk.AccAddress `json:"counterparty"`
 }
 
-// Route is the name of the route for loan
+// Route is the name of the route for purchase order
 func (msg MsgAmendPurchaseOrder) Route() string {
 	return RouterKey
 }

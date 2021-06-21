@@ -23,6 +23,10 @@ func NewHandler(keeper keeper.IKeeper, mkeeper mkeeper.IKeeper) sdk.Handler {
 			res, err := ms.EditPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
+		case *types.MsgDeletePurchaseOrder:
+			res, err := ms.DeletePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgCompletePurchaseOrder:
 			res, err := ms.CancelPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
