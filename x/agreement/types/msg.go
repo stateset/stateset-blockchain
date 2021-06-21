@@ -10,8 +10,8 @@ import (
 const (
 	// TypeMsgCreateAgreement represents the type of the message for creating new agreement
 	TypeMsgCreateAgreement = "create_agreement"
-	// TypeMsgEditAgreement represents the type of the message for editing an agreement
-	TypeMsgEditAgreement = "edit_agreement"
+	// TypeMsgEditAgreement represents the type of the message for updating an agreement
+	TypeMsgUpdateAgreement = "update_agreement"
 	// TypeMsgActivateAgreement represents the type of the message for delete an agreement
 	TypeMsgDeleteAgreement = "delete_agreement"
 	// TypeMsgActivateAgreement represents the type of the message for activating an agreement
@@ -30,7 +30,7 @@ const (
 
 // verify interface at compile time
 var _ sdk.Msg = &MsgCreateAgreement{}
-var _ sdk.Msg = &MsgEditAgreement{}
+var _ sdk.Msg = &MsgUpdateAgreement{}
 var _ sdk.Msg = &MsgDeleteAgreement{}
 var _ sdk.Msg = &MsgActivateAgreement{}
 var _ sdk.Msg = &MsgAmendAgreement{}
@@ -397,65 +397,6 @@ func (msg MsgExpireAgreement) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
 }
 
-// MsgEditAgreement defines a message to edit an agreement
-type MsgEditAgreement struct {
-	AgreementID         uint64         `json:"agreementid"`
-	AgreementName       string         `json:"agreementName"`
-	AgreementNumber     string         `json:"agreementNumber"`
-	TotalAgreementValue string         `json:"totalAgreementValue"`
-	AgreementStartBlock string         `json:"AgreementStartBlock"`
-	AgreementEndBlock   string         `json:"AgreementEndBlock"`
-	Editor              sdk.AccAddress `json:"editor"`
-}
-
-// NewMsgEditAgreement creates a new message to edit a loan
-func NewMsgEditAgreement(agreementId uint64, agreementName string, agreementNumber, totalAgreementValue sdk.Coin, AgreementStartBlock time.Time, AgreementEndBlock time.Time, editor sdk.AccAddress) MsgEditLoan {
-	return MsgEditLoan{
-		ID:                  agreementid,
-		AgreementName:       agreementName,
-		AgreementNumber:     agreementNumber,
-		TotalAgreementValue: totalAgreementValue,
-		AgreementStartBlock: AgreementStartBlock,
-		AgreementEndBlock:   AgreementEndBlock,
-		Editor:              editor,
-	}
-}
-
-// Route is the name of the route for loan
-func (msg MsgEditAgreement) Route() string {
-	return RouterKey
-}
-
-// Type is the name for the Msg
-func (msg MsgEditAgreement) Type() string {
-	return ModuleName
-}
-
-// ValidateBasic validates basic fields of the Msg
-func (msg MsgEditAgreement) ValidateBasic() sdk.Error {
-	if msg.ID == 0 {
-		return ErrUnknownLoan(msg.ID)
-	}
-	if len(msg.Editor) == 0 {
-		return sdk.ErrInvalidAddress("Invalid address: " + msg.Editor.String())
-	}
-
-	return nil
-}
-
-// GetSignBytes gets the bytes for Msg signer to sign on
-func (msg MsgEditAgreement) GetSignBytes() []byte {
-	msgBytes := ModuleCodec.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(msgBytes)
-}
-
-// GetSigners gets the signs of the Msg
-func (msg MsgEditAgreement) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Editor)}
-}
-
-
-var _ sdk.Msg = &MsgSendIbcAgreement{}
 
 func NewMsgSendIbcAgreement(
 	sender string,
