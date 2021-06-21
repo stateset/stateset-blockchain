@@ -24,6 +24,8 @@ const (
 	TypeMsgRemoveAdmin = "remove_admin"
 	// TypeMsgUpdateParams represents the type of
 	TypeMsgUpdateParams = "update_params"
+	// TypeMsgUpdateParams represents the type of
+	TypeMsgSendIbcPurchaseOrder = "send_ibc_purchaseorder"
 )
 
 // verify interface at compile time
@@ -35,6 +37,7 @@ var _ sdk.Msg = &MsgCancelPurchaseOrder{}
 var _ sdk.Msg = &MsgFinancePurchaseOrder{}
 var _ sdk.Msg = &MsgRemoveAdmin{}
 var _ sdk.Msg = &MsgUpdateParams{}
+var _ sdk.Msg = &MsgSendIbcPurchaseOrder{}
 
 // MsgCreatePurchaseOrder defines a message to create an purchaseorder
 type MsgCreatePurchaseOrder struct {
@@ -182,4 +185,55 @@ func (msg MsgCancelPurchaseOrder) GetSignBytes() []byte {
 // GetSigners gets the signs of the Msg
 func (msg MsgCancelPurchaseOrder) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
+}
+
+func NewMsgSendIbcPurchaseOrder(
+	sender string,
+	port string,
+	channelID string,
+	timeoutTimestamp uint64,
+	purchaseordername string,
+	purchaseordernumber string,
+	status string,
+	total string,
+) *MsgSendIbcPurchaseOrder {
+	return &MsgSendIbcPurchaseOrder{
+		Sender:              sender,
+		Port:                port,
+		ChannelID:           channelID,
+		TimeoutTimestamp:    timeoutTimestamp,
+		Purchaseordername:   purchaseordername,
+		Purchaseordernumber: purchaseordernumber,
+		Status:              status,
+		Total:               total,
+	}
+}
+
+func (msg *MsgSendIbcPurchaseOrder) Route() string {
+	return RouterKey
+}
+
+func (msg *MsgSendIbcPurchaseOrder) Type() string {
+	return "SendIbcPurchaseOrder"
+}
+
+func (msg *MsgSendIbcPurchaseOrder) GetSigners() []sdk.AccAddress {
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{sender}
+}
+
+func (msg *MsgSendIbcPurchaseOrder) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
+}
+
+func (msg *MsgSendIbcPurchaseOrder) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
+	}
+	return nil
 }
