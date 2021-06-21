@@ -83,7 +83,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 
-	"github.com/stateset/stateset-blockchain/x/agreement"
+	//"github.com/stateset/stateset-blockchain/x/agreement"
 	//"github.com/stateset/stateset-blockchain/x/auth"
 	//"github.com/stateset/stateset-blockchain/x/auth/ante"
 	//"github.com/stateset/stateset-blockchain/x/bank"
@@ -134,9 +134,9 @@ var (
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
 		// stateset modules
-		agreement.AppModuleBasic{},
-		purchaseorder.AppModuleBasic{},
-		invoice.AppModuleBasic{},
+		// agreement.AppModuleBasic{},
+		// purchaseorder.AppModuleBasic{},
+		// invoice.AppModuleBasic{},
 		// ibc modules
 		capability.AppModuleBasic{},
 		ibc.AppModuleBasic{},
