@@ -3,14 +3,11 @@ package invoice
 import (
 	"encoding/json"
 
-
-	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/gorilla/mux"
-	"github.com/spf13/cobra"
+	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
 )
 
 var (
@@ -20,49 +17,6 @@ var (
 
 // ModuleName is the name of this module
 const ModuleName = "invoice"
-
-// AppModuleBasic defines the internal data for the module
-// ----------------------------------------------------------------------------
-type AppModuleBasic struct{}
-
-// Name define the name of the module
-func (AppModuleBasic) Name() string {
-	return ModuleName
-}
-
-// RegisterCodec registers the types needed for amino encoding/decoding
-func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
-	RegisterCodec(cdc)
-}
-
-// DefaultGenesis creates the default genesis state for testing
-func (AppModuleBasic) DefaultGenesis() json.RawMessage {
-	return ModuleCodec.MustMarshalJSON(DefaultGenesisState())
-}
-
-// ValidateGenesis validates the genesis state
-func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
-	var data GenesisState
-	err := ModuleCodec.UnmarshalJSON(bz, &data)
-	if err != nil {
-		return err
-	}
-	return ValidateGenesis(data)
-}
-
-// RegisterRESTRoutes registers the REST routes for the supply module.
-func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
-	// no REST routes, use GraphQL API endpoint
-	// i.e: rest.RegisterRoutes(ctx, rtr)
-}
-
-// GetTxCmd returns the root tx command for the supply module.
-func (AppModuleBasic) GetTxCmd() *cobra.Command { return nil }
-
-// GetQueryCmd returns no root query command for the supply module.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return nil
-}
 
 // AppModule defines external data for the module
 // ----------------------------------------------------------------------------
@@ -98,13 +52,24 @@ func (AppModule) QuerierRoute() string {
 	return QuerierRoute
 }
 
+// LegacyQuerierHandler returns the capability module's Querier.
+func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+	return nil
+}
+
 // NewQuerierHandler creates a new querier handler
 func (am AppModule) NewQuerierHandler() sdk.Querier {
 	return NewQuerier(am.keeper)
 }
 
-// RegisterServices allows a module to register services
-func (am AppModule) RegisterServices(Configurator)
+// RegisterServices registers a GRPC query service to respond to the
+// module-specific GRPC queries.
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+}
+
+// RegisterInvariants registers the capability module's invariants.
+func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 // InitGenesis enforces the creation of the genesis state for this module
 func (am AppModule) InitGenesis(ctx sdk.Context, data json.RawMessage) []abci.ValidatorUpdate {
