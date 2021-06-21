@@ -6,14 +6,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/cosmos/cosmos-sdk/client/context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 	"github.com/gorilla/mux"
 
 	feeutils "github.com/stateset/stateset-blockchain/x/auth/client/utils"
-	wasmUtils "github.com/stateset/stateset-blockchain/x/wasm/client/utils"
 	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
 )
 

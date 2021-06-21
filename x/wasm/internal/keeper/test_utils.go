@@ -25,7 +25,6 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	core "github.com/stateset/stateset-blockchain/types"
-	"github.com/stateset/stateset-blockchain/x/treasury"
 	"github.com/stateset/stateset-blockchain/x/wasm/config"
 	"github.com/stateset/stateset-blockchain/x/wasm/internal/types"
 )
