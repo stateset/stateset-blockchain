@@ -77,14 +77,6 @@ func (a Agreement) Total() sdk.Coin {
 	return a.Spec.Total()
 }
 
-// Defines module constants
-const (
-	RouterKey         = ModuleName
-	QuerierRoute      = ModuleName
-	StoreKey          = ModuleName
-	DefaultParamspace = ModuleName
-)
-
 // Agreement stores data about an agreement
 type Agreement struct {
 	agreementID            uint64         `json:"agreementId"`

@@ -24,6 +24,8 @@ const (
 	TypeMsgTerminateAgreement = "terminate_agreement"
 	// TypeMsgPaybackLoan represents the type of the message for expiring an agreement
 	TypeMsgExpireAgreement = "expire_agreement"
+	// TypeMsgPaybackLoan represents the type of the message for expiring an agreement
+	TypeMsgSendIbcAgreement = "send_ibc_agreement"
 )
 
 // verify interface at compile time
@@ -35,6 +37,7 @@ var _ sdk.Msg = &MsgAmendAgreement{}
 var _ sdk.Msg = &MsgRenewAgreement{}
 var _ sdk.Msg = &MsgTerminateAgreement{}
 var _ sdk.Msg = &MsgExpireAgreement{}
+var _ sdk.Msg = &MsgSendIbcAgreement{}
 
 // MsgCreateAgreement defines a message to create an agreement
 type MsgCreateAgreement struct {
@@ -450,3 +453,58 @@ func (msg MsgEditAgreement) GetSignBytes() []byte {
 func (msg MsgEditAgreement) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Editor)}
 }
+
+
+var _ sdk.Msg = &MsgSendIbcAgreement{}
+
+func NewMsgSendIbcAgreement(
+	sender string,
+	port string,
+	channelID string,
+	timeoutTimestamp uint64,
+	name string,
+	number string,
+	status string,
+	totalagreementvalue string,
+) *MsgSendIbcAgreement {
+	return &MsgSendIbcAgreement{
+		Sender:              sender,
+		Port:                port,
+		ChannelID:           channelID,
+		TimeoutTimestamp:    timeoutTimestamp,
+		Name:                name,
+		Number:              number,
+		Status:              status,
+		Totalagreementvalue: totalagreementvalue,
+	}
+}
+
+func (msg *MsgSendIbcAgreement) Route() string {
+	return RouterKey
+}
+
+func (msg *MsgSendIbcAgreement) Type() string {
+	return "SendIbcAgreement"
+}
+
+func (msg *MsgSendIbcAgreement) GetSigners() []sdk.AccAddress {
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{sender}
+}
+
+func (msg *MsgSendIbcAgreement) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
+}
+
+func (msg *MsgSendIbcAgreement) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
+	}
+	return nil
+}
+
