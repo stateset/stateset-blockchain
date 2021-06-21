@@ -37,17 +37,15 @@ var _ sdk.Msg = &MsgUpdateParams{}
 
 // MsgCreatePurchaseOrder defines a message to create an purchaseorder
 type MsgCreatePurchaseOrder struct {
-	AgreementID string             `json:"agreement_id"`
 	PurchaseOrderID 	  string 	`json:"purchaseorder_id"`
-	Body          string         	 `json:"body"`
 	Lender        sdk.AccAddress     `json:"counterparty"`
-	Source        string             `json:"source,omitempty"`
 }
 
 // NewMsgCreatePurchaseOrder creates a new message to create an purchaseorder
-func NewMsgCreatePurchaseOrder(purchaseOrderID) MsgCreatePurchaseOrder {
+func NewMsgCreatePurchaseOrder(purchaseOrderID string, lender sdk.AccAddress,) MsgCreatePurchaseOrder {
 	return MsgCreatePurchaseOrder {
-		PurchaseOrderID:    purchaseorderID,
+		PurchaseOrderID:    purchaseOrderID,
+		Lender: lender,
 	}
 }
 
