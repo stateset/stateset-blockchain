@@ -22,7 +22,7 @@ func (gs GenesisState) Validate() error {
 
 	for _, elem := range gs.PurchaseOrderList {
 		if _, ok := purchaseOrderIdMap[elem.Id]; ok {
-			return fmt.Errorf("duplicated id for agreement")
+			return fmt.Errorf("duplicated id for po")
 		}
 		purchaseOrderIdMap[elem.Id] = true
 	}
