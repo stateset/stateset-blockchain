@@ -1,0 +1,19 @@
+// IbcInvoicePacketData defines a struct for the packet payload
+message IbcInvoicePacketData {
+  string creator = 1;
+  string invoice_id = 2;
+  string invoicenumber = 3; 
+  string invoicename = 4;
+  string billingreason = 5;
+  string amountdue = 6;
+  string amountpaid = 7;
+  string amountremaining = 8;
+  string subtotal = 9;
+  string total = 10;
+  string party = 11;
+  string counterparty = 12;
+  string factor = 13;
+  string duedate = 14;
+  string periodstartdate = 15;
+  string periodenddate = 16;
+}

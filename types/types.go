@@ -92,8 +92,6 @@ type StakeDistributionResultsType int64
 // Distribution result constants
 const (
 	DistributionMajorityNotReached StakeDistributionResultsType = iota
-	DistributionBackersWin
-	DistributionChallengersWin
 )
 
 // StakeDistributionResults contains how the Stake was distributed after the Purchase Order or Invoice is paid.

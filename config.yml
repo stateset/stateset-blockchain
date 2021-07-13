@@ -1,8 +1,8 @@
 accounts:
     - name: alice
-      coins: ["20000state", "200000000stake"]
+      coins: ["20000sset", "200000000stake"]
     - name: bob
-      coins: ["10000state", "100000000stake"]
+      coins: ["10000sset", "100000000stake"]
   validator:
     name: alice
     staked: "100000000stake"
@@ -13,5 +13,5 @@ accounts:
       path: "docs/static/openapi.yml"
   faucet:
     name: bob
-    coins: ["5state", "100000stake"]
+    coins: ["5sset", "100000stake"]
   
