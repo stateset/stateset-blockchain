@@ -48,7 +48,7 @@ func GetCmdQueryParams() *cobra.Command {
 		Long: strings.TrimSpace(
 			fmt.Sprintf(`Query values set as purchase order parameters.
 Example:
-$ %s query purchase order params
+$ stateset query purchaseorder params
 `,
 				version.AppName,
 			),
@@ -84,7 +84,7 @@ func GetCmdQueryPurchaseOrderPool() *cobra.Command {
 		Long: strings.TrimSpace(
 			fmt.Sprintf(`Query details of an purchase order
 Example:
-$ %s query purchase order 1
+$ stateset query purchaseorder 1
 `,
 				version.AppName,
 			),
@@ -134,7 +134,7 @@ func GetCmdQueryPurchaseOrders() *cobra.Command {
 		Long: strings.TrimSpace(
 			fmt.Sprintf(`Query details about all purchase orders on a network.
 Example:
-$ %s query purchase orders
+$ stateset query purchaseorders
 `,
 				version.AppName,
 			),

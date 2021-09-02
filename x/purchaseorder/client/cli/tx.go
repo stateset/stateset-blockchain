@@ -171,3 +171,8 @@ func GetCmdCompletePurchaseOrder(cdc *codec.LegacyAmino) *cobra.Command {
 		},
 	}
 }
+
+flags.AddTxFlagsToCmd(cmd)
+
+return cmd
+}

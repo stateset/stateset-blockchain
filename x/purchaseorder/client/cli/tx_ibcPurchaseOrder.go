@@ -16,14 +16,13 @@ var _ = strconv.Itoa(0)
 
 func CmdSendIbcPurchaseOrder() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "send-ibcPurchaseOrder [src-port] [src-channel] [purchaseordername] [purchaseordernumber] [status] [total]",
-		Short: "Send a ibcPurchaseOrder over IBC",
-		Args:  cobra.ExactArgs(6),
+		Use:   "send-ibcPurchaseOrder [src-port] [src-channel] [purchaseordernumber] [status] [total]",
+		Short: "Send a purchaseorder over IBC",
+		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsPurchaseordername := string(args[2])
-			argsPurchaseordernumber := string(args[3])
-			argsStatus := string(args[4])
-			argsTotal := string(args[5])
+			argsPurchaseordernumber := string(args[2])
+			argsStatus := string(args[3])
+			argsTotal := string(args[4])
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -56,6 +55,8 @@ func CmdSendIbcPurchaseOrder() *cobra.Command {
 	}
 
 	cmd.Flags().Uint64(flagPacketTimeoutTimestamp, DefaultRelativePacketTimeoutTimestamp, "Packet timeout timestamp in nanoseconds. Default is 10 minutes.")
+	
+	
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
