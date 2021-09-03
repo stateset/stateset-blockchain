@@ -33,15 +33,15 @@ service Msg {
 
 // MsgCreatePurchasOrderRequest is the Msg/CreatePurchaseOrder request type.
 message MsgCreatePurchasOrderRequest {
-  // sender is the address of the sender of the transaction.
+  
   string creator = 1;
-  string purchasorder_id = 2;
-  string purchaseordernumber = 3;
-  string purchaseorderhash = 4;
-  string purchaseorderstatus = 5;
+  string purchaseorder_id = 2;
+  string purchaseorder_number = 3;
+  string purchaseorder_hash = 4;
+  string purchaseorder_status = 5;
   string description = 6;
-  string purchasedate = 7;
-  string deliveryDate = 8;
+  string purchase_date = 7;
+  string delivery_date = 8;
   string subtotal = 9;
   string total = 10;
   string purchaser = 11;
@@ -56,15 +56,15 @@ message MsgCreatePurchaseOrderResponse {
 }
 
 message MsgUpdatePurchasOrderRequest {
-  // sender is the address of the sender of the transaction.
+  
   string creator = 1;
-  string purchasorder_id = 2;
-  string purchaseordernumber = 3;
-  string purchaseorderhash = 4;
-  string purchaseorderstatus = 5;
+  string purchaseorder_id = 2;
+  string purchaseorder_number = 3;
+  string purchaseorder_hash = 4;
+  string purchaseorder_status = 5;
   string description = 6;
-  string purchasedate = 7;
-  string deliveryDate = 8;
+  string purchase_date = 7;
+  string delivery_date = 8;
   string subtotal = 9;
   string total = 10;
   string purchaser = 11;

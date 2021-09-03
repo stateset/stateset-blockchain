@@ -7,15 +7,15 @@ import "gogoproto/gogo.proto";
 
 message Purchaseorder {
   string creator = 1;
-  string purchasorder_id = 2;
-  string purchaseordernumber = 3;
-  string purchaseorderhash = 4;
-  string purchaseorderstatus = 5;
+  string purchaseorder_id = 2;
+  string purchaseorder_number = 3;
+  string purchaseorder_hash = 4;
+  string purchaseorder_status = 5;
   string description = 6;
-  string purchasedate = 7;
-  string deliveryDate = 8;
-  int32 subtotal = 9;
-  int32 total = 10;
+  string purchase_date = 7;
+  string delivery_date = 8;
+  string subtotal = 9;
+  string total = 10;
   string purchaser = 11;
   string vendor = 12;
   string fulfiller = 13;
@@ -39,15 +39,15 @@ State state = 2 [(gogoproto.jsontag) = "state", (gogoproto.moretags) = "yaml:\"s
 
 message MsgCreatePurchaseorder {
   string creator = 1;
-  string purchasorder_id = 2;
-  string purchaseordernumber = 3;
-  string purchaseorderhash = 4;
-  string purchaseorderstatus = 5;
+  string purchaseorder_id = 2;
+  string purchaseorder_number = 3;
+  string purchaseorder_hash = 4;
+  string purchaseorder_status = 5;
   string description = 6;
-  string purchasedate = 7;
-  string deliveryDate = 8;
-  int32 subtotal = 9;
-  int32 total = 10;
+  string purchase_date = 7;
+  string delivery_date = 8;
+  string subtotal = 9;
+  string total = 10;
   string purchaser = 11;
   string vendor = 12;
   string fulfiller = 13;
@@ -56,15 +56,15 @@ message MsgCreatePurchaseorder {
 
 message MsgUpdatePurchaseorder {
   string creator = 1;
-  string purchasorder_id = 2;
-  string purchaseordernumber = 3;
-  string purchaseorderhash = 4;
-  string purchaseorderstatus = 5;
+  string purchaseorder_id = 2;
+  string purchaseorder_number = 3;
+  string purchaseorder_hash = 4;
+  string purchaseorder_status = 5;
   string description = 6;
-  string purchasedate = 7;
-  string deliveryDate = 8;
-  int32 subtotal = 9;
-  int32 total = 10;
+  string purchase_date = 7;
+  string delivery_date = 8;
+  string subtotal = 9;
+  string total = 10;
   string purchaser = 11;
   string vendor = 12;
   string fulfiller = 13;

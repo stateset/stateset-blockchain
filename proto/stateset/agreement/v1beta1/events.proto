@@ -9,60 +9,90 @@ option go_package = "github.com/stateset/stateset-blockchain/x/agreement";
 // EventCreateAgreement is an event emitted when an agreement is created.
 message EventCreateAgreement {
 
-    // agreement_id is the unique ID of agreement
-    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+  // agreement_id is the unique ID of agreement
+  string agreement_id = 1 [(gogoproto.moretags) = "yaml:\"agreement_id\""];
 
-    // creator is the creator of the agreement
-    string creator = 2;
+  // creator is the account address creator of the agreement
+  string creator = 2;
+
+  // counterparty is the account address of the counterparty of the agreement.
+  string counterparty = 3;
+
+  // total_amount is the total number of credits in the credit batch.
+  string total_amount = 4 [(gogoproto.moretags) = "yaml:\"total_amount\""];
+
+  // start_date is the beginning of the period during which this credit batch
+  // was quantified and verified.
+  string start_date = 5 [(gogoproto.moretags) = "yaml:\"start_date\""];
+
+  // end_date is the end of the period during which this credit batch was
+  // quantified and verified.
+  string end_date = 6 [(gogoproto.moretags) = "yaml:\"end_date\""];
 }
-
 
 // EventActivated is an event emitted when an agreement is activated.
 message EventActivated {
 
-    // agreement_id is the unique ID of agreement
-    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+  // agreement_id is the unique ID of agreement
+  string agreement_id = 1 [(gogoproto.moretags) = "yaml:\"agreement_id\""];
 
-    // creator is the creator of the agreement
-    string creator = 2;
+  // activator is the activator of the agreement
+  string activator = 2;
+
+  // activation_date is the beginning of the period during which this agreement
+  // was activated.
+  string activation_date = 3 [(gogoproto.moretags) = "yaml:\"start_date\""];
 }
 
 // EventRenewed is an event emitted when an agreement is renewed.
 message EventRenewed {
 
-    // agreement_id is the unique ID of agreement
-    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+  // agreement_id is the unique ID of agreement
+  string agreement_id = 1 [(gogoproto.moretags) = "yaml:\"agreement_id\""];
 
-    // creator is the creator of the agreement
-    string creator = 2;
+  // renewer is the renewer of the agreement
+  string renewer = 2;
+
+  // renewal_date is the beginning of the period during which this agreement was renewed
+  string renewal_date = 3 [(gogoproto.moretags) = "yaml:\"start_date\""];
+
 }
 
 // EventTerminated is an event emitted when an agreement is terminated.
 message EventTerminated {
 
-    // agreement_id is the unique ID of agreement
-    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+  // agreement_id is the unique ID of agreement
+  string agreement_id = 1 [(gogoproto.moretags) = "yaml:\"agreement_id\""];
 
-    // creator is the creator of the agreement
-    string creator = 2;
+  // terminator is the terminator of the agreement
+  string terminator = 2;
+
+  // termination_date is the when this agreement was terminated
+  string termination_date = 3 [(gogoproto.moretags) = "yaml:\"start_date\""];
 }
 
 // EventAmended is an event emitted when an agreement is amended.
 message EventAmended {
 
-    // agreement_id is the unique ID of agreement
-    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+  // agreement_id is the unique ID of agreement
+  string agreement_id = 1 [(gogoproto.moretags) = "yaml:\"agreement_id\""];
 
-    // creator is the creator of the agreement
-    string creator = 2;
+  // amender is the renewer of the amender
+  string amender = 2;
+
+  // amendment_date is the beginning of the period during which this agreement was amended
+  string amendment_date = 3 [(gogoproto.moretags) = "yaml:\"start_date\""];
 }
 
 // EventExpired is an event emitted when an agreement is expired.
 message EventExpired {
 
-    // agreement_id is the unique ID of agreement
-    string agreement_id = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+  // agreement_id is the unique ID of agreement
+  string agreement_id = 1 [(gogoproto.moretags) = "yaml:\"agreement_id\""];
 
-    // creator is the creator of the agreement
-    string creator = 2
+  // expirer is the renewer of the expirer
+  string expirer = 2;
+
+  // expirer_date is the beginning of the period during which this agreement was expired
+  string expiration_date = 3 [(gogoproto.moretags) = "yaml:\"start_date\""];
 }

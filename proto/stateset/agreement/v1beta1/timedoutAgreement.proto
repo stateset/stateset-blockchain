@@ -8,13 +8,13 @@ import "gogoproto/gogo.proto";
 message TimedoutAgreement {
   string creator = 1;
   string agreement_id = 2;
-  string agreementNumber = 3; 
-  string agreementName = 4; 
-  string agreementType = 5; 
-  string agreementStatus = 6; 
-  int32 totalAgreementValue = 7; 
+  string agreement_number = 3; 
+  string agreement_name = 4; 
+  string agreement_type = 5; 
+  string agreement_status = 6; 
+  int32 total_agreement_value = 7; 
   string party = 8; 
   string counterparty = 9; 
-  string AgreementStartBlock = 10; 
-  string AgreementEndBlock = 11;
+  string start_date = 10; 
+  string end_date = 11;
 }

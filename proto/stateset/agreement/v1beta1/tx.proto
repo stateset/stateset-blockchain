@@ -39,18 +39,31 @@ service Msg {
 
 // MsgCreateAgreementRequest is the Msg/CreateAgreement request type.
 message MsgCreateAgreementRequest {
-  // sender is the address of the sender of the transaction.
-  string sender = 1;
-  string agreement_id = 2;
-  string agreementNumber = 3; 
-  string agreementName = 4; 
-  string agreementType = 5; 
-  string agreementStatus = 6; 
-  int32 totalAgreementValue = 7; 
+
+  string creator = 1;
+
+  string agreement_id = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+
+  string agreement_number = 3; 
+
+  string agreement_name = 4; 
+
+  string agreement_type = 5; 
+
+  string agreement_status = 6; 
+
+  int32 total_agreement_value = 7; 
+
   string party = 8; 
+
   string counterparty = 9; 
-  string AgreementStartBlock = 10; 
-  string AgreementEndBlock = 11; 
+
+  google.protobuf.Timestamp start_date = 10
+  [(gogoproto.stdtime) = true, (gogoproto.moretags) = "yaml:\"start_date\""];
+
+  google.protobuf.Timestamp end_date = 11
+  [(gogoproto.stdtime) = true, (gogoproto.moretags) = "yaml:\"end_date\""];
+
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
@@ -59,18 +72,30 @@ message MsgCreateAgreementResponse {}
 
 // MsgCreateAgreementRequest is the Msg/CreateAgreement request type.
 message MsgUpdateAgreementRequest {
-  // sender is the address of the sender of the transaction.
-  string sender = 1;
-  string agreement_id = 2;
-  string agreementNumber = 3; 
-  string agreementName = 4; 
-  string agreementType = 5; 
-  string agreementStatus = 6; 
-  int32 totalAgreementValue = 7; 
+
+  string creator = 1;
+
+  string agreement_id = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+
+  string agreement_number = 3; 
+
+  string agreement_name = 4; 
+
+  string agreement_type = 5; 
+
+  string agreement_status = 6; 
+
+  int32 total_agreement_value = 7; 
+
   string party = 8; 
+
   string counterparty = 9; 
-  string AgreementStartBlock = 10; 
-  string AgreementEndBlock = 11; 
+
+  google.protobuf.Timestamp start_date = 10
+  [(gogoproto.stdtime) = true, (gogoproto.moretags) = "yaml:\"start_date\""];
+
+  google.protobuf.Timestamp end_date = 11
+  [(gogoproto.stdtime) = true, (gogoproto.moretags) = "yaml:\"end_date\""];
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
@@ -85,9 +110,13 @@ message MsgDeleteAgreementResponse { }
 
 // MsgActivateAgreementRequest is the Msg/ActivateAgreement request type.
 message MsgActivateAgreementRequest {
-  // sender is the address of the sender of the transaction.
-  string sender = 1;
-  string agreement_id = 2;
+
+  string activator = 1;
+
+  string agreement_id = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+
+  string activation_date = 3 [(gogoproto.moretags) = "yaml:\"activation_date\""];
+
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.

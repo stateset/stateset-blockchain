@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Stateset proof-of-stake blockchain based on the Cosmos SDK and Tendermint.
+Stateset proof-of-stake blockchain based on the Cosmos SDK, Tendermint and IBC.
 
 <img src="stateset-blockchain.png">
 
