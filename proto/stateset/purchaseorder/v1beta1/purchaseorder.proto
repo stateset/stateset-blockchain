@@ -35,8 +35,6 @@ enum State {
   canceled = 3 [(gogoproto.enumvalue_customname) = "Canceled"];
 }
 
-State state = 2 [(gogoproto.jsontag) = "state", (gogoproto.moretags) = "yaml:\"state\""];
-
 message MsgCreatePurchaseorder {
   string creator = 1;
   string purchaseorder_id = 2;
