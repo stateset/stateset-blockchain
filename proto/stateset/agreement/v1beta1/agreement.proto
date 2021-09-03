@@ -79,6 +79,17 @@ message MsgExpireAgreement {
   string agreement_id = 2;
 }
 
+enum Action {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  ActionCreate = 0;
+  ActionActivate = 1;
+  ActionAmend = 2;
+  ActionRenew = 3;
+  ActionTerminate = 4;
+  ActionExpire = 5;
+}
+
 
 // State is an enum which refers to state of an agreement
 enum State {

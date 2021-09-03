@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stateset.liquidity;
+package stateset.liquidity.v1beta1;
 
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -12,7 +12,7 @@ service MsgApi {
   // Submit create liquidity pool message.
   rpc CreatePoolApi(MsgCreatePoolRequest) returns (MsgCreatePoolResponse) {
     option (google.api.http) = {
-      post: "/liquidity/pools"
+      post: "/stateset/liquidity/v1beta1/pools"
       body: "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
@@ -25,7 +25,7 @@ service MsgApi {
   // Submit deposit to the liquidity pool batch
   rpc DepositToPoolApi(MsgDepositToPoolRequest) returns (MsgDepositToPoolResponse) {
     option (google.api.http) = {
-      post: "/liquidity/pools/{pool_id}/batch/deposits"
+      post: "/stateset/liquidity/v1beta1/pools/{pool_id}/batch/deposits"
       body: "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
@@ -37,7 +37,7 @@ service MsgApi {
   // Submit withdraw from to the liquidity pool batch
   rpc WithdrawFromPoolApi(MsgWithdrawFromPoolRequest) returns (MsgWithdrawFromPoolResponse) {
     option (google.api.http) = {
-      post: "/liquidity/pools/{pool_id}/batch/withdraws"
+      post: "/stateset/liquidity/v1beta1/pools/{pool_id}/batch/withdraws"
       body: "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
@@ -49,7 +49,7 @@ service MsgApi {
   // Submit swap to the liquidity pool batch
   rpc SwapApi(MsgSwapRequest) returns (MsgSwapResponse) {
     option (google.api.http) = {
-      post: "/liquidity/pools/{pool_id}/batch/swaps"
+      post: "/stateset/liquidity/v1beta1/pools/{pool_id}/batch/swaps"
       body: "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {

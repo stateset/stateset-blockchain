@@ -14,57 +14,45 @@ service Query {
 
   // Agreements returns agreeement details based on agreement.
   rpc Agreements(QueryAgreementsRequest) returns (QueryAgreementsResponse) {
-    option (google.api.http).get = "/stateset/agreement/v1beta1/agreements/all";
+    option (google.api.http).get = 
+        "/stateset/agreement/v1beta1/agreements";
   }
 
   // Agreement returns agreeement details based on agreement.
   rpc Agreement(QueryAgreementRequest) returns (QueryAgreementResponse) {
-    option (google.api.http).get = "/stateset/agreement/v1beta1/agreements/info";
+    option (google.api.http).get =
+        "/stateset/agreement/v1beta1/agreements/{agreement_id}";
   }
-
-  rpc AgreementParams(QueryAgreementParamsRequest) returns (QueryAgreementParamsResponse) {
-    option (google.api.http).get = "/stateset/agreement/v1beta1/{agreementId}/params";
-  }
-
 }
 
+//=============================== Agreements
+// QueryAgreementRequest is the Query/Agreement request type.
+message QueryAgreementsRequest {
+
+AgreementFilters filters = 1 [(gogoproto.nullable) = false];
+
+cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryAgreementsResponse {
+
+repeated Agreement agreements = 1 [(gogoproto.nullable) = false];
+
+cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
 
 //=============================== Agreement
 // QueryAgreementRequest is the Query/Agreement request type.
 
 message QueryAgreementRequest {
 
-  string agreement_id = 1;[ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
+  // agreement_id is the unique ID of agreement to query.
+  string agreement_id = 1;
+  [(gogoproto.moretags) = "yaml:\"agreement_id\""];
 }
 
+// QueryClassInfoResponse is the Query/ClassInfo request type.
 message QueryAgreementResponse {
-    Agreement agreement = 1 [ (gogoproto.nullable) = false ];
-    
-}
 
-
-//=============================== Agreements
-// QueryAgreementRequest is the Query/Agreement request type.
-message QueryAgreementsRequest {
-
-  AgreementFilters filters = 1 [(gogoproto.nullable) = false];
-
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
-}
-
-message QueryAgreementsResponse {
-  
-  repeated Agreement agreements = 1 [ (gogoproto.nullable) = false ];
-
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
-    
-}
-
-//=============================== AgreementParams
-message QueryAgreementParamsRequest {
-  uint64 agreementId = 1 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
-}
-
-message QueryAgreementParamsResponse {
-  AgreementParams params = 1 [ (gogoproto.nullable) = false ];
+  Agreement agreement = 1;
 }

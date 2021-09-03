@@ -12,19 +12,16 @@ option go_package = "github.com/stateset/stateset-blockchain/x/purchaseorder/typ
 // Query defines the gRPC querier service.
 service Query {
 
-  // Queries a day by id.
-	rpc PurchaseOrderQueryGetPurchaseOrderRequest) returns (QueryGetPurchaseOrderResponse) {
-		option (google.api.http).get = "/stateset/purchaseorder/v1beta1/purchaseorders/{id}";
-	}
-
   // PurchaseOrders returns purchase order details based on purchase order.
   rpc PurchaseOrders(QueryPurchaseOrdersRequest) returns (QueryPurchaseOrdersResponse) {
-    option (google.api.http).get = "/stateset/purchaseorder/v1beta1/purchaseorders/list";
+    option (google.api.http).get = 
+        "/stateset/purchaseorder/v1beta1/purchaseorders";
   }
 
   // Purchase Order returns purchase order details based on purchase order.
   rpc PurchaseOrder(QueryPurchaseOrderRequest) returns (QueryPurchaseOrderResponse) {
-    option (google.api.http).get = "/stateset/purchaseorder/v1beta1/purchaseorders/info";
+    option (google.api.http).get = 
+        "/stateset/purchaseorder/v1beta1/purchaseorders/{purchaseorder_id}";
   }
 
 }
@@ -32,35 +29,20 @@ service Query {
 // QueryPurchaseOrderRequest is the Query/PurchaseOrder request type.
 message QueryPurchaseOrderRequest {
 
-  string purchaseorder_id = 1;
+   // purchase_id is the unique ID of purchase order to query.
+   string purchaseorder_id = 1 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
+   
 }
 
 message QueryPurchaseOrderResponse {
-    repeated QueryPurchaseOrderResponse purchaseorders = 1;
+
+    PurchaseOrder purchaseorder = 1;
     
 }
 
-message QueryAllPurchaseOrdertResponse {
+message QueryPurchaseOrdersResponse {
+
 	repeated PurchaseOrder PurchaseOrder = 1;
+
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-
-message QueryPurchaseOrderResponse {s
-
-  string creator = 1;
-  string purchasorder_id = 2;
-  string purchaseordernumber = 3;
-  string purchaseorderhash = 4;
-  string purchaseorderstatus = 5;
-  string description = 6;
-  string purchasedate = 7;
-  string deliveryDate = 8;
-  int32 subtotal = 9;
-  int32 total = 10;
-  string purchaser = 11;
-  string vendor = 12;
-  string fulfiller = 13;
-  string financer = 14;
-
 }
