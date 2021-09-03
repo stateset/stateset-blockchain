@@ -1,3 +1,6 @@
+syntax = "proto3";
+package stateset.agreement.v1beta1;
+
 // IbcAgreementPacketData defines a struct for the packet payload
 message IbcAgreementPacketData {
   string creator = 1;
@@ -6,7 +9,7 @@ message IbcAgreementPacketData {
   string agreement_name = 4; 
   string agreement_type = 5; 
   string agreement_status = 6; 
-  int32 total_agreement_value = 7; 
+  string total_agreement_value = 7; 
   string party = 8; 
   string counterparty = 9; 
   string start_date = 10; 
