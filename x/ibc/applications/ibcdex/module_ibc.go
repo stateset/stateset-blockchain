@@ -9,7 +9,7 @@ import (
 	channeltypes "github.com/cosmos/cosmos-sdk/x/ibc/core/04-channel/types"
 	porttypes "github.com/cosmos/cosmos-sdk/x/ibc/core/05-port/types"
 	host "github.com/cosmos/cosmos-sdk/x/ibc/core/24-host"
-	"github.com/stateset/stateset-blockchain/dex/x/ibcdex/types"
+	"github.com/stateset/stateset-blockchain/dex/x/ibc/applications/ibcdex/types"
 )
 
 // OnChanOpenInit implements the IBCModule interface

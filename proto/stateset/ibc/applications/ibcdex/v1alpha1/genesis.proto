@@ -4,7 +4,7 @@ package stateset.ibcdex.v1alpha1
 import "ibcdex/v1alpha1/buyOrderBook.proto";
 import "ibcdex/v1alpha1/sellOrderBook.proto";
 
-option go_package = "github.com/stateset/stateset-blockchain/x/ibcdex/types";
+option go_package = "github.com/stateset/stateset-blockchain/x/ibc/applications/ibcdex/types";
 
 // GenesisState defines the ibcdex module's genesis state.
 message GenesisState {
