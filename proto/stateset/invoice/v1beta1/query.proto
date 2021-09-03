@@ -13,26 +13,23 @@ option go_package = "github.com/stateset/stateset-blockchain/x/invoice/types";
 service Query {
 
   // Queries a day by id.
-	rpc InvoiceQueryGetInvoiceRequest) returns (QueryGetInvoiceResponse) {
-		option (google.api.http).get = "/stateset/invoice/v1beta1/invoices/{id}";
+	rpc Invoice(QueryGetInvoiceRequest) returns (QueryGetInvoiceResponse) {
+		option (google.api.http).get = "/stateset/invoice/v1beta1/invoices/{invoice_id}";
 	}
 
   // Invoices returns purchase order details based on purchase order.
   rpc Invoices(QueryInvoicesRequest) returns (QueryInvoicesResponse) {
-    option (google.api.http).get = "/stateset/invoice/v1beta1/invoices/list";
+    option (google.api.http).get = "/stateset/invoice/v1beta1/invoices";
   }
 
-  // Purchase Order returns purchase order details based on purchase order.
-  rpc Invoice(QueryInvoiceRequest) returns (QueryInvoiceResponse) {
-    option (google.api.http).get = "/stateset/invoice/v1beta1/invoices/info";
-  }
 
 }
 
 // QueryInvoiceRequest is the Query/Invoice request type.
 message QueryInvoiceRequest {
 
-  string invoice_id = 1;
+    // invoice_id is the unique ID of invoice to query.
+    string invoice_id = 1 [(gogoproto.moretags) = "yaml:\"invoice_id\""];
 }
 
 message QueryInvoiceResponse {
@@ -40,27 +37,10 @@ message QueryInvoiceResponse {
     
 }
 
-message QueryAllInvoicetResponse {
+message QueryAllInvoiceResponse {
 	repeated Invoice Invoice = 1;
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 
-message QueryInvoiceResponse {s
-
-  string creator = 1;
-  string purchasorder_id = 2;
-  string invoicenumber = 3;
-  string invoicehash = 4;
-  string invoicestatus = 5;
-  string description = 6;
-  string purchasedate = 7;
-  string deliveryDate = 8;
-  string subtotal = 9;
-  string total = 10;
-  string purchaser = 11;
-  string vendor = 12;
-  string fulfiller = 13;
-  string financer = 14;
-
-}
+message QueryInvoiceResponse {}
