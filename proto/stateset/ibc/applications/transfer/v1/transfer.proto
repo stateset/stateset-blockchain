@@ -1,11 +1,14 @@
 syntax = "proto3";
 
-package ibc.apps.transfer.v1;
+package ibc.applications.transfer.v1;
 
-option go_package = "github.com/stateset/stateset-blockchain/modules/apps/transfer/types";
+option go_package = "github.com/cosmos/ibc-go/modules/apps/transfer/types";
 
 import "gogoproto/gogo.proto";
 
+// FungibleTokenPacketData defines a struct for the packet payload
+// See FungibleTokenPacketData spec:
+// https://github.com/cosmos/ics/tree/master/spec/ics-020-fungible-token-transfer#data-structures
 message FungibleTokenPacketData {
   // the token denomination to be transferred
   string denom = 1;
@@ -34,9 +37,8 @@ message DenomTrace {
 message Params {
   // send_enabled enables or disables all cross-chain token transfers from this
   // chain.
-  bool send_enabled = 1 [ (gogoproto.moretags) = "yaml:\"send_enabled\"" ];
+  bool send_enabled = 1 [(gogoproto.moretags) = "yaml:\"send_enabled\""];
   // receive_enabled enables or disables all cross-chain token transfers to this
   // chain.
-  bool receive_enabled = 2
-      [ (gogoproto.moretags) = "yaml:\"receive_enabled\"" ];
+  bool receive_enabled = 2 [(gogoproto.moretags) = "yaml:\"receive_enabled\""];
 }
