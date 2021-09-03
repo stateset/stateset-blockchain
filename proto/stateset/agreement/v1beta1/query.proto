@@ -47,8 +47,8 @@ cosmos.base.query.v1beta1.PageRequest pagination = 2;
 message QueryAgreementRequest {
 
   // agreement_id is the unique ID of agreement to query.
-  string agreement_id = 1;
-  [(gogoproto.moretags) = "yaml:\"agreement_id\""];
+  string agreement_id = 1 [(gogoproto.moretags) = "yaml:\"agreement_id\""];
+  
 }
 
 // QueryClassInfoResponse is the Query/ClassInfo request type.
