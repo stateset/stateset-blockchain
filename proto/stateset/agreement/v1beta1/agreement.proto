@@ -1,9 +1,7 @@
 syntax = "proto3";
 package stateset.agreement.v1beta1;
 
-import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
-import "google/protobuf/any.proto";
 
 option go_package = "github.com/stateset/stateset-blockchain/x/agreement/types";
 
@@ -14,7 +12,7 @@ message Agreement {
   string agreementName = 4; 
   string agreementType = 5; 
   string agreementStatus = 6; 
-  int32 totalAgreementValue = 7; 
+  string totalAgreementValue = 7; 
   string party = 8; 
   string counterparty = 9; 
   string AgreementStartBlock = 10; 
@@ -28,7 +26,7 @@ message MsgCreateAgreement {
   string agreementName = 4; 
   string agreementType = 5; 
   string agreementStatus = 6; 
-  int32 totalAgreementValue = 7; 
+  string totalAgreementValue = 7; 
   string party = 8; 
   string counterparty = 9; 
   string AgreementStartBlock = 10; 
@@ -42,7 +40,7 @@ message MsgUpdateAgreement {
   string agreementName = 4; 
   string agreementType = 5; 
   string agreementStatus = 6; 
-  int32 totalAgreementValue = 7; 
+  string totalAgreementValue = 7; 
   string party = 8; 
   string counterparty = 9; 
   string AgreementStartBlock = 10; 
