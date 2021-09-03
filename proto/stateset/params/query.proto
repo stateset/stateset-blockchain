@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "stateset/params/params.proto";
 
-option go_package = "github.com/stateset/stateset-blockchain/params/types/proposal";
+option go_package = "github.com/cosmos/cosmos-sdk/x/params/types/proposal";
 
 // Query defines the gRPC querier service.
 service Query {
