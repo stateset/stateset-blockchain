@@ -93,7 +93,7 @@ enum Action {
 
 // State is an enum which refers to state of an agreement
 enum State {
-  
+
   option (gogoproto.goproto_enum_prefix) = false;
   // Prefix should start with 0 in enum. So declaring dummy state
   invalid = 0 [(gogoproto.enumvalue_customname) = "AgreementStateInvalid"];
@@ -111,9 +111,6 @@ enum State {
   expired = 6 [(gogoproto.enumvalue_customname) = "Expired"];
 
 }
-
-State state = 2 [(gogoproto.jsontag) = "state", (gogoproto.moretags) = "yaml:\"state\""];
-
 
 message AgreementFilters {
   option (gogoproto.equal) = false;
