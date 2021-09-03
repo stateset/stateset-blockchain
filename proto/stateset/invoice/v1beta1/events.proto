@@ -13,7 +13,7 @@ message EventCreateInvoice {
     string invoice_id = 1 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
 
     // creator is the creator of the invoice
-    string creator = 2
+    string creator = 2;
 }
 
 
@@ -24,7 +24,7 @@ message EventCompleted {
     string invoice_id = 1 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
 
     // creator is the creator of the invoice
-    string creator = 2
+    string creator = 2;
 }
 
 // EventCancelled is an event emitted when an invoice is cancelled.
@@ -34,7 +34,7 @@ message EventCancelled {
     string invoice_id = 1 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
 
     // creator is the creator of the invoice
-    string creator = 2
+    string creator = 2;
 }
 
 // EventFactored is an event emitted when an invoice is factored.
@@ -44,5 +44,5 @@ message EventFactored {
     string invoice_id = 1 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
 
     // creator is the creator of the invoice
-    string creator = 2
+    string creator = 2;
 }
