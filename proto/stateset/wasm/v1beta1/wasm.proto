@@ -4,7 +4,7 @@ package stateset.wasm.v1beta1;
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
-option go_package = "github.com/stateset/stateset-blockchain/x/wasm/types";
+option go_package = "github.com/stateset/stateset-blockchain/x/wasm/internal/types";
 
 // Params defines the parameters for the wasm module.
 message Params {
