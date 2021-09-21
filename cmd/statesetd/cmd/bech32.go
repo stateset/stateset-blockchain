@@ -12,16 +12,16 @@ var (
 	flagBech32Prefix = "prefix"
 )
 
-// get cmd to convert any bech32 address to an sset prefix
+// get cmd to convert any bech32 address to an paro prefix
 
 func ConvertBech32Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "bech32-convert [bech32 string]",
-		Short: "Convert any bech32 string to the sset prefix",
-		Long: `Convert any bech32 string to the sset prefix
-Especially useful for converting cosmos addresses to sset addresses
+		Short: "Convert any bech32 string to the paro prefix",
+		Long: `Convert any bech32 string to the paro prefix
+Especially useful for converting cosmos addresses to paro addresses
 Example:
-	statesetd bech32-convert sset1ey69r37gfxvxg62sh4r0ktpuc46pzjrmz29g45
+	statesetd bech32-convert paro1ey69r37gfxvxg62sh4r0ktpuc46pzjrmz29g45
 	`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -47,7 +47,7 @@ Example:
 		},
 	}
 
-	cmd.Flags().StringP(flagBech32Prefix, "p", "sset", "Bech32 Prefix to encode to")
+	cmd.Flags().StringP(flagBech32Prefix, "p", "paro", "Bech32 Prefix to encode to")
 
 	return cmd
 }

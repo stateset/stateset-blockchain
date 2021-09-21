@@ -6,12 +6,12 @@ import (
 )
 
 const (
-	HumanCoinUnit = "sset"
-	BaseCoinUnit  = "usset"
+	HumanCoinUnit = "paro"
+	BaseCoinUnit  = "uparo"
 	StatesetExponent  = 6
 
 	// Bech32PrefixAccAddr defines the Bech32 prefix of an account's address
-	Bech32PrefixAccAddr = "sset"
+	Bech32PrefixAccAddr = "stateset"
 )
 
 var (

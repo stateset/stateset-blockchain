@@ -28,7 +28,7 @@ type AppStateV036 struct {
 
 type Snapshot struct {
 	TotalAtomAmount         sdk.Int `json:"total_atom_amount"`
-	TotalSsetsAirdropAmount sdk.Int `json:"total_sset_amount"`
+	TotalParosAirdropAmount sdk.Int `json:"total_paro_amount"`
 	NumberAccounts          uint64  `json:"num_accounts"`
 
 	Accounts map[string]SnapshotAccount `json:"accounts"`
@@ -45,10 +45,10 @@ type SnapshotAccount struct {
 	AtomUnstakedBalance sdk.Int `json:"atom_unstaked_balance"` // AtomStakedPercent = AtomStakedBalance / AtomBalance
 	AtomStakedPercent   sdk.Dec `json:"atom_staked_percent"`
 
-	SsetBalance      sdk.Int `json:"sset_balance"`           // SsetBalance = sqrt( AtomBalance ) * (1 + 1.5 * atom staked percent)
-	SsetBalanceBase  sdk.Int `json:"sset_balance_base"`      // SsetBalanceBase = sqrt(atom balance)
-	SsetBalanceBonus sdk.Int `json:"sset_balance_bonus"`     // SsetBalanceBonus = SsetBalanceBase * (1.5 * atom staked percent)
-	SsetPercent      sdk.Dec `json:"sset_ownership_percent"` // SsetPercent = SsetNormalizedBalance / TotalSsetSupply
+	ParoBalance      sdk.Int `json:"paro_balance"`           // ParoBalance = sqrt( AtomBalance ) * (1 + 1.5 * atom staked percent)
+	ParoBalanceBase  sdk.Int `json:"paro_balance_base"`      // ParoBalanceBase = sqrt(atom balance)
+	ParoBalanceBonus sdk.Int `json:"paro_balance_bonus"`     // ParoBalanceBonus = ParoBalanceBase * (1.5 * atom staked percent)
+	ParoPercent      sdk.Dec `json:"paro_ownership_percent"` // ParoPercent = ParoNormalizedBalance / TotalParoSupply
 }
 
 // setCosmosBech32Prefixes set config for cosmos address system
@@ -63,13 +63,13 @@ func setCosmosBech32Prefixes() {
 // ExportAirdropSnapshotCmd generates a snapshot.json from a provided cosmos-sdk v0.36 genesis export.
 func ExportAirdropSnapshotCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "export-airdrop-snapshot [airdrop-to-denom] [input-genesis-file] [output-snapshot-json] --sset-supply=[ssets-genesis-supply]",
+		Use:   "export-airdrop-snapshot [airdrop-to-denom] [input-genesis-file] [output-snapshot-json] --paro-supply=[paros-genesis-supply]",
 		Short: "Export a quadratic fairdrop snapshot from a provided cosmos-sdk v0.36 genesis export",
 		Long: `Export a quadratic fairdrop snapshot from a provided cosmos-sdk v0.36 genesis export
 Sample genesis file:
 	https://raw.githubusercontent.com/cephalopodequipment/cosmoshub-3/master/genesis.json
 Example:
-	statesetd export-airdrop-genesis uatom ~/.statesetd/config/genesis.json ../snapshot.json --sset-supply=100000000000000
+	statesetd export-airdrop-genesis uatom ~/.statesetd/config/genesis.json ../snapshot.json --paro-supply=100000000000000
 	- Check input genesis:
 		file is at ~/.statesetd/config/genesis.json
 	- Snapshot

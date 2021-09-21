@@ -38,7 +38,7 @@ func DefaultConfig() network.Config {
 		},
 		GenesisState:    ModuleBasics.DefaultGenesis(encCfg.Marshaler),
 		TimeoutCommit:   2 * time.Second,
-		ChainID:         "stateset-8",
+		ChainID:         "stateset-1",
 		NumValidators:   1,
 		BondDenom:       sdk.DefaultBondDenom,
 		MinGasPrices:    fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),

@@ -10,21 +10,21 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/cssets/cssets-sdk/client"
-	"github.com/cssets/cssets-sdk/client/flags"
-	"github.com/cssets/cssets-sdk/codec"
-	"github.com/cssets/cssets-sdk/server"
-	sdk "github.com/cssets/cssets-sdk/types"
-	"github.com/cssets/cssets-sdk/types/module"
-	"github.com/cssets/cssets-sdk/x/genutil"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/server"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/cosmos/cosmos-sdk/x/genutil"
 
-	banktypes "github.com/cssets/cssets-sdk/x/bank/types"
-	crisistypes "github.com/cssets/cssets-sdk/x/crisis/types"
-	distributiontypes "github.com/cssets/cssets-sdk/x/distribution/types"
-	genutiltypes "github.com/cssets/cssets-sdk/x/genutil/types"
-	govtypes "github.com/cssets/cssets-sdk/x/gov/types"
-	slashingtypes "github.com/cssets/cssets-sdk/x/slashing/types"
-	stakingtypes "github.com/cssets/cssets-sdk/x/staking/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
+	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	appParams "github.com/stateset/stateset-blockchain/app/params"
 
@@ -195,7 +195,7 @@ type GenesisParams struct {
 func MainnetGenesisParams() GenesisParams {
 	genParams := GenesisParams{}
 
-	genParams.AirdropSupply = sdk.NewIntWithDecimal(5, 13)                // 5*10^13 usset, 5*10^7 (50 million) sset
+	genParams.AirdropSupply = sdk.NewIntWithDecimal(5, 13)                // 5*10^13 uparo, 5*10^7 (50 million) paro
 	genParams.GenesisTime = time.Date(2021, 6, 18, 17, 0, 0, 0, time.UTC) // Jun 18, 2021 - 17:00 UTC
 
 	genParams.NativeCoinMetadatas = []banktypes.Metadata{
@@ -236,31 +236,31 @@ func MainnetGenesisParams() GenesisParams {
 
 	genParams.StrategicReserveAccounts = []banktypes.Balance{
 		{
-			Address: "sset1ekmcnlkmlksck218oiuoijioj1232121",
+			Address: "paro1ekmcnlkmlksck218oiuoijioj1232121",
 			Coins:   sdk.NewCoins(sdk.NewCoin(genParams.NativeCoinMetadatas[0].Base, sdk.NewInt(47_874_500_000_000))), // 47.8745 million OSMO
 		},
 		{
-			Address: "sset1ekmcnlkmlksck218oiuoijioj1232121",
+			Address: "paro1ekmcnlkmlksck218oiuoijioj1232121",
 			Coins:   sdk.NewCoins(sdk.NewCoin(genParams.NativeCoinMetadatas[0].Base, sdk.NewInt(500_000_000_000))), // 500 thousand OSMO
 		},
 		{
-			Address: "sset1ekmcnlkmlksck218oiuoijioj1232121",
+			Address: "paro1ekmcnlkmlksck218oiuoijioj1232121",
 			Coins:   sdk.NewCoins(sdk.NewCoin(genParams.NativeCoinMetadatas[0].Base, sdk.NewInt(1_000_000_000_000))), // 1 million OSMO
 		},
 		{
-			Address: "sset16n7070n4whce0wlu76j42dyrxh9f7nlapg6c4a",
+			Address: "paro16n7070n4whce0wlu76j42dyrxh9f7nlapg6c4a",
 			Coins:   sdk.NewCoins(sdk.NewCoin(genParams.NativeCoinMetadatas[0].Base, sdk.NewInt(50_000_000_000))),
 		},
 		{
-			Address: "sset1vnyc6q49sr0hs9ddjepcmtlaq3l6wwj0rrw6hd",
+			Address: "paro1vnyc6q49sr0hs9ddjepcmtlaq3l6wwj0rrw6hd",
 			Coins:   sdk.NewCoins(sdk.NewCoin(genParams.NativeCoinMetadatas[0].Base, sdk.NewInt(1_000_000_000))),
 		},
 		{
-			Address: "sset1ujx3rqerqdksnxnjka2n9tde874mzut75hzx92",
+			Address: "paro1ujx3rqerqdksnxnjka2n9tde874mzut75hzx92",
 			Coins:   sdk.NewCoins(sdk.NewCoin(genParams.NativeCoinMetadatas[0].Base, sdk.NewInt(1_000_000_000))),
 		},
 		{
-			Address: "sset1a2r7nqnc9e032wj37ptskh207e232462vcrrjf",
+			Address: "paro1a2r7nqnc9e032wj37ptskh207e232462vcrrjf",
 			Coins:   sdk.NewCoins(sdk.NewCoin(genParams.NativeCoinMetadatas[0].Base, sdk.NewInt(1_000_000_000))),
 		},
 	}
@@ -286,63 +286,63 @@ func MainnetGenesisParams() GenesisParams {
 	genParams.MintParams.MintingRewardsDistributionStartEpoch = 1
 	genParams.MintParams.WeightedDeveloperRewardsReceivers = []minttypes.WeightedAddress{
 		{
-			Address: "sset14kjcwdwcqsujkdt8n5qwpd8x8ty2rys5rjrdjj",
+			Address: "paro14kjcwdwcqsujkdt8n5qwpd8x8ty2rys5rjrdjj",
 			Weight:  sdk.MustNewDecFromStr("0.2887"),
 		},
 		{
-			Address: "sset1gw445ta0aqn26suz2rg3tkqfpxnq2hs224d7gq",
+			Address: "paro1gw445ta0aqn26suz2rg3tkqfpxnq2hs224d7gq",
 			Weight:  sdk.MustNewDecFromStr("0.2290"),
 		},
 		{
-			Address: "sset13lt0hzc6u3htsk7z5rs6vuurmgg4hh2ecgxqkf",
+			Address: "paro13lt0hzc6u3htsk7z5rs6vuurmgg4hh2ecgxqkf",
 			Weight:  sdk.MustNewDecFromStr("0.1625"),
 		},
 		{
-			Address: "sset1kvc3he93ygc0us3ycslwlv2gdqry4ta73vk9hu",
+			Address: "paro1kvc3he93ygc0us3ycslwlv2gdqry4ta73vk9hu",
 			Weight:  sdk.MustNewDecFromStr("0.109"),
 		},
 		{
-			Address: "sset19qgldlsk7hdv3ddtwwpvzff30pxqe9phq9evxf",
+			Address: "paro19qgldlsk7hdv3ddtwwpvzff30pxqe9phq9evxf",
 			Weight:  sdk.MustNewDecFromStr("0.0995"),
 		},
 		{
-			Address: "sset19fs55cx4594een7qr8tglrjtt5h9jrxg458htd",
+			Address: "paro19fs55cx4594een7qr8tglrjtt5h9jrxg458htd",
 			Weight:  sdk.MustNewDecFromStr("0.06"),
 		},
 		{
-			Address: "sset1ssp6px3fs3kwreles3ft6c07mfvj89a544yj9k",
+			Address: "paro1ssp6px3fs3kwreles3ft6c07mfvj89a544yj9k",
 			Weight:  sdk.MustNewDecFromStr("0.015"),
 		},
 		{
-			Address: "sset1c5yu8498yzqte9cmfv5zcgtl07lhpjrj0skqdx",
+			Address: "paro1c5yu8498yzqte9cmfv5zcgtl07lhpjrj0skqdx",
 			Weight:  sdk.MustNewDecFromStr("0.01"),
 		},
 		{
-			Address: "sset1yhj3r9t9vw7qgeg22cehfzj7enwgklw5k5v7lj",
+			Address: "paro1yhj3r9t9vw7qgeg22cehfzj7enwgklw5k5v7lj",
 			Weight:  sdk.MustNewDecFromStr("0.0075"),
 		},
 		{
-			Address: "sset18nzmtyn5vy5y45dmcdnta8askldyvehx66lqgm",
+			Address: "paro18nzmtyn5vy5y45dmcdnta8askldyvehx66lqgm",
 			Weight:  sdk.MustNewDecFromStr("0.007"),
 		},
 		{
-			Address: "sset1z2x9z58cg96ujvhvu6ga07yv9edq2mvkxpgwmc",
+			Address: "paro1z2x9z58cg96ujvhvu6ga07yv9edq2mvkxpgwmc",
 			Weight:  sdk.MustNewDecFromStr("0.005"),
 		},
 		{
-			Address: "sset1tvf3373skua8e6480eyy38avv8mw3hnt8jcxg9",
+			Address: "paro1tvf3373skua8e6480eyy38avv8mw3hnt8jcxg9",
 			Weight:  sdk.MustNewDecFromStr("0.0025"),
 		},
 		{
-			Address: "sset1zs0txy03pv5crj2rvty8wemd3zhrka2ne8u05n",
+			Address: "paro1zs0txy03pv5crj2rvty8wemd3zhrka2ne8u05n",
 			Weight:  sdk.MustNewDecFromStr("0.0025"),
 		},
 		{
-			Address: "sset1djgf9p53n7m5a55hcn6gg0cm5mue4r5g3fadee",
+			Address: "paro1djgf9p53n7m5a55hcn6gg0cm5mue4r5g3fadee",
 			Weight:  sdk.MustNewDecFromStr("0.001"),
 		},
 		{
-			Address: "sset1488zldkrn8xcjh3z40v2mexq7d088qkna8ceze",
+			Address: "paro1488zldkrn8xcjh3z40v2mexq7d088qkna8ceze",
 			Weight:  sdk.MustNewDecFromStr("0.0008"),
 		},
 	}
