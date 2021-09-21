@@ -188,7 +188,6 @@ func MakeCodec() *codec.LegacyAmino {
 // StatesetApp extended ABCI application
 type StatesetApp struct {
 	*baseapp.BaseApp
-
 	cdc               *codec.LegacyAmino
 	appCodec          codec.Marshaler
 	interfaceRegistry types.InterfaceRegistry
