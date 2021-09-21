@@ -6,9 +6,11 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// x/agreement module sentinel errors
+// x/purchase order module sentinel errors
 var (
-	ErrSample               = sdkerrors.Register(ModuleName, 1100, "sample error")
-	ErrInvalidPacketTimeout = sdkerrors.Register(ModuleName, 1500, "invalid packet timeout")
-	ErrInvalidVersion       = sdkerrors.Register(ModuleName, 1501, "invalid version")
+	ErrPurchaseOrderNotFound      = sdkerrors.Register(ModuleName, 1, "purchase order not found")
+	ErrPurchaseOrderAlreadyExist  = sdkerrors.Register(ModuleName, 2, "purchase order already exist")
+	ErrPurchaseOrderLocked        = sdkerrors.Register(ModuleName, 3, "purchase order is locked")
+	ErrInvalidPacketTimeout = sdkerrors.Register(ModuleName, 4, "invalid packet timeout")
+	ErrInvalidVersion       = sdkerrors.Register(ModuleName, 5, "invalid version")
 )

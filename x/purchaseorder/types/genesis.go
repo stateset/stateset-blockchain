@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	host "github.com/cosmos/cosmos-sdk/x/ibc/core/24-host"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 )
 
 // DefaultIndex is the default capability global index
@@ -12,7 +13,9 @@ const DefaultIndex uint64 = 1
 // DefaultGenesis returns the default Capability genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		PortId: PortID,
+		PortId: PortID,	
+		PurchaseOrders:	[]*codectypes:Any{},
+		Params:         DefaultParams(),
 		TimedoutPurchaseOrderList: []*TimedoutPurchaseOrder{},
 		SentPurchaseOrderList:     []*SentPurchaseOrder{},
 	}

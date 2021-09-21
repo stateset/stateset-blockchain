@@ -21,6 +21,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgDeletePurchaseOrder{}, "stateset/MsgDeletePurchaseOrder", nil)
 	cdc.RegisterConcrete(&MsgCompletePurchaseOrder{}, "stateset/MsgCompletePurchaseOrder", nil)
 	cdc.RegisterConcrete(&MsgCancelPurchaseOrder{}, "stateset/MsgCancelPurchaseOrder", nil)
+	cdc.RegisterConcrete(&MsgLockPurchaseOrder{}, "stateset/MsgLockPurchaseOrder", nil)
 	cdc.RegisterConcrete(&MsgFinancePurchaseOrder{}, "stateset/MsgFinancePurchaseOrder", nil)
 	cdc.RegisterConcrete(&MsgSendIbcPurchaseOrder{}, "stateset/MsgSendIbcPurchaseOrder", nil)
 
@@ -34,6 +35,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgDeletePurchaseOrder{},
 		&MsgCompletePurchaseOrder{},
 		&MsgCancelPurchaseOrder{},
+		&MsgLockPurchaseOrder{},
 		&MsgFinancePurchaseOrder{},
 		&MsgSendIbcPurchaseOrder{},
 	)
