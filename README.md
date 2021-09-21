@@ -12,7 +12,7 @@ Stateset proof-of-stake blockchain based on the Cosmos SDK, Tendermint and IBC.
 
 **[Stateset](https://stateset.io)** is a blockchain protocol that provides a common base for decentralized finance. The Stateset blockchain Liquidity Pools (LPs) are used for purchase order financing and invoice factoring where users can participate as lenders or borrowers. Smart contracts on Stateset run on WebAssembly.
 
-**Stateset Core** is the reference implementation of the Stateset protocol, written in Golang. Stateset is built atop [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) and uses [Tendermint](https://github.com/tendermint/tendermint) BFT consensus. If you intend to work on Stateset Core source, it is recommended that you familiarize yourself with the concepts in those projects.
+**Stateset Core** is the reference implementation of the Stateset protocol, written in Golang. Stateset is built atop [Cosmos SDK](https://github.com/cosmos/cosmos-sdk), [Tendermint](https://github.com/tendermint/tendermint) BFT and [IBC](https://ibc-protocol.org). If you intend to work on Stateset Core source, it is recommended that you familiarize yourself with the concepts in those projects.
 
 
 ## Installation
