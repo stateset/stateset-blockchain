@@ -48,33 +48,33 @@ message MsgUpdateAgreement {
 }
 
 message MsgDeleteAgreement {
-  string creator = 1;
-  string agreement_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 agreementId = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
 }
 
 message MsgActivateAgreement {
-  string creator = 1;
-  string agreement_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 agreementId = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
 }
 
 message MsgAmendAgreement {
-  string creator = 1;
-  string agreement_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 agreementId = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
 }
 
 message MsgRenewAgreement {
-  string creator = 1;
-  string agreement_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 agreementId = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
 }
 
 message MsgTerminateAgreement {
-  string creator = 1;
-  string agreement_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 agreementId = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
 }
 
 message MsgExpireAgreement {
-  string creator = 1;
-  string agreement_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 agreementId = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
 }
 
 enum Action {
