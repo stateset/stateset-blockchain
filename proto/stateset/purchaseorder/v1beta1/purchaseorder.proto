@@ -33,6 +33,10 @@ enum State {
   completed = 2 [(gogoproto.enumvalue_customname) = "Completed"];
 
   canceled = 3 [(gogoproto.enumvalue_customname) = "Canceled"];
+
+  locked = 4 [(gogoproto.enumvalue_customname) = "Locked"];
+
+  financed = 5 [(gogoproto.enumvalue_customname) = "Financed"];
 }
 
 message MsgCreatePurchaseorder {
@@ -70,21 +74,26 @@ message MsgUpdatePurchaseorder {
 }
 
 message MsgCompletePurchaseorder {
-  string creator = 1;
-  string purchaseorder_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 purchaseOrderId = 2 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
 }
 
 message MsgCancelPurchaseorder {
-  string creator = 1;
-  string purchaseorder_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 purchaseOrderId = 2 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
 }
 
 message MsgDeletePurchaseorder {
-  string creator = 1;
-  string purchaseorder_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 purchaseOrderId = 2 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
+}
+
+message MsgLockPurchaseorder {
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 purchaseOrderId = 2 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
 }
 
 message MsgFinancePurchaseorder {
-  string creator = 1;
-  string purchaseorder_id = 2;
+  string creator = 1 [ (gogoproto.moretags) = "yaml:\"creator\"" ];
+  uint64 purchaseOrderId = 2 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
 }
