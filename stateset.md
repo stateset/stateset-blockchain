@@ -86,5 +86,5 @@ Stateset Platform provides a user interface to call workflows between organizati
 
 ### Conclusion
 
-We have proposed a system for distributed sales and finance network, a peer-to-peer network of nodes that are able to use a flow framework for b2b transactions that are notarized using Tendermint BFT to record a history of all transactions that quickly is replicated across a cluster of notary nodes. This creates an authoritative shared system between organizations around the world for sales, finance and commerce. Our mission is to create a fast, state-of-the-art network with fast finality and a shared state machine for global commerce and finance automation.
+ Our mission is to create a fast, state-of-the-art network with fast finality and shared state machine for global commerce and finance automation. We have proposed peer-to-peer distributed sales and finance network of nodes for transactions using Tendermint BFT. Stateset is a next-generation network for the world of sales and finance automation.
 
