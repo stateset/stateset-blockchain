@@ -31,7 +31,6 @@ func QueryCmd() *cobra.Command {
 		GetCmdQueryAgreements(),
 		GetCmdQueryAgreementLineItem(),
 		GetCmdQueryAgreementLineItems(),
-		GetCmdQueryPoolBatchSwap(),
 	)
 
 	return agreementQueryCmd

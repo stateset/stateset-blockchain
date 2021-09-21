@@ -64,6 +64,7 @@ func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router
 
 }
 
+// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module.
 func (AppModuleBasic) RegisterGRPCRoutes(ctx client.Context, *runtime.ServeMux) {
 
 }
@@ -76,10 +77,15 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	return nil
 }
 
+// ----------------------------------------------------------------------------
+// AppModule
+// ----------------------------------------------------------------------------
+
 // AppModule defines external data for the module
 // ----------------------------------------------------------------------------
 type AppModule struct {
 	AppModuleBasic
+
 	keeper Keeper
 }
 
@@ -115,7 +121,8 @@ func (am AppModule) NewQuerierHandler() sdk.Querier {
 	return NewQuerier(am.keeper)
 }
 
-// RegisterServices allows a module to register services
+// RegisterServices registers a GRPC query service to respond to the
+// module-specific GRPC queries.
 func (am AppModule) RegisterServices(Configurator)
 
 // InitGenesis enforces the creation of the genesis state for this module
