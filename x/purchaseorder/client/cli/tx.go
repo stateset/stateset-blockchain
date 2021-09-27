@@ -27,7 +27,7 @@ import (
 func GetTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 	purchaseorderTxCmd := &cobra.Command{
 		Use:                        "purchaseorder",
-		Short:                      "purchaseorder transactions subcommands",
+		Short:                      "Purchase Order transaction subcommands",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
@@ -37,6 +37,8 @@ func GetTxCmd(cdc *codec.LegacyAmino) *cobra.Command {
 		GetCmdCreatePurchaseOrder(cdc),
 		getCmdCompletePurchaseOrder(cdc),
 		GetCmdCancelPurchaseOrder(cdc)
+		GetCmdLockPurchaseOrder(cdc)
+		GetCmdFinancePurchaseOrder(cdc)
 	)...)
 
 	return purchaseorderTxCmd
@@ -161,6 +163,68 @@ func GetCmdCompletePurchaseOrder(cdc *codec.LegacyAmino) *cobra.Command {
 			}
 
 			msg := types.NewMsgCompletePurchaseOrder(from, purchaseOrderID)
+
+			err = msg.ValidateBasic()
+			if err != nil {
+				return err
+			}
+
+			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
+		},
+	}
+}
+
+// GetCmdLockPurchaseOrder cli command for locking a purchase order
+func GetCmdLockPurchaseOrder(cdc *codec.LegacyAmino) *cobra.Command {
+	return &cobra.Command{
+		Use:     "lock [purchaseorder-id]",
+		Short:   "lock purchaseorder by id",
+		Example: fmt.Sprintf("%s tx %s complete 6682c03cc3856879c8fb98c9733c6b0c30758299138166b6523fe94628b1d3af --from accA", version.ClientName, types.ModuleName),
+		Args:    cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			inBuf := bufio.NewReader(cmd.InOrStdin())
+			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
+
+			from := cliCtx.GetFromAddress()
+
+			agreementID, err := hex.DecodeString(args[0])
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgLockPurchaseOrder(from, purchaseOrderID)
+
+			err = msg.ValidateBasic()
+			if err != nil {
+				return err
+			}
+
+			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
+		},
+	}
+}
+
+// GetCmdFinancePurchaseOrder cli command for financing a purchase order
+func GetCmdFinancePurchaseOrder(cdc *codec.LegacyAmino) *cobra.Command {
+	return &cobra.Command{
+		Use:     "finance [purchaseorder-id]",
+		Short:   "finance purchaseorder by id",
+		Example: fmt.Sprintf("%s tx %s complete 6682c03cc3856879c8fb98c9733c6b0c30758299138166b6523fe94628b1d3af --from accA", version.ClientName, types.ModuleName),
+		Args:    cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			inBuf := bufio.NewReader(cmd.InOrStdin())
+			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
+
+			from := cliCtx.GetFromAddress()
+
+			agreementID, err := hex.DecodeString(args[0])
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgFinancePurchaseOrder(from, purchaseOrderID)
 
 			err = msg.ValidateBasic()
 			if err != nil {
