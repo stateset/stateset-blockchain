@@ -85,13 +85,11 @@ import (
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"github.com/stateset/stateset-blockchain/x/agreement"
-	//"github.com/stateset/stateset-blockchain/x/auth"
-	//"github.com/stateset/stateset-blockchain/x/auth/ante"
-	//"github.com/stateset/stateset-blockchain/x/bank"
-	//"github.com/stateset/stateset-blockchain/x/invoice"
-	//"github.com/stateset/stateset-blockchain/x/liquidity"
-	//"github.com/stateset/stateset-blockchain/x/purchaseorder"
-	//"github.com/stateset/stateset-blockchain/x/wasm"
+	"github.com/stateset/stateset-blockchain/x/bank"
+	"github.com/stateset/stateset-blockchain/x/invoice"
+	"github.com/stateset/stateset-blockchain/x/liquidity"
+	"github.com/stateset/stateset-blockchain/x/purchaseorder"
+	"github.com/stateset/stateset-blockchain/x/wasm"
 	tmjson "github.com/tendermint/tendermint/libs/json"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
@@ -135,11 +133,9 @@ var (
 		supply.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
-		// stateset modules
-		// agreement.AppModuleBasic{},
-		// purchaseorder.AppModuleBasic{},
-		// invoice.AppModuleBasic{},
-		// ibc modules
+		agreement.AppModuleBasic{},
+		purchaseorder.AppModuleBasic{},
+		invoice.AppModuleBasic{},
 		capability.AppModuleBasic{},
 		ibc.AppModuleBasic{},
 		evidence.AppModuleBasic{},
@@ -622,7 +618,7 @@ func (app *StatesetApp) GetMemKey(storeKey string) *sdk.MemoryStoreKey {
 }
 
 // GetSubspace returns a param subspace for a given module name.
-func (app *StateeetApp) GetSubspace(moduleName string) paramstypes.Subspace {
+func (app *StatesetApp) GetSubspace(moduleName string) paramstypes.Subspace {
 	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
 	return subspace
 }
@@ -684,7 +680,6 @@ func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyA
 	paramsKeeper.Subspace(purchaseordertypes.ModuleName)
 	paramsKeeper.Subspace(invoicetypes.ModuleName)
 	paramsKeeper.Subspace(agreementtypes.ModuleName)
-	paramsKeeper.Subspace(statesettypes.ModuleName)
 
 	return paramsKeeper
 }

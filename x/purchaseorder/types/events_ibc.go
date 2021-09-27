@@ -1,9 +1,8 @@
 package types
 
-// IBC events
+// Stateset Purchase Order IBC events
 const (
 	EventTypeTimeout = "timeout"
-	// this line is used by starport scaffolding # ibc/packet/event
 	EventTypeIbcPurchaseOrderPacket = "ibcPurchaseOrder_packet"
 
 	AttributeKeyAckSuccess = "success"

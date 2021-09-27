@@ -11,7 +11,21 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) PurchaseOrderAll(c context.Context, req *types.QueryAllPurchaseOrderRequest) (*types.QueryAllPurchaseOrderResponse, error) {
+func (k Keeper) PurchaseOrder(c context.Context, req *types.QueryGetPurchaseOrderRequest) (*types.QueryGetPurchaseOrderResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	var purchaseorder types.PurchaseOrder
+	ctx := sdk.UnwrapSDKContext(c)
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PurchaseOrderKey))
+	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.PurchaseOrderKey + req.Id)), &purchaseorder)
+
+	return &types.QueryGetPurchaseOrderResponse{PurchaseOrder: &purchaseorder}, nil
+}
+
+func (k Keeper) PurchaseOrders(c context.Context, req *types.QueryAllPurchaseOrderRequest) (*types.QueryAllPurchaseOrderResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -37,18 +51,4 @@ func (k Keeper) PurchaseOrderAll(c context.Context, req *types.QueryAllPurchaseO
 	}
 
 	return &types.QueryAllPurchaseOrderResponse{PurchaseOrder: purchaseorders, Pagination: pageRes}, nil
-}
-
-func (k Keeper) PurchaseOrder(c context.Context, req *types.QueryGetPurchaseOrderRequest) (*types.QueryGetPurchaseOrderResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	var purchaseorder types.PurchaseOrder
-	ctx := sdk.UnwrapSDKContext(c)
-
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PurchaseOrderKey))
-	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.PurchaseOrderKey + req.Id)), &purchaseorder)
-
-	return &types.QueryGetPurchaseOrderResponse{PurchaseOrder: &purchaseorder}, nil
 }

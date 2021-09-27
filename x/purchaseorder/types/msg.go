@@ -17,6 +17,8 @@ const (
 	// TypeMsgCompletePurchaseOrder represents the type of the message for amending an purchaseorder
 	TypeMsgCancelPurchaseOrder = "cancel_purchaseorder"
 	// TypeMsgCancelPurchaseOrder represents the type of the message for amending an purchaseorder
+	TypeMsgLockPurchaseOrder = "lock_purchaseorder"
+	// TypeMsgFinancePurchaseOrder represents the type of the message for renewing an purchaseorder
 	TypeMsgFinancePurchaseOrder = "finance_purchaseorder"
 	// TypeMsgFinancePurchaseOrder represents the type of the message for renewing an purchaseorder
 	TypeMsgAddAdmin = "add_admin"
@@ -35,6 +37,7 @@ var _ sdk.Msg = &MsgDeletePurchaseOrder{}
 var _ sdk.Msg = &MsgCompletePurchaseOrder{}
 var _ sdk.Msg = &MsgCancelPurchaseOrder{}
 var _ sdk.Msg = &MsgFinancePurchaseOrder{}
+var _ sdk.Msg = &MsgLockPurchaseOrder{}
 var _ sdk.Msg = &MsgRemoveAdmin{}
 var _ sdk.Msg = &MsgUpdateParams{}
 var _ sdk.Msg = &MsgSendIbcPurchaseOrder{}
@@ -46,7 +49,7 @@ type MsgCreatePurchaseOrder struct {
 }
 
 // NewMsgCreatePurchaseOrder creates a new message to create an purchaseorder
-func NewMsgCreatePurchaseOrder(purchaseOrderID string, lender sdk.AccAddress,) MsgCreatePurchaseOrder {
+func NewMsgCreatePurchaseOrder(purchaseOrderID string) MsgCreatePurchaseOrder {
 	return MsgCreatePurchaseOrder {
 		PurchaseOrderID:    purchaseOrderID,
 		Lender: lender,

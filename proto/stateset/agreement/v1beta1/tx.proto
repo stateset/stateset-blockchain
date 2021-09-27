@@ -5,6 +5,7 @@ package stateset.agreement.v1beta1;
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/stateset/stateset-blockchain/x/agreement/types";
 
@@ -40,8 +41,10 @@ service Msg {
 // MsgCreateAgreementRequest is the Msg/CreateAgreement request type.
 message MsgCreateAgreementRequest {
 
+   // creator is the address of the account that created the agreement class.
   string creator = 1;
 
+   // agreement_id is the address of the agreement
   string agreement_id = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
 
   string agreement_number = 3; 
@@ -66,13 +69,19 @@ message MsgCreateAgreementRequest {
 
 }
 
-// MsgSignDataResponse is the Msg/SignData response type.
-message MsgCreateAgreementResponse {}
+// MsgCreateAgreementResponse is the Msg/CreateAgreement response type.
+message MsgCreateAgreementResponse {
+
+    // agreement_id is the unique ID of the newly created agreement class.
+    string agreement_id = 1;
+  
+}
 
 
 // MsgCreateAgreementRequest is the Msg/CreateAgreement request type.
 message MsgUpdateAgreementRequest {
 
+    // creator is the address of the account that created the agreement class.
   string creator = 1;
 
   string agreement_id = 2 [ (gogoproto.moretags) = "yaml:\"agreement_id\"" ];
@@ -99,7 +108,11 @@ message MsgUpdateAgreementRequest {
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
-message MsgUpdateAgreementResponse {}
+message MsgUpdateAgreementResponse {
+
+    // agreement_id is the unique ID of the newly created agreement class.
+    string agreement_id = 1;
+}
 
 message MsgDeleteAgreement {
   string creator = 1;

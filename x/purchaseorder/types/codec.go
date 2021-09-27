@@ -29,6 +29,13 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 
 // RegisterInterfaces registers the x/purchaseorder interfaces types with the interface registry
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
+
+	registry.RegisterInterface(
+		"stateset.purchaseorder.v1alpha1.PurchaseOrder",
+		(*PurchaseOrderI)(nil),
+		&PurchaseOrder{},
+	)
+	
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreatePurchaseOrder{},
 		&MsgEditPurchaseOrder{},
@@ -41,4 +48,15 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
+}
+
+var (
+	amino = codec.NewLegacyAmino()
+
+	ModuleCdc = codec.NewAminoCodec(amino)
+)
+
+func init() {
+	RegisterLegacyAminoCodec(amino)
+	amino.Seal()
 }

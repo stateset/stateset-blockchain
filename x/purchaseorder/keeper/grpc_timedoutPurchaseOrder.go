@@ -12,7 +12,25 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) TimedoutPurchaseOrderAll(c context.Context, req *types.QueryAllTimedoutPurchaseOrderRequest) (*types.QueryAllTimedoutPurchaseOrderResponse, error) {
+func (k Keeper) TimedoutPurchaseOrder(c context.Context, req *types.QueryGetTimedoutPurchaseOrderRequest) (*types.QueryGetTimedoutPurchaseOrderResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	var timedoutPurchaseOrder types.TimedoutPurchaseOrder
+	ctx := sdk.UnwrapSDKContext(c)
+
+	if !k.HasTimedoutPurchaseOrder(ctx, req.Id) {
+		return nil, sdkerrors.ErrKeyNotFound
+	}
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TimedoutPurchaseOrderKey))
+	k.cdc.MustUnmarshalBinaryBare(store.Get(GetTimedoutPurchaseOrderIDBytes(req.Id)), &timedoutPurchaseOrder)
+
+	return &types.QueryGetTimedoutPurchaseOrderResponse{TimedoutPurchaseOrder: &timedoutPurchaseOrder}, nil
+}
+
+func (k Keeper) TimedoutPurchaseOrders(c context.Context, req *types.QueryAllTimedoutPurchaseOrderRequest) (*types.QueryAllTimedoutPurchaseOrderResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -38,22 +56,4 @@ func (k Keeper) TimedoutPurchaseOrderAll(c context.Context, req *types.QueryAllT
 	}
 
 	return &types.QueryAllTimedoutPurchaseOrderResponse{TimedoutPurchaseOrder: timedoutPurchaseOrders, Pagination: pageRes}, nil
-}
-
-func (k Keeper) TimedoutPurchaseOrder(c context.Context, req *types.QueryGetTimedoutPurchaseOrderRequest) (*types.QueryGetTimedoutPurchaseOrderResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	var timedoutPurchaseOrder types.TimedoutPurchaseOrder
-	ctx := sdk.UnwrapSDKContext(c)
-
-	if !k.HasTimedoutPurchaseOrder(ctx, req.Id) {
-		return nil, sdkerrors.ErrKeyNotFound
-	}
-
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TimedoutPurchaseOrderKey))
-	k.cdc.MustUnmarshalBinaryBare(store.Get(GetTimedoutPurchaseOrderIDBytes(req.Id)), &timedoutPurchaseOrder)
-
-	return &types.QueryGetTimedoutPurchaseOrderResponse{TimedoutPurchaseOrder: &timedoutPurchaseOrder}, nil
 }

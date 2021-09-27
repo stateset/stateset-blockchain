@@ -15,8 +15,8 @@ message Agreement {
   string totalAgreementValue = 7; 
   string party = 8; 
   string counterparty = 9; 
-  string AgreementStartBlock = 10; 
-  string AgreementEndBlock = 11;
+  string start_date = 10; 
+  string end_date = 11;
 }
 
 message MsgCreateAgreement {
@@ -29,8 +29,8 @@ message MsgCreateAgreement {
   string totalAgreementValue = 7; 
   string party = 8; 
   string counterparty = 9; 
-  string AgreementStartBlock = 10; 
-  string AgreementEndBlock = 11; 
+  string start_date = 10; 
+  string end_date = 11;
 }
 
 message MsgUpdateAgreement {
@@ -43,8 +43,8 @@ message MsgUpdateAgreement {
   string totalAgreementValue = 7; 
   string party = 8; 
   string counterparty = 9; 
-  string AgreementStartBlock = 10; 
-  string AgreementEndBlock = 11; 
+  string start_date = 10; 
+  string end_date = 11;
 }
 
 message MsgDeleteAgreement {

@@ -51,8 +51,10 @@ message MsgCreatePurchasOrderRequest {
 }
 
 // MsgCreatePurchaseOrderResponse is the Msg/CreatePurchaseOrder response type.
-message MsgCreatePurchaseOrderResponse { 
-  uint64 purchaseorder_id = 1;
+message MsgCreatePurchaseOrderResponse {
+
+    // purchaseorder_id is the unique ID of the newly created purchase order class.
+    string purchaseorder_id = 1;
 }
 
 message MsgUpdatePurchasOrderRequest {
@@ -73,37 +75,57 @@ message MsgUpdatePurchasOrderRequest {
   string financer = 14;
 }
 
-message MsgUpdatePurchaseOrderResponse { }
+message MsgUpdatePurchaseOrderResponse {
+    
+    // purchaseorder_id is the unique ID of the newly created purchase order class.
+    string purchaseorder_id = 1;
+ }
 
 message MsgDeletePurchaseOrder {
   string creator = 1;
   uint64 purchaseorder_id = 2;
 }
 
-message MsgDeletePurchaseOrderResponse { }
+message MsgDeletePurchaseOrderResponse {
+
+    // purchaseorder_id is the unique ID of the newly created purchase order class.
+    string purchaseorder_id = 1;
+ }
 
 // MsgCompletePurchaseOrderRequest is the Msg/CompletePurchaseOrder request type.
 message MsgCompletePurchaseOrderRequest {
+  
   // sender is the address of the sender of the transaction.
   string creator = 1;
   string purchaseorder_id = 2;
 }
 
 // MsgCompletePurchaseOrderResponse is the Msg/CompletePurchaseOrderResponse response type.
-message MsgCompletePurchaseOrderResponse { }
+message MsgCompletePurchaseOrderResponse {
+
+    // purchaseorder_id is the unique ID of the newly created purchase order class.
+    string purchaseorder_id = 1;
+ }
 
 // MsgCancelPurchaseOrderRequest is the Msg/CancelPurchaseOrder request type.
 message MsgCancelPurchaseOrderRequest {
+
   // sender is the address of the sender of the transaction.
   string creator = 1;
   string purchaseorder_id = 2;
 }
 
 // MsgCancelPurchaseOrderResponse is the Msg/CancelPurchaseOrder response type.
-message MsgCancelPurchaseOrderResponse { }
+message MsgCancelPurchaseOrderResponse {
+
+  // purchaseorder_id is the unique ID of the newly created purchase order class.
+  string purchaseorder_id = 1;
+
+ }
 
 // MsgFinancePurchaseOrder is the Msg/FinancePurchaseOrder request type.
 message MsgFinancePurchaseOrderRequest {
+
   // sender is the address of the sender of the transaction.
   string creator = 1;
   string purchaseorder_id = 2;

@@ -8,18 +8,25 @@ option go_package = "github.com/stateset/stateset-blockchain/x/wasm/internal/typ
 
 // Msg defines the oracle Msg service.
 service Msg {
+
   // StoreCode to submit Wasm code to the system
   rpc StoreCode(MsgStoreCode) returns (MsgStoreCodeResponse);
+
   // MigrateCode to submit new version Wasm code to the system
   rpc MigrateCode(MsgMigrateCode) returns (MsgMigrateCodeResponse);
+
   //  Instantiate creates a new smart contract instance for the given code id.
   rpc InstantiateContract(MsgInstantiateContract) returns (MsgInstantiateContractResponse);
+
   // Execute submits the given message data to a smart contract
   rpc ExecuteContract(MsgExecuteContract) returns (MsgExecuteContractResponse);
+
   // Migrate runs a code upgrade/ downgrade for a smart contract
   rpc MigrateContract(MsgMigrateContract) returns (MsgMigrateContractResponse);
+
   // UpdateContractAdmin sets a new admin for a smart contract
   rpc UpdateContractAdmin(MsgUpdateContractAdmin) returns (MsgUpdateContractAdminResponse);
+  
   // ClearContractAdmin remove admin flag from a smart contract
   rpc ClearContractAdmin(MsgClearContractAdmin) returns (MsgClearContractAdminResponse);
 }

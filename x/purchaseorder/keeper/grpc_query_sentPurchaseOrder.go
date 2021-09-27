@@ -12,7 +12,25 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) SentPurchaseOrderAll(c context.Context, req *types.QueryAllSentPurchaseOrderRequest) (*types.QueryAllSentPurchaseOrderResponse, error) {
+func (k Keeper) SentPurchaseOrder(c context.Context, req *types.QueryGetSentPurchaseOrderRequest) (*types.QueryGetSentPurchaseOrderResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	var sentPurchaseOrder types.SentPurchaseOrder
+	ctx := sdk.UnwrapSDKContext(c)
+
+	if !k.HasSentPurchaseOrder(ctx, req.Id) {
+		return nil, sdkerrors.ErrKeyNotFound
+	}
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.SentPurchaseOrderKey))
+	k.cdc.MustUnmarshalBinaryBare(store.Get(GetSentPurchaseOrderIDBytes(req.Id)), &sentPurchaseOrder)
+
+	return &types.QueryGetSentPurchaseOrderResponse{SentPurchaseOrder: &sentPurchaseOrder}, nil
+}
+
+func (k Keeper) SentPurchaseOrders(c context.Context, req *types.QueryAllSentPurchaseOrderRequest) (*types.QueryAllSentPurchaseOrderResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -38,22 +56,4 @@ func (k Keeper) SentPurchaseOrderAll(c context.Context, req *types.QueryAllSentP
 	}
 
 	return &types.QueryAllSentPurchaseOrderResponse{SentPurchaseOrder: sentPurchaseOrders, Pagination: pageRes}, nil
-}
-
-func (k Keeper) SentPurchaseOrder(c context.Context, req *types.QueryGetSentPurchaseOrderRequest) (*types.QueryGetSentPurchaseOrderResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	var sentPurchaseOrder types.SentPurchaseOrder
-	ctx := sdk.UnwrapSDKContext(c)
-
-	if !k.HasSentPurchaseOrder(ctx, req.Id) {
-		return nil, sdkerrors.ErrKeyNotFound
-	}
-
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.SentPurchaseOrderKey))
-	k.cdc.MustUnmarshalBinaryBare(store.Get(GetSentPurchaseOrderIDBytes(req.Id)), &sentPurchaseOrder)
-
-	return &types.QueryGetSentPurchaseOrderResponse{SentPurchaseOrder: &sentPurchaseOrder}, nil
 }

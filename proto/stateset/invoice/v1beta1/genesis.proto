@@ -7,7 +7,7 @@ option go_package = "github.com/stateset/stateset-blockchain/x/invoices/types";
 
 // GenesisState defines the genesis state used by agreement module
 message GenesisState {
-  repeated INvoice invoices = 1
+  repeated Invoice invoices = 1
       [(gogoproto.nullable) = false, (gogoproto.jsontag) = "invoices", (gogoproto.moretags) = "yaml:\"invoices\""];
 
   ];

@@ -3,48 +3,49 @@ package handler
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	mkeeper "github.com/stateset/stateset-blockchain/x/agreement/keeper"
 	"github.com/stateset/stateset-blockchain/x/purchaseorder/keeper"
 	"github.com/stateset/stateset-blockchain/x/purchaseorder/types"
 )
 
 
-func NewHandler(keeper keeper.IKeeper, mkeeper mkeeper.IKeeper) sdk.Handler {
-	ms := NewMsgServerImpl(keeper, mkeeper)
+// NewHandler returns a handler for "purchaseorder" type messages.
+func NewHandler(k keeper.Keeper) sdk.Handler {
+	msgServer := keeper.NewMsgServerImpl(k)
 
-	func NewHandler(keeper keeper.IKeeper, mkeeper mkeeper.IKeeper) sdk.Handler {
-		ms := NewMsgServerImpl(keeper, mkeeper)
+	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
+		ctx = ctx.WithEventManager(sdk.NewEventManager())
+
+		switch msg := msg.(type) {
 		case *types.MsgCreatePurchaseOrder:
-			res, err := ms.CreatePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.CreatePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 		
 		case *types.MsgEditPurchaseOrder:
-			res, err := ms.EditPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.EditPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgDeletePurchaseOrder:
-			res, err := ms.DeletePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.DeletePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgCompletePurchaseOrder:
-			res, err := ms.CancelPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.CancelPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 		
 		case *types.MsgCancelPurchaseOrder:
-			res, err := ms.CancelPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.CancelPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgLockPurchaseOrder:
-			res, err := ms.LockPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.LockPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgFinancePurchaseOrder:
-			res, err := ms.FinancePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.FinancePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		default:
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized purchaseorder message type: %T", msg)
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized %s message type: %T", types.ModuleName, msg)
 		}
 	}
 }

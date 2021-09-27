@@ -49,56 +49,75 @@ func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 	return ValidateGenesis(data)
 }
 
+//---------------------------------------
+// Interfaces
+
 // RegisterRESTRoutes registers the REST routes for the supply module.
 func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
 
 }
 
-// GetTxCmd returns the root tx command for the supply module.
-func (AppModuleBasic) GetTxCmd(_ *codec.LegacyAmino) *cobra.Command { return nil }
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(ctx context.CLIContext, mux *runtime.ServeMux) {
+	types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
+}
 
-// GetQueryCmd returns no root query command for the supply module.
-func (AppModuleBasic) GetQueryCmd(cdc *codec.LegacyAmino) *cobra.Command {
-	return nil
+func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	return cli.NewTxCmd()
+}
+
+func (AppModuleBasic) GetQueryCmd() *cobra.Command {
+	return cli.GetQueryCmd()
+}
+
+// RegisterInterfaces registers interfaces and implementations of the purchaseorder module.
+func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
+	types.RegisterInterfaces(registry)
 }
 
 // AppModule defines external data for the module
 // ----------------------------------------------------------------------------
 type AppModule struct {
 	AppModuleBasic
-	keeper Keeper
+	
+	ak     types.AccountKeeper
+	bk     types.BankKeeper
+	keeper keeper.Keeper
+
+	accountKeeper stakingtypes.AccountKeeper
+	bankKeeper    stakingtypes.BankKeeper
 }
 
-// NewAppModule creates a NewAppModule object
-func NewAppModule(keeper Keeper) AppModule {
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
+	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+}
+
+func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper,
+	accountKeeper types.AccountKeeper, bankKeeper types.BankKeeper) AppModule {
 	return AppModule{
-		AppModuleBasic: AppModuleBasic{},
+		AppModuleBasic: AppModuleBasic{cdc: cdc},
 		keeper:         keeper,
+		ak:             accountKeeper,
+		bk:             bankKeeper,
 	}
 }
 
-// RegisterInvariants enforces registering of invariants
+// RegisterInvariants registers the gamm module invariants.
 func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
+	keeper.RegisterInvariants(ir, am.keeper, am.bk)
 }
 
-// Route defines the key for the route
-func (AppModule) Route() string {
-	return RouterKey
+// Route returns the message routing key for the gamm module.
+func (am AppModule) Route() sdk.Route {
+	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
 }
 
-// NewHandler creates the handler for the module
-func (am AppModule) NewHandler() sdk.Handler {
-	return NewHandler(am.keeper)
-}
+// QuerierRoute returns the gamm module's querier route name.
+func (AppModule) QuerierRoute() string { return types.RouterKey }
 
-// QuerierRoute defines the querier route
-func (AppModule) QuerierRoute() string {
-	return QuerierRoute
-}
-
-// NewQuerierHandler creates a new querier handler
-func (am AppModule) NewQuerierHandler() sdk.Querier {
-	return NewQuerier(am.keeper)
+// LegacyQuerierHandler returns the gamm module sdk.Querier.
+func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+	return nil
 }
 
 // InitGenesis enforces the creation of the genesis state for this module
@@ -123,3 +142,5 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 func (AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}
 }
+
+// ___________________________________________________________________________
