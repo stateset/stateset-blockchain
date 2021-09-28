@@ -6,80 +6,121 @@ import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
 import "stateset/purchaseorder.proto";
 
-option go_package = "github.com/stateset/stateset-blockchain/x/purchaseorders/types";
+option go_package =
+    "github.com/stateset/stateset-blockchain/x/purchaseorders/types";
 
 // Msg is the stateset.purchaseorder.v1beta1 Msg service
 service Msg {
 
   // Create defines a method to create a new purchase order.
-  rpc Create(MsgCreatePurchaseOrderRequest) returns (MsgCreatePurchaseOrderResponse);
+  rpc Create(MsgCreatePurchaseOrderRequest)
+      returns(MsgCreatePurchaseOrderResponse);
 
   // Update defines a method to update a purchase order.
-  rpc Update(MsgUpdatePurchaseOrderRequest) returns (MsgUpdatePurchaseOrderResponse);
+  rpc Update(MsgUpdatePurchaseOrderRequest)
+      returns(MsgUpdatePurchaseOrderResponse);
 
   // Delete defines a method to delete a purchase order.
-  rpc Delete(MsgDeletePurchaseOrderRequest) returns (MsgDeletePurchaseOrderResponse);
+  rpc Delete(MsgDeletePurchaseOrderRequest)
+      returns(MsgDeletePurchaseOrderResponse);
 
   // Complete defines a method to complete a purchase order
-  rpc Complete(MsgCompletePurchaseOrderRequest) returns (MsgCompletePurchaseOrderResponse);
+  rpc Complete(MsgCompletePurchaseOrderRequest)
+      returns(MsgCompletePurchaseOrderResponse);
 
   // Cancel defines a method to cancel a purchase order
-  rpc Cancel(MsgCancelPurchaseOrderRequest) returns (MsgCancelPurchaseOrderResponse);
+  rpc Cancel(MsgCancelPurchaseOrderRequest)
+      returns(MsgCancelPurchaseOrderResponse);
+
+  // Lock defines a method to lock a purchase order
+  rpc Lock(MsgLockPurchaseOrderRequest) returns(MsgLockPurchaseOrderResponse);
 
   // Finance defines a method to finance a purchase order
-  rpc Finance(MsgFinancePurchaseOrderRequest) returns (MsgFinancePurchaseOrderResponse);
-
+  rpc Finance(MsgFinancePurchaseOrderRequest)
+      returns(MsgFinancePurchaseOrderResponse);
 }
 
-// MsgCreatePurchasOrderRequest is the Msg/CreatePurchaseOrder request type.
-message MsgCreatePurchasOrderRequest {
-  
+// MsgCreatePurchaseOrderRequest is the Msg/CreatePurchaseOrder request type.
+message MsgCreatePurchaseOrderRequest {
+
+  // creator is the address of the account that created the purchase order
+  // class.
   string creator = 1;
+
   string purchaseorder_id = 2;
+
   string purchaseorder_number = 3;
+
   string purchaseorder_hash = 4;
+
   string purchaseorder_status = 5;
+
   string description = 6;
+
   string purchase_date = 7;
+
   string delivery_date = 8;
+
   string subtotal = 9;
+
   string total = 10;
+
   string purchaser = 11;
+
   string vendor = 12;
+
   string fulfiller = 13;
+
   string financer = 14;
 }
 
 // MsgCreatePurchaseOrderResponse is the Msg/CreatePurchaseOrder response type.
 message MsgCreatePurchaseOrderResponse {
 
-    // purchaseorder_id is the unique ID of the newly created purchase order class.
-    string purchaseorder_id = 1;
+  // purchaseorder_id is the unique ID of the newly created purchase order
+  // class.
+  string purchaseorder_id = 1;
 }
 
 message MsgUpdatePurchasOrderRequest {
-  
+
+  // creator is the address of the account that created the purchase order
+  // class.
   string creator = 1;
+
   string purchaseorder_id = 2;
+
   string purchaseorder_number = 3;
+
   string purchaseorder_hash = 4;
+
   string purchaseorder_status = 5;
+
   string description = 6;
+
   string purchase_date = 7;
+
   string delivery_date = 8;
+
   string subtotal = 9;
+
   string total = 10;
+
   string purchaser = 11;
+
   string vendor = 12;
+
   string fulfiller = 13;
+
   string financer = 14;
 }
 
 message MsgUpdatePurchaseOrderResponse {
-    
-    // purchaseorder_id is the unique ID of the newly created purchase order class.
-    string purchaseorder_id = 1;
- }
+
+  // purchaseorder_id is the unique ID of the newly created purchase order
+  // class.
+  string purchaseorder_id = 1;
+}
 
 message MsgDeletePurchaseOrder {
   string creator = 1;
@@ -88,24 +129,28 @@ message MsgDeletePurchaseOrder {
 
 message MsgDeletePurchaseOrderResponse {
 
-    // purchaseorder_id is the unique ID of the newly created purchase order class.
-    string purchaseorder_id = 1;
- }
+  // purchaseorder_id is the unique ID of the newly created purchase order
+  // class.
+  string purchaseorder_id = 1;
+}
 
-// MsgCompletePurchaseOrderRequest is the Msg/CompletePurchaseOrder request type.
+// MsgCompletePurchaseOrderRequest is the Msg/CompletePurchaseOrder request
+// type.
 message MsgCompletePurchaseOrderRequest {
-  
+
   // sender is the address of the sender of the transaction.
   string creator = 1;
   string purchaseorder_id = 2;
 }
 
-// MsgCompletePurchaseOrderResponse is the Msg/CompletePurchaseOrderResponse response type.
+// MsgCompletePurchaseOrderResponse is the Msg/CompletePurchaseOrderResponse
+// response type.
 message MsgCompletePurchaseOrderResponse {
 
-    // purchaseorder_id is the unique ID of the newly created purchase order class.
-    string purchaseorder_id = 1;
- }
+  // purchaseorder_id is the unique ID of the newly created purchase order
+  // class.
+  string purchaseorder_id = 1;
+}
 
 // MsgCancelPurchaseOrderRequest is the Msg/CancelPurchaseOrder request type.
 message MsgCancelPurchaseOrderRequest {
@@ -118,10 +163,22 @@ message MsgCancelPurchaseOrderRequest {
 // MsgCancelPurchaseOrderResponse is the Msg/CancelPurchaseOrder response type.
 message MsgCancelPurchaseOrderResponse {
 
-  // purchaseorder_id is the unique ID of the newly created purchase order class.
+  // purchaseorder_id is the unique ID of the newly created purchase order
+  // class.
   string purchaseorder_id = 1;
+}
 
- }
+// MsgLockPurchaseOrder is the Msg/FinancePurchaseOrder request type.
+message MsgLockPurchaseOrderRequest {
+
+  // sender is the address of the sender of the transaction.
+  string creator = 1;
+  string purchaseorder_id = 2;
+}
+
+// MsgFinancePurchaseOrderResponse is the Msg/FinancePurchaseOrder response
+// type.
+message MsgLockPurchaseOrderResponse {}
 
 // MsgFinancePurchaseOrder is the Msg/FinancePurchaseOrder request type.
 message MsgFinancePurchaseOrderRequest {
@@ -131,5 +188,6 @@ message MsgFinancePurchaseOrderRequest {
   string purchaseorder_id = 2;
 }
 
-// MsgFinancePurchaseOrderResponse is the Msg/FinancePurchaseOrder response type.
-message MsgFinancePurchaseOrderResponse { }
+// MsgFinancePurchaseOrderResponse is the Msg/FinancePurchaseOrder response
+// type.
+message MsgFinancePurchaseOrderResponse {}

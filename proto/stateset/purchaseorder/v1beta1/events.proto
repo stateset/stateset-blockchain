@@ -14,6 +14,9 @@ message EventCreatePurchaseOrder {
 
     // creator is the creator of the purchaseorder
     string creator = 2;
+
+    // amount is the amount of the purchaseorder that has been created.
+    string amount = 3;
 }
 
 
@@ -25,6 +28,10 @@ message EventCompleted {
 
     // creator is the creator of the purchaseorder
     string creator = 2;
+
+        // amount is the amount of the purchaseorder that has been completed.
+        string amount = 3;
+    
 }
 
 // EventCancelled is an event emitted when an purchaseorder is cancelled.
@@ -35,6 +42,22 @@ message EventCancelled {
 
     // creator is the creator of the purchaseorder
     string creator = 2;
+
+   // amount is the amount of the purchaseorder that has been canceled.
+   string amount = 3;
+}
+
+// EventLocked is an event emitted when an purchaseorder is locked.
+message EventLocked {
+
+    // purchaseorder_id is the unique ID of purchaseorder
+    string purchaseorder_id = 1 [ (gogoproto.moretags) = "yaml:\"purchaseorder_id\"" ];
+
+    // creator is the creator of the purchaseorder
+    string creator = 2;
+
+   // amount is the amount of the purchaseorder that has been locked.
+    string amount = 3;
 }
 
 // EventFinanced is an event emitted when an purchaseorder is financed.
@@ -45,4 +68,7 @@ message EventFinanced {
 
     // creator is the creator of the purchaseorder
     string creator = 2;
+
+    // amount is the amount of the purchaseorder that has been financed.
+    string amount = 3;
 }

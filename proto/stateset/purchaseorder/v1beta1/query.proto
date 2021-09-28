@@ -40,6 +40,14 @@ message QueryPurchaseOrderResponse {
     
 }
 
+
+message QueryPurchaseOrdersRequest {
+
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+
+}
+
+
 message QueryPurchaseOrdersResponse {
 
 	repeated PurchaseOrder PurchaseOrder = 1;
