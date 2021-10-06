@@ -9,9 +9,9 @@ const (
 	// TypeMsgCreatePurchaseOrder represents the type of the message for creating new purchaseorder
 	TypeMsgCreatePurchaseOrder = "create_purchaseorder"
 	// TypeMsgUpdateAgreement represents the type of the message for updating an purchaseorder
-	TypeMsgUpdatePurchaseOrder = "update_purchasorder"
+	TypeMsgUpdatePurchaseOrder = "update_purchaseorder"
 	// TypeMsgDeletePurchaseOrder represents the type of the message for activating an purchaseorder
-	TypeMsgDeletePurchaseOrder = "delete_purchasorder"
+	TypeMsgDeletePurchaseOrder = "delete_purchaseorder"
 	// TypeMsgEditPurchaseOrder represents the type of the message for activating an purchaseorder
 	TypeMsgCompletePurchaseOrder = "complete_purchaseorder"
 	// TypeMsgCompletePurchaseOrder represents the type of the message for amending an purchaseorder
@@ -45,14 +45,14 @@ var _ sdk.Msg = &MsgSendIbcPurchaseOrder{}
 // MsgCreatePurchaseOrder defines a message to create an purchaseorder
 type MsgCreatePurchaseOrder struct {
 	PurchaseOrderID 	  string 	`json:"purchaseorder_id"`
-	Lender        sdk.AccAddress     `json:"counterparty"`
+	Creator       sdk.AccAddress     `json:"creator"`
 }
 
 // NewMsgCreatePurchaseOrder creates a new message to create an purchaseorder
 func NewMsgCreatePurchaseOrder(purchaseOrderID string) MsgCreatePurchaseOrder {
 	return MsgCreatePurchaseOrder {
 		PurchaseOrderID:    purchaseOrderID,
-		Lender: lender,
+		Creator: creator,
 	}
 }
 
@@ -64,14 +64,9 @@ func (msg MsgCreatePurchaseOrder) Type() string { return TypeMsgCreatePurchaseOr
 
 // ValidateBasic validates basic fields of the Msg
 func (msg MsgCreatePurchaseOrder) ValidateBasic() sdkerrors {
-	if len(msg.Description) == 0 {
-		return ErrInvalidDescrtiptionTooShort(msg.Description)
-	}
+
 	if len(msg.PurchaseOrderID) == 0 {
 		return ErrInvalidPurchaseOrderID(msg.PurchaseOrderID)
-	}
-	if len(msg.Counterparty) == 0 {
-		return sdk.ErrInvalidAddress("Invalid address: " + msg.Counterparty.String())
 	}
 
 	return nil
@@ -93,8 +88,7 @@ func (msg MsgCreatePurchaseOrder) GetSigners() []sdk.AccAddress {
 
 // MsgAmendAgreement defines a message to amend an purchaseorder
 type MsgUpdatePurchaseOrder struct {
-	ID      uint64         `json:"id"`
-	Counterparty sdk.AccAddress `json:"counterparty"`
+	PurchaseOrderID      uint64         `json:"id"`
 }
 
 
@@ -102,9 +96,8 @@ type MsgUpdatePurchaseOrder struct {
 
 // Msg Purchase Order defines a message to activate an Purchase Order
 type MsgCompletePurchaseOrder struct {
-	ID              uint64         `json:"id"`
+	PurchaseOrderID            uint64         `json:"id"`
 	PurchaseOrderStatus string         `json:"purcahseOrderStatus"`
-	Counterparty    sdk.AccAddress `json:"counterparty"`
 }
 
 // Route is the name of the route for an purchaseorder
@@ -119,8 +112,8 @@ func (msg MsgCompletePurchaseOrder) Type() string {
 
 // ValidateBasic validates basic fields of the Msg
 func (msg MsgCompletePurchaseOrder) ValidateBasic() sdkerrors {
-	if msg.AgreementID == 0 {
-		return ErrUnknownAgreement(msg.AgreementID)
+	if msg.PurchaseOrderID == 0 {
+		return ErrUnknownPurchaseOrder(msg.PurchaseOrderID)
 	}
 	if len(msg.Counterparty) == 0 {
 		return sdk.ErrInvalidAddress("Invalid address: " + msg.Counterparty.String())
@@ -148,9 +141,8 @@ func (msg MsgCompletePurchaseOrder) GetSigners() []sdk.AccAddress {
 
 // Msg Purchase Order defines a message to cancel an Purchase Order
 type MsgCancelPurchaseOrder struct {
-	ID              uint64         `json:"id"`
+	PurchaseOrderID              uint64         `json:"purchaseorder_id"`
 	PurchaseOrderStatus string         `json:"purchaseOrderStatus"`
-	Counterparty    sdk.AccAddress `json:"counterparty"`
 }
 
 // Route is the name of the route for an purchaseorder
@@ -165,11 +157,8 @@ func (msg MsgCancelPurchaseOrder) Type() string {
 
 // ValidateBasic validates basic fields of the Msg
 func (msg MsgCancelPurchaseOrder) ValidateBasic() sdk.Error {
-	if msg.AgreementID == 0 {
-		return ErrUnknownAgreement(msg.AgreementID)
-	}
-	if len(msg.Counterparty) == 0 {
-		return sdk.ErrInvalidAddress("Invalid address: " + msg.Counterparty.String())
+	if msg.PurchaseOrderID == 0 {
+		return ErrUnknownPurchaseOrder(msg.PurchaseOrderID)
 	}
 
 	if msg.PurchaseOrderStatus != "CANCELLED" {
@@ -189,6 +178,55 @@ func (msg MsgCancelPurchaseOrder) GetSignBytes() []byte {
 func (msg MsgCancelPurchaseOrder) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
 }
+
+
+
+// Finance Purchase Order
+
+// Msg Purchase Order defines a message to activate an Purchase Order
+type MsgFinancePurchaseOrder struct {
+	PurchaseOrderID            uint64         `json:"purchaseorder_id"`
+	PurchaseOrderStatus string         `json:"purcahseOrderStatus"`
+}
+
+// Route is the name of the route for an purchaseorder
+func (msg MsgFinancePurchaseOrder) Route() string {
+	return RouterKey
+}
+
+// Type is the name for the Msg
+func (msg MsgFinancePurchaseOrder) Type() string {
+	return ModuleName
+}
+
+// ValidateBasic validates basic fields of the Msg
+func (msg MsgFinancePurchaseOrder) ValidateBasic() sdkerrors {
+	if msg.PurchaseOrderID == 0 {
+		return ErrUnknownPurchaseOrder(msg.PurchaseOrderID)
+	}
+
+	if msg.PurchaseOrderStatus != "FINANCED" {
+		return Error("The Purchase Order status must be Financed.")
+	}
+
+	return nil
+}
+
+// GetSignBytes gets the bytes for Msg signer to sign on
+func (msg MsgFinancePurchaseOrder) GetSignBytes() []byte {
+	msgBytes := ModuleCodec.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(msgBytes)
+}
+
+// GetSigners gets the signs of the Msg
+func (msg MsgFinancePurchaseOrder) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{sdk.AccAddress(msg.Party)}
+}
+
+
+
+
+// Send IBC Purchase Order
 
 func NewMsgSendIbcPurchaseOrder(
 	sender string,

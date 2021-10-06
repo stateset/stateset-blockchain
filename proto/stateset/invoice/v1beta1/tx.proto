@@ -19,37 +19,36 @@ service Msg {
    // Delete defines a method to create a new invoice.
   rpc Delete(MsgDeleteInvoiceRequest) returns (MsgDeleteInvoiceResponse);
 
-  // Activate defines a method to activate an invoice
-  rpc Activate(MsgActivateInvoiceRequest) returns (MsgActivateInvoiceResponse);
+  // Cancel defines a method to cancel an invoice
+  rpc Cancel(MsgCancelInvoiceRequest) returns (MsgCancelInvoiceResponse);
 
-  // Renew defines a method to renew an invoice
-  rpc Renew(MsgRenewInvoiceRequest) returns (MsgRenewInvoiceResponse);
+  // Complete defines a method to complete an invoice
+  rpc Complete(MsgCompleteInvoiceRequest) returns (MsgCompleteInvoiceResponse);
 
-  // Amend defines a method to amend an invoice
-  rpc Amend(MsgAmendInvoiceRequest) returns (MsgAmendInvoiceResponse);
-
-  // Terminate defines a method to terminate an invoice
-  rpc Terminate(MsgTerminateInvoiceRequest) returns (MsgTerminateInvoiceResponse);
-
-  // Expire defines a method to expire an invoice
-  rpc Expire(MsgExpireInvoiceRequest) returns (MsgExpireInvoiceResponse);
+  // Factor defines a method to factor an invoice
+ rpc Complete(MsgFactorInvoiceRequest) returns (MsgFactorInvoiceResponse);
 
 }
 
 // MsgCreateInvoiceRequest is the Msg/CreateInvoice request type.
 message MsgCreateInvoiceRequest {
   // sender is the address of the sender of the transaction.
-  string sender = 1;
+  string creator = 1;
   string invoice_id = 2;
-  string invoiceNumber = 3; 
-  string invoiceName = 4; 
-  string invoiceType = 5; 
-  string invoiceStatus = 6; 
-  string totalInvoiceValue = 7; 
-  string party = 8; 
-  string counterparty = 9; 
-  string InvoiceStartBlock = 10; 
-  string InvoiceEndBlock = 11; 
+  string invoice_number = 3; 
+  string invoice_name = 4;
+  string billing_reason = 5;
+  string amount_due = 6;
+  string amount_paid = 7;
+  string amount_remaining = 8;
+  string subtotal = 9;
+  string total = 10;
+  string party = 11;
+  string counterparty = 12;
+  string factor = 13;
+  string due_date = 14;
+  string period_start_date = 15;
+  string period_end_date = 16;
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
@@ -58,18 +57,23 @@ message MsgCreateInvoiceResponse {}
 
 // MsgCreateInvoiceRequest is the Msg/CreateInvoice request type.
 message MsgUpdateInvoiceRequest {
-  // sender is the address of the sender of the transaction.
-  string sender = 1;
+  
+  string creator = 1;
   string invoice_id = 2;
-  string invoiceNumber = 3; 
-  string invoiceName = 4; 
-  string invoiceType = 5; 
-  string invoiceStatus = 6; 
-  string totalInvoiceValue = 7; 
-  string party = 8; 
-  string counterparty = 9; 
-  string InvoiceStartBlock = 10; 
-  string InvoiceEndBlock = 11; 
+  string invoice_number = 3; 
+  string invoice_name = 4;
+  string billing_reason = 5;
+  string amount_due = 6;
+  string amount_paid = 7;
+  string amount_remaining = 8;
+  string subtotal = 9;
+  string total = 10;
+  string party = 11;
+  string counterparty = 12;
+  string factor = 13;
+  string due_date = 14;
+  string period_start_date = 15;
+  string period_end_date = 16;
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
@@ -83,61 +87,33 @@ message MsgDeleteInvoice {
 message MsgDeleteInvoiceResponse { }
 
 // MsgActivateInvoiceRequest is the Msg/ActivateInvoice request type.
-message MsgActivateInvoiceRequest {
+message MsgCancelInvoiceRequest {
   // sender is the address of the sender of the transaction.
   string sender = 1;
   string invoice_id = 2;
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
-message MsgActivateInvoiceResponse {}
+message MsgCancelInvoiceResponse {}
 
 // MsgActivateInvoiceRequest is the Msg/ActivateInvoice request type.
-message MsgActivateInvoiceRequest {
+message MsgCompleteInvoiceRequest {
   // sender is the address of the sender of the transaction.
   string sender = 1;
   string invoice_id = 2;
 }
 
 // MsgSignDataResponse is the Msg/SignData response type.
-message MsgActivateInvoiceResponse {}
+message MsgCompleteInvoiceResponse {}
 
-// MsgRenewRenewRequest is the Msg/RenewInvoice request type.
-message MsgRenewInvoiceRequest {
+// MsgFinancePurchaseOrder is the Msg/FinancePurchaseOrder request type.
+message MsgFactorPurchaseOrderRequest {
+
   // sender is the address of the sender of the transaction.
-  string sender = 1;
+  string creator = 1;
   string invoice_id = 2;
 }
 
-// MsgRenewInvoiceResponse is the Msg/SignData response type.
-message MsgRenewInvoiceResponse {}
-
-// MsgAmendInvoiceRequest is the Msg/AmendInvoice request type.
-message MsgAmendInvoiceRequest {
-  // sender is the address of the sender of the transaction.
-  string sender = 1;
-  string invoice_id = 2;
-}
-
-// MsgAmendResponse is the Msg/AmendInvoice response type.
-message MsgAmendInvoiceResponse {}
-
-// MsgTerminateInvoiceRequest is the Msg/TerminateInvoice request type.
-message MsgTerminateInvoiceRequest {
-  // sender is the address of the sender of the transaction.
-  string sender = 1;
-  string invoice_id = 2;
-}
-
-// MsgTerminateResponse is the Msg/TerminateInvoice response type.
-message MsgTerminateInvoiceResponse {}
-
-// MsgExpireInvoiceRequest is the Msg/ExpireInvoice request type.
-message MsgExpireInvoiceRequest {
-  // sender is the address of the sender of the transaction.
-  string sender = 1;
-  string invoice_id = 2;
-}
-
-// MsgExpireResponse is the Msg/ExpireInvoice response type.
-message MsgExpireInvoiceResponse {}
+// MsgFinancePurchaseOrderResponse is the Msg/FinancePurchaseOrder response
+// type.
+message MsgFactorPurchaseOrderResponse {}

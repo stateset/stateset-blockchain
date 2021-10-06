@@ -1,28 +1,62 @@
 package invoice
 
-import "github.com/cosmos/cosmos-sdk/codec"
-
-// RegisterCodec registers all the necessary types and interfaces for the module
-func RegisterCodec(c *codec.LegacyAmino) {
-	c.RegisterConcrete(MsgCreateInvoice{}, "stateset/MsgCreateInvoice", nil)
-	c.RegisterConcrete(MsgCancelInvoice{}, "stateset/MsgCancelInvoice", nil)
-	c.RegisterConcrete(MsgEditInvoice{}, "stateset/MsgEditInvoice", nil)
-	c.RegisterConcrete(MsgDeleteInvoice{}, "stateset/MsgDeleteInvoice", nil)
-	c.RegisterConcrete(MsgFactorInvoice{}, "stateset/MsgFactorInvoice", nil)
-	c.RegisterConcrete(MsgPayInvoice{}, "stateset/MsgPayInvoice", nil)
-	c.RegisterConcrete(MsgAddAdmin{}, "stateset/MsgAddAdmin", nil)
-	c.RegisterConcrete(MsgRemoveAdmin{}, "stateset/MsgRemoveAdmin", nil)
-	c.RegisterConcrete(MsgUpdateParams{}, "stateset/MsgUpdateParams", nil)
-
-	c.RegisterConcrete(Invoice{}, "stateset/Invoice", nil)
-}
-
-// ModuleCodec encodes module codec
-var ModuleCodec *codec.LegacyAmino
+import (
+	"github.com/cosmos/cosmos-sdk/codec"
+	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/msgservice"
+)
 
 func init() {
-	ModuleCodec = codec.New()
-	RegisterCodec(ModuleCodec)
-	codec.RegisterCrypto(ModuleCodec)
-	ModuleCodec.Seal()
+	RegisterLegacyAminoCodec(amino)
+	cryptocodec.RegisterCrypto(amino)
+	amino.Seal()
+}
+
+// RegisterCodec registers all the necessary types and interfaces for the module
+func RegisterCodec(cdc *codec.LegacyAmino) {
+	cdc.RegisterConcrete(MsgCreateInvoice{}, "stateset/MsgCreateInvoice", nil)
+	cdc.RegisterConcrete(MsgCancelInvoice{}, "stateset/MsgCancelInvoice", nil)
+	cdc.RegisterConcrete(MsgEditInvoice{}, "stateset/MsgEditInvoice", nil)
+	cdc.RegisterConcrete(MsgDeleteInvoice{}, "stateset/MsgDeleteInvoice", nil)
+	cdc.RegisterConcrete(MsgFactorInvoice{}, "stateset/MsgFactorInvoice", nil)
+	cdc.RegisterConcrete(MsgPayInvoice{}, "stateset/MsgPayInvoice", nil)
+	cdc.RegisterConcrete(MsgAddAdmin{}, "stateset/MsgAddAdmin", nil)
+	cdc.RegisterConcrete(MsgRemoveAdmin{}, "stateset/MsgRemoveAdmin", nil)
+	cdc.RegisterConcrete(MsgUpdateParams{}, "stateset/MsgUpdateParams", nil)
+
+	cdc.RegisterConcrete(Invoice{}, "stateset/Invoice", nil)
+}
+
+// RegisterInterfaces registers the x/purchaseorder interfaces types with the interface registry
+func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
+
+	registry.RegisterInterface(
+		"stateset.invoice.v1alpha1.Invoice",
+		(*InvoiceI)(nil),
+		&Invoice{},
+	)
+	
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgCreateInvoice{},
+		&MsgEditInvoice{},
+		&MsgDeleteInvoice{},
+		&MsgCompleteInvoice{},
+		&MsgCancelInvoice{},
+		&MsgPayPurchaseOrder{},
+	)
+
+	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
+}
+
+var (
+	amino = codec.NewLegacyAmino()
+
+	ModuleCdc = codec.NewAminoCodec(amino)
+)
+
+func init() {
+	RegisterLegacyAminoCodec(amino)
+	amino.Seal()
 }

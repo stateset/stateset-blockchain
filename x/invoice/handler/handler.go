@@ -1,206 +1,51 @@
 package invoice
 
 import (
-	"fmt"
-	"net/url"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/stateset/stateset-blockchain/x/invoice/keeper"
+	"github.com/stateset/stateset-blockchain/x/invoice/types"
 )
 
-// NewHandler creates a new handler
-func NewHandler(keeper Keeper) sdk.Handler {
-	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
+
+// NewHandler returns a handler for "invoice" type messages.
+func NewHandler(k keeper.Keeper) sdk.Handler {
+	msgServer := keeper.NewMsgServerImpl(k)
+
+	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
+		ctx = ctx.WithEventManager(sdk.NewEventManager())
+
 		switch msg := msg.(type) {
-		case MsgCreateInvoice:
-			return handleMsgCreateInvoice(ctx, keeper, msg)
-		case MsgCancelInvoice:
-			return handleMsgCancelInvoice(ctx, keeper, msg)
-		case MsgEditInvoice:
-			return handleMsgEditInvoice(ctx, keeper, msg)
-		case MsgPayInvoice:
-			return handleMsgPayInvoice(ctx, keeper, msg)
-		case MsgFactorInvoice:
-			return handleMsgFactorInvoice(ctx, keeper, msg)
-		case MsgAddAdmin:
-			return handleMsgAddAdmin(ctx, keeper, msg)
-		case MsgRemoveAdmin:
-			return handleMsgRemoveAdmin(ctx, keeper, msg)
-		case MsgUpdateParams:
-			return handleMsgUpdateParams(ctx, keeper, msg)
+		case *types.MsgCreateInvoice:
+			res, err := msgServer.CreateInvoice(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+		
+		case *types.MsgEditInvoice:
+			res, err := msgServer.EditInvoice(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgDeleteInvoice:
+			res, err := msgServer.DeleteInvoice(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgCompleteInvoice:
+			res, err := msgServer.CancelInvoice(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+		
+		case *types.MsgCancelInvoice:
+			res, err := msgServer.CancelInvoice(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgLockInvoice:
+			res, err := msgServer.LockInvoice(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgFactorInvoice:
+			res, err := msgServer.FactorInvoice(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
 		default:
-			errMsg := fmt.Sprintf("Unrecognized invoice message type: %T", msg)
-			return sdk.ErrUnknownRequest(errMsg).Result()
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized %s message type: %T", types.ModuleName, msg)
 		}
-	}
-}
-
-func handleMsgCreateInvoice(ctx sdk.Context, keeper Keeper, msg MsgCreateInvoice) sdk.Result {
-	if err := msg.ValidateBasic(); err != nil {
-		return err.Result()
-	}
-
-	// parse url from string
-	sourceURL, urlError := url.Parse(msg.Source)
-	if urlError != nil {
-		return ErrInvalidSourceURL(msg.Source).Result()
-	}
-
-	invoice, err := keeper.SubmitInvoice(ctx, msg.Body, msg.Merchant, *sourceURL)
-	if err != nil {
-		return err.Result()
-	}
-
-	res, codecErr := ModuleCodec.MarshalJSON(invoice)
-	if codecErr != nil {
-		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
-	}
-
-	return sdk.Result{
-		Data: res,
-	}
-}
-
-// Cancel Invoice
-func handleMsgCancelInvoice(ctx sdk.Context, keeper Keeper, msg MsgCancelInvoice) sdk.Result {
-	if err := msg.ValidateBasic(); err != nil {
-		return err.Result()
-	}
-
-	invoice, err := keeper.CancelInvoice(ctx, msg.ID, msg.Body, msg.Editor)
-	if err != nil {
-		return err.Result()
-	}
-
-	res, codecErr := ModuleCodec.MarshalJSON(invoice)
-	if codecErr != nil {
-		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
-	}
-
-	return sdk.Result{
-		Data: res,
-	}
-}
-
-func handleMsgEditInvoice(ctx sdk.Context, keeper Keeper, msg MsgEditInvoice) sdk.Result {
-	if err := msg.ValidateBasic(); err != nil {
-		return err.Result()
-	}
-
-	invoice, err := keeper.EditInvoice(ctx, msg.ID, msg.Body, msg.Editor)
-	if err != nil {
-		return err.Result()
-	}
-
-	res, codecErr := ModuleCodec.MarshalJSON(invoice)
-	if codecErr != nil {
-		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
-	}
-
-	return sdk.Result{
-		Data: res,
-	}
-}
-
-// Pay Invoice
-
-func handleMsgPayInvoice(ctx sdk.Context, keeper Keeper, msg MsgPayInvoice) sdk.Result {
-	if err := msg.ValidateBasic(); err != nil {
-		return err.Result()
-	}
-
-	invoice, err := keeper.PayInvoice(ctx, msg.ID, msg.Body, msg.Editor)
-	if err != nil {
-		return err.Result()
-	}
-
-	res, codecErr := ModuleCodec.MarshalJSON(invoice)
-	if codecErr != nil {
-		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
-	}
-
-	return sdk.Result{
-		Data: res,
-	}
-}
-
-// Factor Invoice
-
-func handleMsgFactorInvoice(ctx sdk.Context, keeper Keeper, msg MsgFactorInvoice) sdk.Result {
-	if err := msg.ValidateBasic(); err != nil {
-		return err.Result()
-	}
-
-	invoice, err := keeper.FactorInvoice(ctx, msg.ID, msg.Body, msg.Editor)
-	if err != nil {
-		return err.Result()
-	}
-
-	res, codecErr := ModuleCodec.MarshalJSON(invoice)
-	if codecErr != nil {
-		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", codecErr)).Result()
-	}
-
-	return sdk.Result{
-		Data: res,
-	}
-}
-
-func handleMsgAddAdmin(ctx sdk.Context, k Keeper, msg MsgAddAdmin) sdk.Result {
-	if err := msg.ValidateBasic(); err != nil {
-		return err.Result()
-	}
-
-	err := k.AddAdmin(ctx, msg.Admin, msg.Creator)
-	if err != nil {
-		return err.Result()
-	}
-
-	res, jsonErr := ModuleCodec.MarshalJSON(true)
-	if jsonErr != nil {
-		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", jsonErr)).Result()
-	}
-
-	return sdk.Result{
-		Data: res,
-	}
-}
-
-func handleMsgRemoveAdmin(ctx sdk.Context, k Keeper, msg MsgRemoveAdmin) sdk.Result {
-	if err := msg.ValidateBasic(); err != nil {
-		return err.Result()
-	}
-
-	err := k.RemoveAdmin(ctx, msg.Admin, msg.Remover)
-	if err != nil {
-		return err.Result()
-	}
-
-	res, jsonErr := ModuleCodec.MarshalJSON(true)
-	if jsonErr != nil {
-		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", jsonErr)).Result()
-	}
-
-	return sdk.Result{
-		Data: res,
-	}
-}
-
-func handleMsgUpdateParams(ctx sdk.Context, k Keeper, msg MsgUpdateParams) sdk.Result {
-	if err := msg.ValidateBasic(); err != nil {
-		return err.Result()
-	}
-
-	err := k.UpdateParams(ctx, msg.Updater, msg.Updates, msg.UpdatedFields)
-	if err != nil {
-		return err.Result()
-	}
-
-	res, jsonErr := ModuleCodec.MarshalJSON(true)
-	if jsonErr != nil {
-		return sdk.ErrInternal(fmt.Sprintf("Marshal result error: %s", jsonErr)).Result()
-	}
-
-	return sdk.Result{
-		Data: res,
 	}
 }

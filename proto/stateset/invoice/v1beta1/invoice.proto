@@ -8,91 +8,93 @@ import "gogoproto/gogo.proto";
 message Invoice {
   string creator = 1;
   string invoice_id = 2;
-  string invoicenumber = 3; 
-  string invoicename = 4;
-  string billingreason = 5;
-  string amountdue = 6;
-  string amountpaid = 7;
-  string amountremaining = 8;
+  string invoice_number = 3; 
+  string invoice_name = 4;
+  string billing_reason = 5;
+  string amount_due = 6;
+  string amount_paid = 7;
+  string amount_remaining = 8;
   string subtotal = 9;
   string total = 10;
   string party = 11;
   string counterparty = 12;
   string factor = 13;
-  string duedate = 14;
-  string periodstartdate = 15;
-  string periodenddate = 16;
+  string due_date = 14;
+  string period_start_date = 15;
+  string period_end_date = 16;
 }
 
 // State is an enum which refers to state of an ourchase order
 enum State {
   option (gogoproto.goproto_enum_prefix) = false;
   // Prefix should start with 0 in enum. So declaring dummy state
-  invalid = 0 [(gogoproto.enumvalue_customname) = "PurchaseOrderStateInvalid"];
+  invalid = 0 [(gogoproto.enumvalue_customname) = "InvoiceStateInvalid"];
 
   request = 1 [(gogoproto.enumvalue_customname) = "Request"];
 
   paid = 2 [(gogoproto.enumvalue_customname) = "Paid"];
 
   canceled = 3 [(gogoproto.enumvalue_customname) = "Canceled"];
+
+  factored = 3 [(gogoproto.enumvalue_customname) = "Factored"];
 }
 
 message MsgCreateInvoice {
   string creator = 1;
   string invoice_id = 2;
-  string invoicenumber = 3; 
-  string invoicename = 4;
-  string billingreason = 5;
-  string amountdue = 6;
-  string amountpaid = 7;
-  string amountremaining = 8;
+  string invoice_number = 3; 
+  string invoice_name = 4;
+  string billing_reason = 5;
+  string amount_due = 6;
+  string amount_paid = 7;
+  string amount_remaining = 8;
   string subtotal = 9;
   string total = 10;
   string party = 11;
   string counterparty = 12;
   string factor = 13;
-  string duedate = 14;
-  string periodstartdate = 15;
-  string periodenddate = 16;
+  string due_date = 14;
+  string period_start_date = 15;
+  string period_end_date = 16;
 }
 
 message MsgUpdateInvoice {
   string creator = 1;
   string invoice_id = 2;
-  string invoicenumber = 3; 
-  string invoicename = 4;
-  string billingreason = 5;
-  string amountdue = 6;
-  string amountpaid = 7;
-  string amountremaining = 8;
+  string invoice_number = 3; 
+  string invoice_name = 4;
+  string billing_reason = 5;
+  string amount_due = 6;
+  string amount_paid = 7;
+  string amount_remaining = 8;
   string subtotal = 9;
   string total = 10;
   string party = 11;
   string counterparty = 12;
   string factor = 13;
-  string duedate = 14;
-  string periodstartdate = 15;
-  string periodenddate = 16;
+  string due_date = 14;
+  string period_start_date = 15;
+  string period_end_date = 16;
 }
 
 
 message MsgCancelInvoice {
   string creator = 1;
-  string invoice_id = 2;
+  uint64 invoiceId = 2 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
 }
 
 
 message MsgPayInvoice {
   string creator = 1;
-  string invoice_id = 2;
+  uint64 invoiceId = 2 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
 }
 
 message MsgFactorInvoice {
   string creator = 1;
-  string invoice_id = 2;
+  uint64 invoiceId = 2 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
 }
 
 message MsgDeleteInvoice {
   string creator = 1;
-  string invoice_id = 2;
+  uint64 invoiceId = 2 [ (gogoproto.moretags) = "yaml:\"invoice_id\"" ];
 }
