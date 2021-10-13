@@ -33,7 +33,8 @@ service Msg {
       returns(MsgCancelPurchaseOrderResponse);
 
   // Lock defines a method to lock a purchase order
-  rpc Lock(MsgLockPurchaseOrderRequest) returns(MsgLockPurchaseOrderResponse);
+  rpc Lock(MsgLockPurchaseOrderRequest)
+      returns(MsgLockPurchaseOrderResponse);
 
   // Finance defines a method to finance a purchase order
   rpc Finance(MsgFinancePurchaseOrderRequest)

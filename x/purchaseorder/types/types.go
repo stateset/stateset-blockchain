@@ -14,7 +14,7 @@ const (
 	DefaultParamspace = ModuleName
 )
 
-// PurchaseOrder stores data about an invoice
+// PurchaseOrder stores data about an purchase order
 type PurchaseOrder struct {
 	purchaseOrderID         uint64         `json:"purchaseOrderId"`
 	purchaseOrderNumber     string         `json:"purchaseOrderNumber`

@@ -1,6 +1,6 @@
-# Makefile for the "osmosisdnode" docker image.
+# Makefile for the "statesetdnode" docker image.
 
 all:
-	docker build --tag osmosis-labs/osmosisdnode osmosisdnode
+	docker build --tag stateset/statesetdnode statesetdnode
 
 .PHONY: all

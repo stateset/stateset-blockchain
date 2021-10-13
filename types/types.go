@@ -18,7 +18,7 @@ const (
 
 // Coin units
 const (
-	SSET = 1
+	PARO = 1
 )
 
 const (
@@ -37,11 +37,11 @@ const (
 )
 
 // InitialStake is an `sdk.Coins` representing the balance a new user is granted upon registration
-var InitialStake = sdk.Coin{Amount: sdk.NewInt(330 * SSET), Denom: StakeDenom}
+var InitialStake = sdk.Coin{Amount: sdk.NewInt(330 * PARO), Denom: StakeDenom}
 
 // NewStatesetCoin returns the desired amount
 func NewStatesetCoin(amount int64) sdk.Coin {
-	return sdk.NewInt64Coin(StakeDenom, amount*SSET)
+	return sdk.NewInt64Coin(StakeDenom, amount*PARO)
 }
 
 // MsgResult is the default success response for a chain request

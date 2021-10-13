@@ -26,7 +26,7 @@ service Msg {
   rpc Complete(MsgCompleteInvoiceRequest) returns (MsgCompleteInvoiceResponse);
 
   // Factor defines a method to factor an invoice
- rpc Complete(MsgFactorInvoiceRequest) returns (MsgFactorInvoiceResponse);
+  rpc Complete(MsgFactorInvoiceRequest) returns (MsgFactorInvoiceResponse);
 
 }
 

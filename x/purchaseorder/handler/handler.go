@@ -17,31 +17,31 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 
 		switch msg := msg.(type) {
 		case *types.MsgCreatePurchaseOrder:
-			res, err := msgServer.CreatePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.Create(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 		
-		case *types.MsgEditPurchaseOrder:
-			res, err := msgServer.EditPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+		case *types.MsgUpdatePurchaseOrder:
+			res, err := msgServer.Update(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgDeletePurchaseOrder:
-			res, err := msgServer.DeletePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.Delete(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgCompletePurchaseOrder:
-			res, err := msgServer.CancelPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.Complete(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 		
 		case *types.MsgCancelPurchaseOrder:
-			res, err := msgServer.CancelPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.Cancel(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgLockPurchaseOrder:
-			res, err := msgServer.LockPurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.Lock(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgFinancePurchaseOrder:
-			res, err := msgServer.FinancePurchaseOrder(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.Finance(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		default:
