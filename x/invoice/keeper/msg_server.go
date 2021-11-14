@@ -16,6 +16,7 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
+// Create Invoice
 func (server msgServer) CreateInvoice(goCtx context.Context, msg *types.MsgCreateInvoice) (*types.MsgCreateInvoiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -24,10 +25,22 @@ func (server msgServer) CreateInvoice(goCtx context.Context, msg *types.MsgCreat
 		return nil, err
 	}
 
-	poolId, err := server.keeper.CreateInvoice(ctx, sender, msg.InvoiceParams, msg.InvoiceAssets)
+	invoiceId, err := server.keeper.CreateInvoice(ctx, sender, msg.InvoiceParams, msg.InvoiceAssets)
 	if err != nil {
 		return nil, err
 	}
+
+	invoice, found := k.GetInvoice(ctx, msg.Id)
+	invoice.InvoiceStatus = "created"
+
+	// Verify the Value of the Invoice from existing system
+	k.zkpKeeper.VerifyProof(ctx, invoice)
+	
+	// Add a DID to represent the Invoice in the Cosmosverse DID:STATESET:INV:123
+	k.didKeeper.AddDID(ctx, invoicehash)
+	
+	// Mint a NFT that represents the Invoice DID and Value of the Invoice
+	k.nftKeeper.MintNFT(ctx, did)
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
@@ -44,6 +57,7 @@ func (server msgServer) CreateInvoice(goCtx context.Context, msg *types.MsgCreat
 	return &types.MsgCreateInvoiceResponse{}, nil
 }
 
+// Complete Invoice
 func (server msgServer) CompleteInvoice(goCtx context.Context, msg *types.MsgCompleteInvoice) (*types.MsgCompleteInvoiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -56,6 +70,9 @@ func (server msgServer) CompleteInvoice(goCtx context.Context, msg *types.MsgCom
 	if err != nil {
 		return nil, err
 	}
+
+	invoice, found := k.GetInvoice(ctx, msg.Id)
+	invoice.InvoiceStatus = "completed"
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
@@ -72,7 +89,7 @@ func (server msgServer) CompleteInvoice(goCtx context.Context, msg *types.MsgCom
 	return &types.MsgCompleteInvoiceResponse{}, nil
 }
 
-
+// Factor Invoice
 func (server msgServer) FactorInvoice(goCtx context.Context, msg *types.MsgFactorInvoice) (*types.MsgFactorInvoiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -85,6 +102,9 @@ func (server msgServer) FactorInvoice(goCtx context.Context, msg *types.MsgFacto
 	if err != nil {
 		return nil, err
 	}
+
+	invoice, found := k.GetInvoice(ctx, msg.Id)
+	invoice.InvoiceStatus = "factored"
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(

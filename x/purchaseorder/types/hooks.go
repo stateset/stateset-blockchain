@@ -12,11 +12,11 @@ type PurchaseOrderHooks interface {
 
 var _ PurchaseOrderHooks = MultiPurchaseOrderHooks{}
 
-// combine multiple gamm hooks, all hook functions are run in array sequence
+// combine multiple hooks, all hook functions are run in array sequence
 type MultiPurchaseOrderHooks []PurchaseOrderHooks
 
 // Creates hooks for the PurchaseOrder Module
-func NewPurchaseOrderGammHooks(hooks ...PurchaseOrderHooks) MultiPurchaseOrderHooks {
+func NewPurchaseOrderHooks(hooks ...PurchaseOrderHooks) MultiPurchaseOrderHooks {
 	return hooks
 }
 

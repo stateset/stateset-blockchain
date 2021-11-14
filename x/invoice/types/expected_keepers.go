@@ -58,3 +58,11 @@ type BankKeeper interface {
 	UndelegateCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
 	DelegateCoinsFromAccountToModule(ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
 }
+
+
+// DidKeeper defines the expected interface needed to add dids.
+type DidKeeper interface {
+	AddDid(ctx sdk.Context, did) error
+	GetDid(ctx sdk.Context, did) error
+	AddCredentials(ctx sdk.Context, did, credentials) error
+}

@@ -1,20 +1,13 @@
 package keeper
 
 import (
+	"context"
+	"fmt"
+
 	"github.com/stateset/stateset-blockchain/x/agreement/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
-
-type msgServer struct {
-	Keeper
-}
-
-// NewMsgServerImpl returns an implementation of the MsgServer interface
-// for the provided Keeper.
-func NewMsgServerImpl(keeper Keeper) types.MsgServer {
-	return &msgServer{Keeper: keeper}
-}
-
-var _ types.MsgServer = msgServer{}
 
 func (server msgServer) CreateAgreement(goCtx context.Context, msg *types.MsgCreateAgreement) (*types.MsgCreateAgreementResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)

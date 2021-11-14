@@ -13,4 +13,5 @@ var (
 	ErrPurchaseOrderLocked        = sdkerrors.Register(ModuleName, 3, "purchase order is locked")
 	ErrInvalidPacketTimeout = sdkerrors.Register(ModuleName, 4, "invalid packet timeout")
 	ErrInvalidVersion       = sdkerrors.Register(ModuleName, 5, "invalid version")
+	ErrWrongPurchaseOrderState = sdkerrors.Register(ModuleName, 6, "invalide purchase order state")
 )
