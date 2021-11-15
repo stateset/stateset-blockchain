@@ -87,7 +87,6 @@ import (
 	"github.com/stateset/stateset-blockchain/x/agreement"
 	"github.com/stateset/stateset-blockchain/x/did"
 	"github.com/stateset/stateset-blockchain/x/invoice"
-	"github.com/stateset/stateset-blockchain/x/liquidity"
 	"github.com/stateset/stateset-blockchain/x/purchaseorder"
 	"github.com/stateset/stateset-blockchain/x/wasm"
 	tmjson "github.com/tendermint/tendermint/libs/json"
@@ -501,6 +500,7 @@ func NewStatesetApp(
 		purchaseordertypes.ModuleName,
 		invoicetypes.ModuleName,
 		agreementtypes.ModuleName,
+		didtypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -681,6 +681,7 @@ func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyA
 	paramsKeeper.Subspace(purchaseordertypes.ModuleName)
 	paramsKeeper.Subspace(invoicetypes.ModuleName)
 	paramsKeeper.Subspace(agreementtypes.ModuleName)
+	paramsKeeper.Subspace(didtypes.ModuleName)
 
 	return paramsKeeper
 }
